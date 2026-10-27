@@ -1,0 +1,58 @@
+/* Hallmark · theme: ImportGuard · genre: atmospheric · shape: Poster · hero: full-bleed Predictive Arc · nav: Sable dock · footer: editorial · modes: dark+light · v2.0.0 */
+.landing-page { min-height: 100vh; }
+
+.hero-scene {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  min-height: 100svh;
+  overflow: clip;
+  place-items: center;
+  padding: var(--space-12) max(var(--space-5), env(safe-area-inset-left)) var(--space-10);
+  color: var(--hero-ink);
+  background: var(--hero-bg);
+}
+
+.arc-backdrop,
+.hero-shade { position: absolute; z-index: -2; inset: 0; pointer-events: none; }
+.arc-backdrop canvas { display: block; width: 100%; height: 100%; }
+.hero-shade { z-index: -1; background: var(--hero-shade); }
+
+.hero-header {
+  position: absolute;
+  z-index: 2;
+  top: max(var(--space-5), env(safe-area-inset-top));
+  left: max(var(--space-6), env(safe-area-inset-left));
+  right: max(var(--space-6), env(safe-area-inset-right));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.wordmark { display: inline-flex; align-items: center; gap: var(--space-3); color: var(--hero-ink); font-size: 15px; font-weight: 620; text-decoration: none; }
+.wordmark-symbol { display: grid; width: 34px; height: 34px; place-items: center; border: 1px solid var(--hero-mark-rule); border-radius: 11px; color: var(--hero-accent); font-size: 11px; letter-spacing: -0.04em; }
+
+.hero-copy { width: min(860px, 100%); margin-inline: auto; text-align: center; }
+.hero-copy h1 { max-width: 840px; margin: 0 auto; color: var(--hero-ink); font-size: clamp(3rem, 7.1vw, 6.4rem); font-weight: 560; letter-spacing: -0.065em; line-height: 1.02; text-wrap: balance; }
+.hero-copy > p { max-width: 660px; margin: var(--space-4) auto 0; color: var(--hero-muted); font-size: clamp(1rem, 1.5vw, 1.2rem); line-height: 1.65; text-wrap: pretty; }
+.hero-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: var(--space-6); margin-top: var(--space-7); }
+.import-link { display: inline-flex; min-height: 52px; align-items: center; justify-content: center; gap: var(--space-4); padding: 0 var(--space-5); border: 1px solid var(--hero-rule); border-radius: 999px; background: var(--hero-button); color: var(--hero-ink); font-size: 15px; font-weight: 600; text-decoration: none; white-space: nowrap; backdrop-filter: blur(12px); transition: background var(--motion-short) ease, border-color var(--motion-short) ease; }
+.import-link:hover { border-color: var(--hero-accent); background: var(--hero-button-hover); }
+.import-link:active { transform: translateY(1px); }
+.how-link,.scene-scroll { color: var(--hero-subtle); font-size: 14px; text-decoration: none; white-space: nowrap; }
+.how-link span,.scene-scroll span { margin-left: var(--space-2); color: var(--hero-accent); }
+.scene-scroll { position: absolute; bottom: var(--space-5); left: 50%; transform: translateX(-50%); }
+
+.hero-first-followup { display: grid; min-height: 420px; align-content: center; justify-items: start; gap: var(--space-4); padding: var(--space-10) max(var(--space-5), calc((100vw - 1120px) / 2)); background: var(--bg); }
+.hero-first-followup h2 { max-width: 720px; margin: 0; font-size: clamp(2rem, 4vw, 3.4rem); letter-spacing: -0.045em; line-height: 1.1; text-wrap: balance; }
+.hero-first-followup p { max-width: 620px; margin: 0; color: var(--muted); font-size: 17px; line-height: 1.65; }
+.hero-first-followup a { margin-top: var(--space-2); color: var(--accent-strong); }
+
+@media (max-width: 40rem) {
+  .hero-scene { padding: var(--space-11) var(--space-5) var(--space-10); }
+  .hero-header { left: var(--space-5); right: var(--space-5); }
+  .hero-copy h1 { font-size: clamp(2.6rem, 11vw, 4rem); }
+  .hero-copy > p { margin-top: var(--space-4); font-size: 16px; }
+  .hero-actions { flex-direction: column; gap: var(--space-5); margin-top: var(--space-6); }
+  .hero-first-followup { min-height: 360px; padding: var(--space-9) var(--space-5); }
+}

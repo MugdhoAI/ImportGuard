@@ -37,3 +37,12 @@ Add decisions below using:
 - Decision: Keep project license undecided; do not add a license grant without owner direction.
 - Reason/evidence: No existing license was provided in the starter workspace.
 - Consequences and revisit condition: Select an appropriate license before public release.
+
+### Landing redesign — 2026-10-27
+- Decision: Add a small Vite + React frontend while retaining FastAPI as the sole application host and backend.
+- Reason/evidence: The selected Predictive Arc, GlassAiButton, and AnimatedTopDock sources are React/TypeScript components; the existing CSV routes and server-rendered workspace remain intact.
+- Alternatives considered: Replacing the ThreeUI sources with static or hand-drawn visuals; rejected by the supplied design acceptance criteria.
+- Consequences and revisit condition: Run `npm.cmd --prefix frontend run build` before starting FastAPI so `/` can serve the built landing page.
+- Decision: Keep fetched ThreeUI canonical source files unchanged under `frontend/src/vendor/threeui/`; use separately named ImportGuard adapters and pin source verification hashes.
+- Reason/evidence: Exact-source integrity and small product-specific behavior changes are both required by the design plan.
+- Consequences and revisit condition: Re-run `npm run verify:sources` before changing vendor source or preparing public distribution.

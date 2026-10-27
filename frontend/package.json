@@ -1,0 +1,29 @@
+{
+  "name": "importguard-landing",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "predev": "node scripts/prepare-vendor.mjs",
+    "prebuild": "node scripts/prepare-vendor.mjs",
+    "build": "tsc -b && vite build",
+    "verify:sources": "node scripts/verify-threeui.mjs",
+    "test": "vitest run",
+    "test:browser": "node scripts/browser-check.mjs"
+  },
+  "dependencies": {
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "three128": "npm:three@0.128.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.1",
+    "puppeteer-core": "^24.31.0",
+    "typescript": "~5.9.3",
+    "vite": "^7.3.1",
+    "vitest": "^4.0.8"
+  }
+}

@@ -1,0 +1,160 @@
+{
+  "verifiedAt": "2026-10-27T09:02:07.657Z",
+  "bundles": [
+    "predictive-arc",
+    "glass-ai-button",
+    "animated-top-dock"
+  ],
+  "files": [
+    {
+      "bundle": "predictive-arc",
+      "path": "src/shaders/predictive-arc/PredictiveArcCollection.tsx",
+      "bytes": 2860,
+      "sha256": "b77a845ab2fa8e8ef8d9b6812d71efe6f320d865d97ec97b2e15253b5950fd63"
+    },
+    {
+      "bundle": "predictive-arc",
+      "path": "src/shaders/predictive-arc/PredictiveArcCanvas.tsx",
+      "bytes": 4365,
+      "sha256": "ebaa5a1b1f785c7772aaedc2b195318fd63bd9c3e5e5d8e175600968b245dae7"
+    },
+    {
+      "bundle": "predictive-arc",
+      "path": "src/shaders/predictive-arc/predictiveArcRenderer.ts",
+      "bytes": 4088,
+      "sha256": "fc08c66b13c4a8173c8a88845926b72266d1b1a4fc345c84f44ee61fbfaba92b"
+    },
+    {
+      "bundle": "predictive-arc",
+      "path": "src/shaders/data-pixel-arc/DataPixelArcCanvas.tsx",
+      "bytes": 2376,
+      "sha256": "2e25156d43dfd1bf0fb47384f75df240cd0c4038deae75a8dacae7c213269c5b"
+    },
+    {
+      "bundle": "predictive-arc",
+      "path": "src/shaders/data-pixel-arc/dataPixelArcRenderer.ts",
+      "bytes": 4372,
+      "sha256": "65bdfb98424996d935923f39f163e1667f0bc2b8faa458d900f4450beabba0eb"
+    },
+    {
+      "bundle": "predictive-arc",
+      "path": "src/shaders/neuform-isolated/NeuformBatchEffects.tsx",
+      "bytes": 41426,
+      "sha256": "dc68c51bea26b922965de44b4fb8d6c432607508fb2b61e16ed60d245da1a69f"
+    },
+    {
+      "bundle": "predictive-arc",
+      "path": "src/shaders/neuform-isolated/sources/amber-halftone.html",
+      "bytes": 16324,
+      "sha256": "3d9ebb64a15a1985c4cef1f01457281a49b2d9900405fd674e8748cac8af00a0"
+    },
+    {
+      "bundle": "predictive-arc",
+      "path": "src/shaders/neuform-isolated/sources/signal-particles.html",
+      "bytes": 33027,
+      "sha256": "613a2005d18795dbc25a5d0f93c3ae4dfecdfcb939ea6e2c5702b82eb1e4bfff"
+    },
+    {
+      "bundle": "predictive-arc",
+      "path": "src/shaders/neuform-isolated/sources/override-grid.html",
+      "bytes": 14421,
+      "sha256": "dc7800f2b6b6329b8b71ea4a06b82af91cff8379701c6a7fa4c9a92d47f89d6c"
+    },
+    {
+      "bundle": "predictive-arc",
+      "path": "src/shaders/ribbon-field/RibbonFieldBackground.tsx",
+      "bytes": 4717,
+      "sha256": "fab02cb57c44c7307afd29cd03d01141372ad90163632b9a6a77910a245a5996"
+    },
+    {
+      "bundle": "predictive-arc",
+      "path": "src/shaders/ribbon-field/ribbonFieldShaders.ts",
+      "bytes": 2907,
+      "sha256": "ab578acab44bbff7f3cf67f1c82b3e2e1d03689de3fcbdc23681e8b5a0a3536c"
+    },
+    {
+      "bundle": "predictive-arc",
+      "path": "src/shaders/neuform-isolated/NeuformIsolatedEffects.tsx",
+      "bytes": 93888,
+      "sha256": "fe9856234253bc3c1a13b3afb84f3d84644dfa6d578e7203bb3e1dd5eced1b75"
+    },
+    {
+      "bundle": "predictive-arc",
+      "path": "src/shaders/neuform-isolated/sources/void-protocol.html",
+      "bytes": 21426,
+      "sha256": "affd21553ba951c0ff0f5a8e40a84ae70d49aaff3c4c69ea4ae1ec897dec21e3"
+    },
+    {
+      "bundle": "predictive-arc",
+      "path": "src/shaders/neuform-isolated/NeuformCraftEffects.tsx",
+      "bytes": 10720,
+      "sha256": "0a1680c3c119dba8c61d946322afa0b64d36dfd80956fb5e7c3fd017d7bfa450"
+    },
+    {
+      "bundle": "predictive-arc",
+      "path": "src/shaders/neuform-isolated/sources/nexus-unified-flow.html",
+      "bytes": 15094,
+      "sha256": "fa1a015ae407dc2091c3c96239d28107e973cbc03aa7abef37dd5da791d5428b"
+    },
+    {
+      "bundle": "predictive-arc",
+      "path": "src/shaders/threeui.css",
+      "bytes": 40715,
+      "sha256": "efe4447139f1358dd8e9be68edf6fa46cbefbd1de423a4d6c439ca61d2c8eccf"
+    },
+    {
+      "bundle": "glass-ai-button",
+      "path": "src/shaders/glass-ai-button/GlassAiButton.tsx",
+      "bytes": 2455,
+      "sha256": "1a11cd583e856d3be328a0192be4d77184607c64721f3fb646bd6d61436b2104"
+    },
+    {
+      "bundle": "glass-ai-button",
+      "path": "src/shaders/glass-ai-button/sources/glass-ai-button.html",
+      "bytes": 739766,
+      "sha256": "a484571de316c05ab7fbd2da82da5e028ee1ffe0bd169449fb8a3c7801abd81e"
+    },
+    {
+      "bundle": "glass-ai-button",
+      "path": "src/shaders/threeui.css",
+      "bytes": 40715,
+      "sha256": "efe4447139f1358dd8e9be68edf6fa46cbefbd1de423a4d6c439ca61d2c8eccf"
+    },
+    {
+      "bundle": "animated-top-dock",
+      "path": "src/shaders/animated-top-dock/AnimatedTopDock.tsx",
+      "bytes": 16200,
+      "sha256": "50ddbba7ebc81565f42bd14dda34efb45e7b18c1aa47e97f196256ffedb4478f"
+    },
+    {
+      "bundle": "animated-top-dock",
+      "path": "src/shaders/animated-top-dock/topDockController.ts",
+      "bytes": 10664,
+      "sha256": "506ab23d4d42cf1b5bc89131e7714586ee107381bb18d9b0302766e9a1dee2bd"
+    },
+    {
+      "bundle": "animated-top-dock",
+      "path": "src/shaders/animated-top-dock/retroPixelField.ts",
+      "bytes": 7469,
+      "sha256": "54f0469be51dfce2da7ce37c952d42c583cc7996794bf96d1ea0b2bb35d94115"
+    },
+    {
+      "bundle": "animated-top-dock",
+      "path": "src/shaders/animated-top-dock/glassParticleField.ts",
+      "bytes": 11896,
+      "sha256": "bc9f07ae6da33b28f82303ea937095806f8e3a2ab08bd1301ae8457aaf0c3464"
+    },
+    {
+      "bundle": "animated-top-dock",
+      "path": "src/shaders/threeui.css",
+      "bytes": 40715,
+      "sha256": "efe4447139f1358dd8e9be68edf6fa46cbefbd1de423a4d6c439ca61d2c8eccf"
+    }
+  ],
+  "font": {
+    "path": "src/shaders/fonts/fragment-mono.woff2",
+    "bytes": 15176,
+    "sha256": "4f4dc27f4a770c0d02fde800daa836c8adc0d1e423b28da74baaf0d1cc3ab96c",
+    "source": "https://raw.githubusercontent.com/MengTo/threeui/main/src/shaders/fonts/fragment-mono.woff2"
+  }
+}

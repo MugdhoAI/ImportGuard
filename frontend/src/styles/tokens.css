@@ -1,0 +1,81 @@
+/* Hallmark · theme: ImportGuard · genre: atmospheric · shape: Poster · hero: full-bleed Predictive Arc · nav: Sable dock · footer: editorial · modes: dark+light · copy: verbatim · v2.0.0
+ * critique: Replacing the light two-column mockup with the verified arc, centered statement, and functional import route.
+ */
+/* Hallmark · waive 44c · full-viewport canvas · the scene itself is the full-height hero visual */
+/* Hallmark · waive 79 · canvas fills lower viewport · the quiet arc backdrop frames the scroll cue */
+:root {
+  color-scheme: dark;
+  --bg: #08090e;
+  --bg-raised: #10121a;
+  --surface: #141722;
+  --surface-hover: #1b2030;
+  --text: #f3f2f8;
+  --muted: #a3a7b7;
+  --subtle: #777d91;
+  --line: #292d3a;
+  --accent: #a78bfa;
+  --accent-strong: #c4b5fd;
+  --success: #8bc9a3;
+  --warning: #edc58b;
+  --danger: #f09a9a;
+  --focus: #d6caff;
+  --hero-bg: #08090e;
+  --hero-ink: #f3f2f8;
+  --hero-muted: #d0ced9;
+  --hero-subtle: #e0deea;
+  --hero-accent: #c4b5fd;
+  --hero-rule: rgb(236 232 250 / 55%);
+  --hero-shade: rgb(8 9 14 / 42%);
+  --hero-button: rgb(225 216 255 / 13%);
+  --hero-button-hover: rgb(225 216 255 / 23%);
+  --hero-mark-rule: rgb(243 242 248 / 34%);
+  --font-sans: Inter, "Segoe UI", sans-serif;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 80px;
+  --space-10: 96px;
+  --space-11: 120px;
+  --space-12: 144px;
+  --motion-short: 180ms;
+  font-family: var(--font-sans);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  color: var(--text);
+  background: var(--bg);
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #f4f3ef;
+  --bg-raised: #ffffff;
+  --surface: #ffffff;
+  --surface-hover: #eeedf4;
+  --text: #17171d;
+  --muted: #5c6070;
+  --subtle: #73788a;
+  --line: #dfdfe7;
+  --accent: #6d4dd2;
+  --accent-strong: #5a3eb5;
+  --focus: #5637ba;
+}
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html,
+body { min-width: 320px; min-height: 100%; margin: 0; overflow-x: clip; }
+
+body { color: var(--text); background: var(--bg); }
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 4px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+}
