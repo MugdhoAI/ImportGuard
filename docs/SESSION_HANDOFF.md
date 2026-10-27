@@ -5,8 +5,8 @@
 - Updated at: 2026-10-27
 - Session/model: Codex implementation session
 - Current branch: master
-- Last verified code commit: `6c4fb76` (`feat: add verified dark Predictive Arc landing hero`); full-page checkpoint is being prepared
-- Working tree state: User-provided instructions/references were present before work and remain unstaged; implementation changes are selected explicitly for the next local commit
+- Last verified code commit: `52134f9` (`feat(ui): complete Hallmark landing and workflow integration`)
+- Working tree state: Implementation checkpoint committed. Pre-existing modified user docs and untracked user references remain untouched; intermediate visual captures remain untracked.
 - Checkpoint type: Hallmark redesign, working sample workflow, shared theme, and browser/a11y verification
 
 ## Project state
@@ -19,7 +19,7 @@ The FastAPI app and deterministic CSV workflow remain in place. The new Vite/Rea
 
 ## Current work / last action completed
 
-- Core implementation and first test/lint iteration completed; final verification and checkpoint remain.
+- Core implementation, verification, and implementation checkpoint completed.
 - Replaced the old landing page with a dark Predictive Arc hero, the required headline, responsive below-fold sections, and a real sample pipeline using the existing profile/local-suggestion/process APIs.
 - Integrated all canonical ThreeUI sources without editing vendor files. `verify:sources` checks all 24 files and the 15,176-byte Fragment Mono font. MIT/OFL notices are under `frontend/src/vendor/threeui/`.
 - The Glass source renderer is retained in a sandboxed iframe; a native accessible anchor overlays it and routes to `/app`. This is a documented product adapter and is not byte-identical integration behavior.
@@ -70,10 +70,10 @@ The FastAPI app and deterministic CSV workflow remain in place. The new Vite/Rea
 
 ## Next 1–3 concrete actions
 
-1. Inspect `git status --short`, stage only implementation files and approved screenshots, then create the full-page local checkpoint.
-2. Commit the verified status/test/handoff documentation with the resulting commit hash.
+1. Optional: split/lazy-load Three.js to reduce the initial JavaScript chunk.
+2. Optional: update Starlette/TestClient dependencies to remove the HTTPX deprecation warning.
 3. Keep Meta disabled and do not deploy, publish, push, or make real API calls without explicit authorization.
 
 ## Copyable instruction for next session
 
-Read `AGENTS.md`, `CODEX_CONTINUITY_PROTOCOL.md`, and this handoff; inspect Git status and recent commits. The redesign and browser verification are complete. Finish the explicitly scoped local checkpoint without staging pre-existing user references. Do not make Meta API calls or publish/deploy/push.
+Read `AGENTS.md`, `CODEX_CONTINUITY_PROTOCOL.md`, and this handoff; inspect Git status and recent commits. Redesign checkpoint `52134f9` is complete and verified. Preserve pre-existing user instructions/references and intermediate screenshot captures. Optional follow-ups: code splitting and updating the deprecated TestClient dependency. Do not make Meta API calls or publish/deploy/push.

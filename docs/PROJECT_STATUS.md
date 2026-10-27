@@ -4,9 +4,9 @@
 
 - Current phase: Hallmark landing redesign and local workflow QA complete
 - Last updated: 2026-10-27
-- Current branch: master
-- Last verified implementation commit: `6c4fb76` (hero checkpoint); full-page checkpoint pending
-- Working tree: Preserve pre-existing user instructions/references; implementation and generated review captures are being checkpointed locally
+- Current branch: master (`52134f9`, docs checkpoint pending)
+- Last verified implementation commit: `52134f9` (full Hallmark redesign and browser QA)
+- Working tree: Implementation checkpoint committed; pre-existing user instructions/references and intermediate captures remain untouched
 - Local app startup command: `npm.cmd --prefix frontend run build` then `python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000`
 - Core workflow status: Pipeline, API, UI, exports, and replay implemented
 - Meta API status: Adapter implemented; no Meta call made; live integration not verified
@@ -31,9 +31,9 @@
 
 ## Next actions
 
-- Review commit and final local tree; preserve user-supplied uncommitted instructions and references.
+- Preserve the pre-existing dirty instructions/references and intermediate captures; do not stage them accidentally.
 - If preparing a public release later, recheck current ThreeUI license terms and provide required notices; no publish/deploy is authorized.
 
 ## Next action
 
-Next: inspect `git status --short`, verify the local full-page checkpoint commit, and continue only from the exact recorded handoff. Do not make Meta API calls without explicit authorization.
+Next: optional performance follow-up is lazy-loading/splitting the Three.js bundle; address the Starlette/HTTPX deprecation when upgrading the test stack. Do not make Meta API calls without explicit authorization.
