@@ -86,23 +86,22 @@ export function Landing() {
         <ImportGuardDock />
         <div className="hero-copy">
           <h1 id="hero-title">Make every CSV import predictable.</h1>
-          <p>Map unfamiliar columns, review every transformation, and export data without silent changes.</p>
-          <div className="hero-actions"><GlassImportButton /><a className="how-link" href="#how">See how it works <span aria-hidden="true">↓</span></a></div>
+          <p>Map unfamiliar columns, review every transformation, and export validated data without silent changes.</p>
+          <div className="hero-actions"><GlassImportButton /><a className="how-link" href="#how">See the workflow <span aria-hidden="true">↓</span></a></div>
         </div>
-        <a className="scene-scroll" href="#how">Explore the workflow <span aria-hidden="true">↓</span></a>
       </section>
       <section id="how" className="workflow-section" aria-labelledby="how-title">
-        <div className="section-intro"><h2 id="how-title">Keep every decision in view.</h2><p>ImportGuard profiles a CSV, proposes local header matches, and waits for your review before validation.</p></div>
+        <div className="section-intro"><h2 id="how-title">Keep every decision in view.</h2><p>ImportGuard profiles CSVs and suggests local header matches. Approve mappings before validation.</p></div>
         <div className="workflow-steps">
-          <article><span>01</span><h3>Profile the file</h3><p>Inspect headers, blank cells, and row counts before choosing a target schema.</p></article>
-          <article><span>02</span><h3>Review the mapping</h3><p>Choose source columns and safe transformations. Suggestions remain unapproved until you review them.</p></article>
-          <article><span>03</span><h3>Validate and export</h3><p>Download accepted and rejected CSVs with a report and replayable recipe.</p></article>
+          <article><span>01</span><h3>Profile the file</h3><p>Inspect headers, empty cells, and row counts before choosing a schema.</p></article>
+          <article><span>02</span><h3>Review the mapping</h3><p>Select source columns and safe transformations; approve every mapping.</p></article>
+          <article><span>03</span><h3>Validate and export</h3><p>Export accepted and rejected CSVs, validation reasons, a report, and replayable recipe.</p></article>
         </div>
       </section>
       <section id="workflow" className="sample-section" aria-labelledby="sample-title">
-        <div className="sample-copy"><h2 id="sample-title">Review a real sample run.</h2><p>This uses ImportGuard’s bundled synthetic registration fixture, local mapping endpoint, and CSV validation API. No Meta request is made.</p><button className="sample-button" type="button" onClick={loadSample} disabled={busy}>{busy ? "Working…" : preview ? "Reload synthetic sample" : "Load synthetic sample"}</button></div>
+        <div className="sample-copy"><h2 id="sample-title">Review a real sample run.</h2><p>Run the bundled synthetic fixture locally. No Meta request is made.</p><button className="sample-button" type="button" onClick={loadSample} disabled={busy}>{busy ? "Working…" : preview ? "Reload synthetic sample" : "Load synthetic sample"}</button></div>
         <div className="sample-review" aria-live="polite">
-          {!preview ? <p className="sample-empty">Load the fixture to profile it and see editable local mapping suggestions.</p> : <>
+          {!preview ? <p className="sample-empty">Load the fixture to review editable local mapping suggestions.</p> : <>
             <p className="sample-summary">{preview.row_count} rows <span>·</span> {preview.headers.length} source columns</p>
             <div className="sample-mappings">{schema.map(field => { const mapping = mappings.find(item => item.target_field === field.name); return <label key={field.name}><span>{field.name}{field.required ? " *" : ""}</span><select aria-label={`Source column for ${field.name}`} value={mapping?.source_column ?? ""} onChange={event => updateMapping(field.name, event.target.value)}><option value="">Unmapped</option>{preview.headers.map(header => <option key={header} value={header}>{header}</option>)}</select></label>; })}</div>
             <label className="sample-approval"><input type="checkbox" checked={approved} onChange={event => setApproved(event.target.checked)} /> I reviewed and approve these mappings</label>

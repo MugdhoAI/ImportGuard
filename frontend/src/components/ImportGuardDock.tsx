@@ -57,12 +57,6 @@ export function ImportGuardDock() {
       <div className="dock-mount" ref={hostRef}>
         <AnimatedTopDock variant="sable" proximity={122} spring={0.19} damping={0.7} widthGrowth={17} heightGrowth={16} drop={3.5} />
       </div>
-      <nav className="mobile-nav" aria-label="ImportGuard navigation">
-        <a href="#how">How it works</a>
-        <a href="#workflow">Workflow</a>
-        <a href="/app">Import</a>
-        <a href="/privacy">Privacy</a>
-      </nav>
     </>
   );
 }

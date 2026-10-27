@@ -143,23 +143,46 @@ try {
   const privacyDarkAxe = await page.evaluate(async () => (await axe.run(document, { runOnly: { type: "tag", values: ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"] } })).violations.map(item => ({ id: item.id, nodes: item.nodes.map(node => node.target) })));
   assert.deepEqual(privacyDarkAxe, [], `Dark privacy axe violations: ${JSON.stringify(privacyDarkAxe)}`);
   await page.goto(origin, { waitUntil: "networkidle0" });
+  await page.waitForSelector(".theme-toggle");
   await page.addScriptTag({ path: resolve("node_modules/axe-core/axe.min.js") });
   const axeResult = await page.evaluate(async () => {
     const result = await axe.run(document, { runOnly: { type: "tag", values: ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"] } });
     return result.violations.map(item => ({ id: item.id, impact: item.impact, nodes: item.nodes.map(node => node.target) }));
   });
   assert.deepEqual(axeResult, [], `Landing axe violations: ${JSON.stringify(axeResult)}`);
+  assert.equal(await page.$eval("html", element => element.dataset.theme), "dark");
+  await page.screenshot({ path: resolve(screenshotDir, "landing-repair-dark-1440.png"), fullPage: true });
+  await page.click(".theme-toggle");
+  await page.waitForFunction(() => document.documentElement.dataset.theme === "light");
+  assert.equal(await page.$eval("html", element => element.dataset.theme), "light");
+  assert.equal(await page.evaluate(() => localStorage.getItem("importguard-theme")), "light");
+  const lightLandingAxe = await page.evaluate(async () => (await axe.run(document, { runOnly: { type: "tag", values: ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"] } })).violations.map(item => ({ id: item.id, nodes: item.nodes.map(node => node.target) })));
+  assert.deepEqual(lightLandingAxe, [], `Light landing axe violations: ${JSON.stringify(lightLandingAxe)}`);
+  await page.screenshot({ path: resolve(screenshotDir, "landing-repair-light-1440.png"), fullPage: true });
+  await page.reload({ waitUntil: "domcontentloaded" });
+  await page.waitForSelector(".theme-toggle");
+  assert.equal(await page.$eval("html", element => element.dataset.theme), "light", "Landing theme persists across reload");
+  await page.click(".theme-toggle");
+  await page.waitForFunction(() => document.documentElement.dataset.theme === "dark");
+  assert.equal(await page.$eval("html", element => element.dataset.theme), "dark");
 
   for (const width of [1920, 1440, 1280, 1024, 768, 430, 390, 360]) {
-    await page.setViewport({ width, height: width <= 600 ? 844 : 900 });
+    const viewportHeight = width <= 600 ? 844 : 900;
+    await page.setViewport({ width, height: viewportHeight });
     await page.goto(origin, { waitUntil: "domcontentloaded" });
     await page.waitForSelector(".hero-copy h1");
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth > innerWidth);
     assert.equal(overflow, false, `Horizontal overflow at ${width}px`);
+    const dock = await page.$eval(".animated-top-dock__nav", element => {
+      const rect = element.getBoundingClientRect();
+      return { left: rect.left, right: rect.right, bottom: rect.bottom };
+    });
+    assert(dock.left >= 0 && dock.right <= width, `Animated dock fits the ${width}px viewport`);
+    if (width <= 600) assert(dock.bottom <= viewportHeight, `Animated dock stays inside the ${width}px mobile viewport`);
     await page.screenshot({ path: resolve(screenshotDir, `redesign-${width}-viewport.png`) });
     if (width === 1440 || width === 390) await page.screenshot({ path: resolve(screenshotDir, `redesign-${width}.png`), fullPage: true });
   }
-  await page.click('.mobile-nav a[href="/privacy"]');
+  await page.click('.dock-mount [data-importguard-href="/privacy"]');
   await page.waitForFunction(() => location.pathname === "/privacy");
 
   const fallbackPage = await browser.newPage();

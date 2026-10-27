@@ -2,15 +2,15 @@
 
 > Update after every major milestone. Only record verified state.
 
-- Current phase: Hallmark landing redesign and local workflow QA complete
+- Current phase: Hallmark landing repair and browser QA complete
 - Last updated: 2026-10-27
-- Current branch: master (`52134f9`, docs checkpoint pending)
-- Last verified implementation commit: `52134f9` (full Hallmark redesign and browser QA)
-- Working tree: Implementation checkpoint committed; pre-existing user instructions/references and intermediate captures remain untouched
+- Current branch: master
+- Last verified implementation: local Hallmark landing repair checkpoint
+- Working tree: Repair committed; pre-existing user instructions/references and intermediate captures remain untouched
 - Local app startup command: `npm.cmd --prefix frontend run build` then `python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000`
 - Core workflow status: Pipeline, API, UI, exports, and replay implemented
 - Meta API status: Adapter implemented; no Meta call made; live integration not verified
-- Latest verified tests: 33 backend tests passed (1 Starlette/HTTPX deprecation warning); 2 frontend unit tests passed; browser end-to-end and axe scans passed; Hallmark page sweep 0 FAIL / 0 WARN
+- Latest verified tests: frontend browser workflow passed; axe scans passed on landing, workspace, and privacy in both themes; source verification and build passed; Hallmark page sweep 0 FAIL / 0 WARN
 
 ## Milestone status
 
@@ -25,6 +25,7 @@
 | Real Meta API request | Pending account access | | Never infer success |
 | Frontend end-to-end workflow | Implemented and browser verified | `/`, `/app`, `/privacy` | Workspace sample profile, local mapping, export, and UI recipe replay exercised |
 | Landing redesign | Implemented and rendered | `frontend/src/pages/Landing.tsx`; captures under `docs/visual-qa/` | Verified Predictive Arc; Glass CTA adapter; working Sable dock; dark/light persisted themes; real sample pipeline |
+| Landing repair | Implemented and rendered | `docs/visual-qa/landing-repair.md` and `landing-repair-*.png` | Reduced overlay, centered stack, single animated responsive dock, repaired theme click target and light contrast; canvas motion measured in browser |
 | ThreeUI source and licenses | Verified | `frontend/src/vendor/threeui/VERIFICATION.json` | 24 source files and 15,176-byte Fragment Mono asset match supplied SHA-256; ThreeUI Community MIT, font OFL 1.1 |
 | Security/privacy and accessibility | Implemented and browser audited | Axe scans on all three pages in both themes; keyboard CTA; WebGL fallback; reduced motion | No automated accessibility violations |
 | Documentation/demo | Implemented | README, architecture, test plan, demo script, source notices | Recheck terms and attribution before any public release |

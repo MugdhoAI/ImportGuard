@@ -33,7 +33,8 @@
   --hero-subtle: #e0deea;
   --hero-accent: #c4b5fd;
   --hero-rule: rgb(236 232 250 / 55%);
-  --hero-shade: rgb(8 9 14 / 42%);
+  --hero-shade: rgb(8 9 14 / 14%);
+  --hero-title-shadow: 0 2px 22px rgb(3 3 8 / 78%);
   --hero-button: rgb(225 216 255 / 13%);
   --hero-button-hover: rgb(225 216 255 / 23%);
   --hero-mark-rule: rgb(243 242 248 / 34%);
@@ -66,7 +67,7 @@
   --surface-hover: #eeedf4;
   --text: #17171d;
   --muted: #5c6070;
-  --subtle: #73788a;
+  --subtle: #5c6070;
   --line: #dfdfe7;
   --accent: #6d4dd2;
   --accent-strong: #5a3eb5;
