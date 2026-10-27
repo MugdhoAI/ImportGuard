@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}ImportGuard — predictable CSV imports{% endblock %}
+{% block body_class %}landing{% endblock %}
+{% block content %}
+<header class="site-header wrap">
+  <a class="brand" href="/" aria-label="ImportGuard home"><span class="brand-mark">IG</span> ImportGuard</a>
+  <nav aria-label="Main navigation"><a href="#how">How it works</a><a href="/privacy">Privacy</a><a class="button button-small" href="/app">Open workspace <span aria-hidden="true">↗</span></a></nav>
+</header>
+<main>
+  <section class="hero wrap">
+    <div class="hero-copy"><p class="eyebrow"><span class="pulse-dot"></span> CSV WORKFLOW, WITH HUMAN REVIEW</p>
+      <h1>Make every CSV import <em>predictable.</em></h1>
+      <p class="hero-lede">Map unfamiliar columns, review every transformation, and export validated data without silent changes.</p>
+      <div class="hero-actions"><a class="button" href="/app">Start an import <span aria-hidden="true">↗</span></a><a class="text-link" href="#how">See how it works <span aria-hidden="true">↓</span></a></div>
+      <p class="hero-caption">Local processing by default · No account required</p>
+    </div>
+    <div class="hero-visual" aria-label="Illustrative CSV mapping preview">
+      <div class="visual-top"><span><i></i> Import review</span><span class="visual-tag">ILLUSTRATIVE EXAMPLE</span></div>
+      <div class="mapping-board">
+        <div class="board-labels"><span>YOUR CSV</span><span>REVIEWED MAP</span><span>TARGET</span></div>
+        <div class="map-row"><span class="source-cell">Reg No</span><span class="map-connector"><b></b></span><span class="map-pill">Approved</span><span class="target-cell">student_id</span></div>
+        <div class="map-row"><span class="source-cell">Mobile</span><span class="map-connector"><b></b></span><span class="map-pill">Approved</span><span class="target-cell">phone</span></div>
+        <div class="map-row uncertain-row"><span class="source-cell">Paid?</span><span class="map-connector"><b></b></span><button class="map-pill review-chip" type="button" aria-label="Example uncertain mapping, illustrative only">Needs review <span>?</span></button><span class="target-cell">payment_status</span></div>
+        <div class="sample-note" role="status"><strong>Review before processing</strong><br>Ambiguous values stay unchanged until you decide.</div>
+      </div>
+      <div class="visual-foot"><span><b class="status-dot"></b> Validation runs locally</span><span>Example data</span></div>
+    </div>
+    <div class="hero-orbit orbit-one"></div><div class="hero-orbit orbit-two"></div>
+  </section>
+  <section id="how" class="steps-section wrap section-pad">
+    <div class="section-heading"><p class="eyebrow">A CLEAR PATH THROUGH MESSY DATA</p><h2>Map. Review. Export.</h2><p>Keep decisions visible from the first column to the final file.</p></div>
+    <div class="steps-grid"><article><span class="step-number">01</span><h3>Bring your CSV</h3><p>Profile columns and inspect a small local preview before choosing a target schema.</p></article><article><span class="step-number">02</span><h3>Review every map</h3><p>Choose mappings and simple cleanup operations. Nothing runs before you approve it.</p></article><article><span class="step-number">03</span><h3>Export with reasons</h3><p>Download accepted rows, rejected rows with explanations, and a reusable recipe.</p></article></div>
+  </section>
+  <section class="features-section"><div class="wrap feature-layout"><div><p class="eyebrow">BUILT AROUND DATA CONTROL</p><h2>Know what changed.<br>Know what didn't.</h2></div><div class="feature-list"><article><span>↗</span><div><h3>Explicit mapping approval</h3><p>Local suggestions are labeled. Optional AI proposals stay proposals until you review them.</p></div></article><article><span>✓</span><div><h3>Row-level validation</h3><p>Strict types and ISO dates flag ambiguous or invalid values instead of guessing.</p></div></article><article><span>⇩</span><div><h3>Recoverable exports</h3><p>Accepted and rejected CSVs preserve row order and account for every input row.</p></div></article><article><span>↻</span><div><h3>Recipe replay</h3><p>Reuse approved mappings on the next export without another model request.</p></div></article></div></div></section>
+  <section class="cta-section wrap"><p class="eyebrow">YOUR DATA, YOUR REVIEW</p><h2>Start with one file.</h2><p>CSV processing works locally without Meta credentials.</p><a class="button" href="/app">Open the workspace <span aria-hidden="true">↗</span></a></section>
+</main>
+<footer class="site-footer wrap"><a class="brand" href="/"> <span class="brand-mark">IG</span> ImportGuard</a><p>CSV processing runs in memory in this local app. Optional Meta mapping sends headers and schema; sample values require a separate opt-in.</p><a href="/privacy">Privacy notice ↗</a><small>© 2026 ImportGuard · Suggestions require review.</small></footer>
+{% endblock %}
+{% block scripts %}<script src="/static/js/landing.js" defer></script>{% endblock %}
