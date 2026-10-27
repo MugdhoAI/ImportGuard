@@ -1,0 +1,77 @@
+[
+  {
+    "path": "AGENTS.md",
+    "bytes": 4477,
+    "sha256": "e5a86c14c6fd3d56942d9bbf1e15c392492a2ee522fd9ab1d4b7c94339161f71"
+  },
+  {
+    "path": "CODEX_CONTINUITY_PROTOCOL.md",
+    "bytes": 6539,
+    "sha256": "e517bb7df0830eb223d462875f924eee0cee3b11ff92345bbeeff819a2a3670c"
+  },
+  {
+    "path": "CODEX_DESIGN_REFERENCE_GUIDE.md",
+    "bytes": 3111,
+    "sha256": "7e0066fe0cb42cd600209050e558cb7d546ae70a7c97d05c4ef135f104140e72"
+  },
+  {
+    "path": "CODEX_EXECUTION_PLAN.md",
+    "bytes": 40512,
+    "sha256": "7348cdf5e7ae9a79478b6e91f9aac4bdde67788af99b0e586d105d1cdae333c9"
+  },
+  {
+    "path": "CODEX_SECURITY_PRIVACY_QUALITY_CHECKLIST.md",
+    "bytes": 14964,
+    "sha256": "5156270cc2af0593d38a00e3c8ae630f2de5c5c908aca538579cd4093a283be2"
+  },
+  {
+    "path": "CODEX_VISUAL_REDESIGN_PLAN.md",
+    "bytes": 19211,
+    "sha256": "798fc0c649235bbdbaa16259d5b192d022a6e10302c636e384c155e4b62f50d9"
+  },
+  {
+    "path": "README_START_HERE.md",
+    "bytes": 2189,
+    "sha256": "d3e3978da8ef4f30596e24d0df47952bfdcb23802c95505b0e5fd61976006de2"
+  },
+  {
+    "path": "design.md",
+    "bytes": 2931,
+    "sha256": "67bf0b1c4d507546807afcfc139fe2e330cc24265111db12248bddddd8f12b49"
+  },
+  {
+    "path": "prompts/03_VISUAL_REDESIGN.md",
+    "bytes": 3140,
+    "sha256": "7f686708c713a42aacd353ececf74c896f3ef0e5249a8856e92bab81202bf750"
+  },
+  {
+    "path": "references/threeui/PREDICTIVE_ARC_SOURCE_REQUIRED.md",
+    "bytes": 1549,
+    "sha256": "f8ec072683de6491534b6fb69c8ebf2827daaac58e3b2211a6681d58ff66cc1d"
+  },
+  {
+    "path": "references/threeui/SOURCE_INVENTORY.md",
+    "bytes": 1695,
+    "sha256": "adc80ea5449fb27e7c4d8e535ace44887af5050fa45f04f0f8b064d62871a13f"
+  },
+  {
+    "path": "references/threeui/animated-top-dock-source.md",
+    "bytes": 92012,
+    "sha256": "bf4930d1cbfbe8795edd3c8948cd540a6095be3c54c2f646f0768439b115aa3e"
+  },
+  {
+    "path": "references/threeui/glass-ai-button-source.md",
+    "bytes": 786439,
+    "sha256": "45feb198337afa5687dea976de2331b2598c685fac8a04d911c74b8d9d4db646"
+  },
+  {
+    "path": "references/visual/aegis-remixed-bento-reference.html",
+    "bytes": 16654,
+    "sha256": "6912c004aefe22a2984e3769ce72655bd056c72fd9cb007784ba949409de0250"
+  },
+  {
+    "path": "references/visual/current-landing-before.png",
+    "bytes": 125427,
+    "sha256": "c2f9248f5594080fb2faa6ec149532052d6062e232063898bdc8e003cad86526"
+  }
+]

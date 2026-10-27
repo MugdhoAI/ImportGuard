@@ -1,71 +1,50 @@
 # Codex Instructions for ImportGuard
 
-## Read these files first
+## Read first
+Before editing, read completely:
+1. `CODEX_EXECUTION_PLAN.md`
+2. `CODEX_DESIGN_REFERENCE_GUIDE.md`
+3. `CODEX_VISUAL_REDESIGN_PLAN.md`
+4. `design.md`
+5. `CODEX_SECURITY_PRIVACY_QUALITY_CHECKLIST.md`
+6. `CODEX_CONTINUITY_PROTOCOL.md`
 
-Before editing code, read all of these files completely:
-
-1. `CODEX_EXECUTION_PLAN.md` — product specification and implementation phases.
-2. `CODEX_DESIGN_REFERENCE_GUIDE.md` — product UI direction and reference decisions.
-3. `CODEX_SECURITY_PRIVACY_QUALITY_CHECKLIST.md` — privacy, security, data integrity, testing and release expectations.
-4. `CODEX_CONTINUITY_PROTOCOL.md` — mandatory Git checkpoints and cross-session handoff rules.
-
-The files are complementary. If a visual or convenience request conflicts with data integrity, security, hackathon rules, or working product behavior, preserve the latter and record the decision.
+The newest design source of truth is `CODEX_VISUAL_REDESIGN_PLAN.md` + `design.md`. These supersede previous visual suggestions (light Lumora layout, Kage/Sylva worlds) for the current redesign. Preserve existing backend behavior and data integrity.
 
 ## Goal
-
-Build and verify a complete, locally runnable ImportGuard MVP that can be submitted to the Meta Global AI Developer Hackathon. The user wants a functional project, not a winning-at-all-costs research exercise. Keep scope small, implement real behavior, test it, and document truthfully what works.
+Deliver a complete local ImportGuard application with a carefully art-directed landing page, fully functional CSV workspace and verifiable Meta AI integration when explicitly enabled. Do not optimize for speculative awards or add unnecessary product features.
 
 ## Mandatory work style
+- Inspect current Git state, current routes and the last handoff before edits. Preserve the existing working code.
+- Keep working, do not stop at a design plan or mockup.
+- Work in small, coherent phases. After every major implementation, run tests, inspect the diff, update status/handoff/test/decision records, and create a local Git checkpoint commit according to `CODEX_CONTINUITY_PROTOCOL.md`.
+- Do not stage private data, `.env`, API keys, uploaded CSVs, exports, browser profiles, build artifacts or virtual environments.
+- Never claim a test, browser check, API request, hash verification or skill run happened unless it did.
+- Do not push, publish, deploy or incur unexpected costs without explicit approval.
 
-- Inspect the existing workspace and preserve useful work before changing files.
-- Work in small, end-to-end phases. Do not stop after a plan, mockup, or landing page.
-- After each significant feature or phase: run the relevant tests, inspect the diff, update status/handoff records, and create a local Git checkpoint commit according to `CODEX_CONTINUITY_PROTOCOL.md`.
-- Keep `docs/PROJECT_STATUS.md`, `docs/SESSION_HANDOFF.md`, `docs/DECISIONS.md`, `docs/TEST_LOG.md`, and `docs/THIRD_PARTY_NOTICES.md` current. Create them from the included starter files if not present.
-- Treat a near usage limit, context limit, or session ending as a handoff event. Stop feature work early enough to save a checkpoint and write precise resume instructions.
-- Make routine, reversible decisions independently. Record material decisions in `docs/DECISIONS.md`; ask only when essential information cannot safely be inferred.
-- Never claim a command or test ran unless it did. Distinguish passing automated tests, mocked provider tests, and real Meta API verification.
+## Hallmark and visual quality
+- Use Hallmark from https://github.com/Nutlope/hallmark for redesigning the existing page. Install project-locally if missing:
+  `npx skills add nutlope/hallmark --agent codex`
+- Follow Hallmark's actual skill file and redesign workflow. Use its rendered `sloplint` on the hero first, then the page. Fix every Floor failure; fix Reflex warnings or document each legitimate exception. Do not merely mention Hallmark in a report.
+- Build the hero first and screenshot-review it before polishing below-the-fold content.
+- Keep `CODEX_VISUAL_REDESIGN_PLAN.md` and `design.md` as acceptance criteria.
+- The user explicitly selected PredictiveArcCanvas, AnimatedTopDock Sable, and GlassAiButton. Do not silently substitute approximations. Preserve canonical sources; any small product-specific adapter must be clearly documented and must not falsely claim byte-identical source.
+- The owner supplied complete text source references for the Glass button and dock; they are in `references/threeui/`.
+- The complete Predictive Arc source bundle is not included in the local reference files. Fetch the canonical JSON bundle and verify hashes before implementation. The attached Aegis HTML is a separate visual sample; it is not the Predictive Arc source. If you cannot fetch/verify the canonical source, report the blocker instead of approximating it.
+- Check current source licenses/terms, required font asset and attribution before public release.
 
-## Git and continuity
+## Architecture
+- Preserve the existing FastAPI backend, routes, CSV pipeline and tests.
+- The requested exact ThreeUI components are React/TypeScript. A small Vite + React + TypeScript frontend is authorized only if needed to integrate those exact components. Keep FastAPI as backend and serve the built frontend from the same app. Do not add Next.js, Supabase, auth systems, databases, microservices, analytics or unrelated dependencies.
+- Keep `MODEL_API_KEY` server-side only. `ALLOW_META_API_CALLS` remains false until the user explicitly authorizes actual API calls.
 
-- The user explicitly authorized **local Git checkpoints**. If there is no Git repository, inspect the folder and then initialize one. Never overwrite an existing repository or history.
-- Use local commits only. Do not push, publish, deploy, create a remote, or open a PR without explicit approval.
-- Commit after each coherent major implementation and test milestone. Inspect staged files before committing; never blindly stage everything.
-- Never commit `.env`, API keys, real CSV data, uploaded files, private exports, caches, virtual environments, or build artifacts.
-- Do not use `git reset --hard`, `git clean`, force push, history rewrite, or other destructive Git operations.
-- If a session may end while work is incomplete, preserve the working tree and write `docs/SESSION_HANDOFF.md`; if useful, make a clearly labelled WIP checkpoint commit after confirming no secrets or private data are staged. Report any failing tests rather than hiding them.
-- Start each resumed session by reading the latest handoff, project status, Git status, and recent commit history. Continue from actual state, not assumptions.
-- Detailed mandatory procedure is in `CODEX_CONTINUITY_PROTOCOL.md`.
-
-## Technical constraints
-
-- Follow the small Python/FastAPI application and server-rendered HTML/CSS/vanilla JavaScript architecture in the execution plan unless the actual workspace or a verified blocker justifies a change.
-- Do not add Supabase, React/Next.js, a database, background queues, Docker, microservices, analytics, account systems, or a heavy 3D framework without a verified requirement.
-- Manual column mapping and deterministic CSV processing must work without Meta API access.
-- Model output is untrusted. Validate it against a strict schema and allowlist. Require user review before transformations; never execute model-generated code.
-- Never silently modify identifiers, guess ambiguous dates, discard rows, or overwrite original files.
-
-## Meta API and secrets
-
-- Keep `MODEL_API_KEY` in a local `.env` file or environment variable. Ensure `.env` is ignored by Git.
-- Never print, expose, commit, place in frontend code, or send secrets to the browser.
-- Keep `ALLOW_META_API_CALLS=false` by default. Make a real/billable call only when the user explicitly enables it and confirms access/credit status.
-- A fake provider is permitted for automated tests but must never be described as a real Meta request.
-- If credits are pending, finish all non-API work and leave a clear pending status. Do not fake live responses.
-
-## Design
-
-- Use the product-specific direction in `CODEX_DESIGN_REFERENCE_GUIDE.md`, taking inspiration from supplied examples without copying their unrelated branding/content.
-- The workspace and data review experience matter more than animation. Every visible control must work.
-- ThreeUI components are optional, not requirements. Verify exact source, license/terms, attribution, hashes and assets before integrating copied source. If that takes too long or the rights are unclear, use an original CSS/HTML effect and continue.
-- No fake testimonials, customer logos, usage metrics, client lists, or unsupported claims.
-
-## Privacy, safety and release
-
-- Implement an accurate `/privacy` page consistent with actual data flow; do not invent legal contacts or claim compliance without evidence.
-- Follow `CODEX_SECURITY_PRIVACY_QUALITY_CHECKLIST.md` for file upload validation, CSV formula injection, safe HTML, model-input consent, logs, accessibility, licensing, and test expectations.
-- Bind the app to `127.0.0.1` by default. Public deployment requires explicit approval and a separate deployment/privacy review.
-- Check dependency licenses and preserve required notices.
+## Functional floor
+- The real CSV workflow must continue working: upload, profile, schema edit, mapping review, safe transformations, row validation, accepted/rejected exports, report and recipe replay.
+- The actual CTA opens the real workspace.
+- Every dock navigation item and theme button works.
+- No fake "illustrative example" presented as working-product evidence; any sample preview uses the real sample fixture/workflow.
+- Implement dark default and persisted light mode. The Predictive Arc hero stays intentionally dark.
+- Preserve accessibility, reduced motion, keyboard focus, responsive layouts and WebGL fallback.
 
 ## Completion report
-
-When blocked, interrupted, or finished, state: what is implemented; current Git commit; working-tree state; exact tests/commands run and their results; known failures; what is not yet verified; whether a real Meta API request succeeded; exact local run command; and the next concrete task. Keep API keys and private data out of the report.
+Report exact changes, source files/hash/license status, tests actually run, viewport/browser checks, Hallmark output, unresolved issues, Git state and current commit, Meta API verification status, and exact local run/build commands.

@@ -6,7 +6,7 @@
 
 ## 0. Instructions for Codex
 
-1. Read `AGENTS.md`, this entire file, `CODEX_DESIGN_REFERENCE_GUIDE.md`, `CODEX_SECURITY_PRIVACY_QUALITY_CHECKLIST.md`, and `CODEX_CONTINUITY_PROTOCOL.md` before changing anything. Inspect the current project directory, installed Python, Git status, and available commands.
+1. Start by reading this entire file. Then inspect the current project directory, installed Python, Git status, and available commands before changing anything.
 2. If the folder is empty, create the project. If files already exist, inspect them and preserve useful work. Do not overwrite files blindly.
 3. Implement the app locally end to end. Do not stop after producing a plan or a design mockup.
 4. Work in phases, but continue through all phases that are possible without the user's account credentials or other unavailable dependencies. Do not ask the user to approve ordinary implementation decisions.
@@ -548,8 +548,6 @@ Provide a Windows-friendly `run.ps1` only if it reduces friction. Avoid making t
 
 - Inspect directory, Python version, Git state, and available shell.
 - Create `AGENTS.md` containing the key instructions in this document: scope, test requirements, no secret leaks, and no deployment/push without permission.
-- Initialize or verify local Git safely, confirm `.gitignore` excludes secrets/private data, and create/maintain `docs/PROJECT_STATUS.md`, `docs/SESSION_HANDOFF.md`, `docs/DECISIONS.md`, `docs/TEST_LOG.md`, and `docs/THIRD_PARTY_NOTICES.md` according to `CODEX_CONTINUITY_PROTOCOL.md`.
-- Make a local checkpoint commit after the bootstrap tests pass; never push without permission.
 - Create dependencies, configuration, application entrypoint and a health endpoint.
 - Add `.gitignore`, `.env.example`, project license file and `docs/DECISIONS.md`.
 - Create sample CSV/schema fixtures containing synthetic data.
