@@ -5,9 +5,9 @@ Record commands actually run, exact outcomes, and failures. Do not record expect
 | Date/time | Commit | Command | Result | Notes / follow-up |
 |---|---|---|---|---|
 | Initial template | | Not run | Not verified | Start recording after first test run |
-| 2026-10-27 | Pending | `python -m pytest -q` | 33 passed, 1 warning | Starlette TestClient notes HTTPX deprecation; no test failures |
-| 2026-10-27 | Pending | `python -m ruff check .` | Passed | All checks passed |
-| 2026-10-27 | Pending | `python -m uvicorn app.main:app --host 127.0.0.1 --port 8000` and `Invoke-WebRequest` for six routes | Passed | `/health`, `/`, `/app`, `/privacy`, and both example files returned HTTP 200; bound to loopback |
+| 2026-10-27 | `91793d8` | `python -m pytest -q` | 33 passed, 1 warning | Starlette TestClient notes HTTPX deprecation; no test failures |
+| 2026-10-27 | `91793d8` | `python -m ruff check .` | Passed | All checks passed |
+| 2026-10-27 | `91793d8` | `python -m uvicorn app.main:app --host 127.0.0.1 --port 8000` and `Invoke-WebRequest` for six routes | Passed | `/health`, `/`, `/app`, `/privacy`, and both example files returned HTTP 200; bound to loopback |
 
 ## Test categories
 

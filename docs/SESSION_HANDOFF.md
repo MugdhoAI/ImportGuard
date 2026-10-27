@@ -5,9 +5,9 @@
 - Updated at: 2026-10-27
 - Session/model: Codex implementation session
 - Current branch: master
-- Last verified commit: No commit yet; checkpoint pending
-- Working tree state: Uncommitted project implementation; staging not verified
-- Checkpoint type: Functional MVP implementation in progress
+- Last verified commit: `91793d894cbfd138296094b2d2536621600b9cb0` (`feat: build ImportGuard CSV workflow MVP`)
+- Working tree state: Code checkpoint committed; this handoff update is being committed separately
+- Checkpoint type: Functional MVP implementation checkpoint
 
 ## Project state
 
@@ -52,10 +52,10 @@ The starter workspace contained specifications only. A FastAPI app, deterministi
 
 ## Next 1–3 concrete actions
 
-1. Run `python -m pytest -q` and `python -m ruff check .`; fix failures.
-2. Start Uvicorn bound to 127.0.0.1 and check `/`, `/app`, `/privacy`, and `/health`.
-3. Review `git diff --check`, full diff, secrets/private data, update docs with actual outcomes, and commit intended files locally.
+1. Perform a real browser pass at desktop and mobile sizes for upload, manual mapping, approval, download, and recipe replay; no browser automation was available during this session.
+2. Keep live Meta mapping disabled until the owner confirms credits/access and explicitly enables `ALLOW_META_API_CALLS`.
+3. Before public release, choose a project license and review the privacy/release blockers in the checklist.
 
 ## Copyable instruction for next session
 
-Read `AGENTS.md` and `CODEX_CONTINUITY_PROTOCOL.md`, inspect actual Git status, rerun pytest and Ruff, verify local Uvicorn routes, then stage only intended files and create a local checkpoint. Do not enable or call Meta unless explicitly authorized.
+Read `AGENTS.md` and `CODEX_CONTINUITY_PROTOCOL.md`, inspect actual Git status and recent commits, rerun pytest and Ruff, then perform browser QA on the current app. Do not enable or call Meta unless explicitly authorized.

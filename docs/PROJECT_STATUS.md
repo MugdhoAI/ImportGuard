@@ -5,8 +5,8 @@
 - Current phase: Functional implementation complete; final verification and checkpoint in progress
 - Last updated: 2026-10-27
 - Current branch: master
-- Last verified commit: No commit yet; checkpoint pending
-- Working tree: Implementation changes not yet committed
+- Last verified implementation commit: `91793d894cbfd138296094b2d2536621600b9cb0`
+- Working tree: Code checkpoint committed; docs checkpoint in progress
 - Local app startup command: `python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000` (startup/routes verified)
 - Core workflow status: Pipeline, API, UI, exports, and replay implemented
 - Meta API status: Adapter implemented; disabled by default; no real request made
@@ -16,7 +16,7 @@
 
 | Milestone | Status | Evidence / commit | Notes |
 |---|---|---|---|
-| Workspace and Git bootstrap | Implemented | Local repository initialized | Dependencies installed; checkpoint pending |
+| Workspace and Git bootstrap | Implemented | `91793d8` | Local-only root commit; no remote |
 | CSV parsing and profiling | Implemented | `tests/test_csv_pipeline.py` | |
 | Schema and mapping | Implemented | Unit/API tests | Manual and local suggestions |
 | Validation and transformations | Implemented | Unit tests | Strict configured types and allowlist |
