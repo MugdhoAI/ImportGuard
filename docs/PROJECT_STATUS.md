@@ -2,11 +2,11 @@
 
 > Update after every major milestone. Only record verified state.
 
-- Current phase: Functional implementation complete; final verification and checkpoint in progress
+- Current phase: MVP implementation complete; browser QA and live Meta verification pending
 - Last updated: 2026-10-27
 - Current branch: master
 - Last verified implementation commit: `91793d894cbfd138296094b2d2536621600b9cb0`
-- Working tree: Code checkpoint committed; docs checkpoint in progress
+- Working tree: Clean at latest local checkpoint; verify with `git status --short`
 - Local app startup command: `python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000` (startup/routes verified)
 - Core workflow status: Pipeline, API, UI, exports, and replay implemented
 - Meta API status: Adapter implemented; disabled by default; no real request made

@@ -6,7 +6,7 @@
 - Session/model: Codex implementation session
 - Current branch: master
 - Last verified commit: `91793d894cbfd138296094b2d2536621600b9cb0` (`feat: build ImportGuard CSV workflow MVP`)
-- Working tree state: Code checkpoint committed; this handoff update is being committed separately
+- Working tree state: This handoff is committed; verify current state with `git status --short`
 - Checkpoint type: Functional MVP implementation checkpoint
 
 ## Project state
