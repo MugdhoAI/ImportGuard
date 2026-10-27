@@ -5,9 +5,9 @@
 - Updated at: 2026-10-27
 - Session/model: Codex implementation session
 - Current branch: master
-- Last verified base commit: `91793d894cbfd138296094b2d2536621600b9cb0` (`feat: build ImportGuard CSV workflow MVP`); landing hero checkpoint is being committed
-- Working tree state: Preserve the pre-existing uncommitted user redesign references; inspect `git status --short` and stage only implementation files
-- Checkpoint type: Hallmark redesign hero and verified ThreeUI source checkpoint
+- Last verified code commit: `6c4fb76` (`feat: add verified dark Predictive Arc landing hero`); full-page checkpoint is being prepared
+- Working tree state: User-provided instructions/references were present before work and remain unstaged; implementation changes are selected explicitly for the next local commit
+- Checkpoint type: Hallmark redesign, working sample workflow, shared theme, and browser/a11y verification
 
 ## Project state
 
@@ -20,10 +20,16 @@ The FastAPI app and deterministic CSV workflow remain in place. The new Vite/Rea
 ## Current work / last action completed
 
 - Core implementation and first test/lint iteration completed; final verification and checkpoint remain.
-- Replaced the light two-column mockup with a full-height dark Predictive Arc hero; a small React lifecycle adapter calls the canonical renderer.
-- Retrieved all three canonical ThreeUI bundles. All 24 source files and the 15,176-byte Fragment Mono asset match their supplied hashes; current MIT/OFL license files are saved in `frontend/src/vendor/threeui/`.
-- Captured and reviewed the original landing page and hero-only desktop/phone screenshots under `docs/visual-qa/`.
-- Hero CTA routes to the existing workspace. Glass CTA, Sable dock integration, theme toggle and lower workflow sections remain next.
+- Replaced the old landing page with a dark Predictive Arc hero, the required headline, responsive below-fold sections, and a real sample pipeline using the existing profile/local-suggestion/process APIs.
+- Integrated all canonical ThreeUI sources without editing vendor files. `verify:sources` checks all 24 files and the 15,176-byte Fragment Mono font. MIT/OFL notices are under `frontend/src/vendor/threeui/`.
+- The Glass source renderer is retained in a sandboxed iframe; a native accessible anchor overlays it and routes to `/app`. This is a documented product adapter and is not byte-identical integration behavior.
+- The original Glass source, Sable dock source, and Predictive Arc source hashes match owner-supplied pins. Recheck licenses/attribution before release.
+- The animated dock has working home, section, workspace, and privacy navigation. Small screens use a native bottom navigation.
+- Dark is the default; a persisted theme switch works on landing, workspace, and privacy. The arc stays dark in light theme.
+- The landing preview calls the actual bundled synthetic CSV, profile endpoint, and local mapping endpoint. Visitors can edit and approve mappings, validate, and download a real package.
+- Workspace UI browser flow exercised the bundled fixture, manual mapping corrections, approval, process package download, and recipe replay through the existing file controls.
+- Before/after and final screenshots were captured and reviewed in `docs/visual-qa/`; browser checks cover 1920, 1440, 1280, 1024, 768, 430, 390, and 360 CSS px.
+- Intermediate screenshots from earlier layout iterations (`live-full.png` and the non-`-viewport` files for 1024, 1280, 1920, 360, 430, and 768) remain untracked and untouched. The staged screenshot set contains the final reviewed viewport images plus reviewed 1440/390 full pages and workspace theme captures.
 
 ## Tests and commands
 
@@ -34,12 +40,17 @@ The FastAPI app and deterministic CSV workflow remain in place. The new Vite/Rea
 | Uvicorn + six loopback GET requests | Passed | All pages/fixtures returned HTTP 200 |
 | `npm.cmd --prefix frontend run verify:sources` | Passed | 24 source files and exact Fragment Mono SHA-256 verified |
 | `npm.cmd --prefix frontend run build` | Passed | Vite production build; FastAPI serves the built landing from `/` and assets from `/web/` |
-| Hallmark `sloplint --stage hero --render` | 0 FAIL, 0 WARN; 2 documented waivers | Rendered at 1280, 1440, 1920, and 375 CSS px |
-| Puppeteer hero smoke | Passed | Headline, canvas, `/app` CTA, upload control, privacy, health, stylesheet and font verified |
+| `npm.cmd --prefix frontend test` | 2 passed | Glass adapter product label/source guard |
+| `npm.cmd --prefix frontend run test:browser` | Passed | Full workspace sample and recipe replay, dock, keyboard action, themes, axe on three pages in both themes, WebGL fallback, reduced motion, and eight widths |
+| Hallmark rendered page sweep | 0 FAIL, 0 WARN, 2 WAIVED, 1 NOTE | 1280x800, 1440x900, 1920x1080, 1440 and 375 full pages |
+| `npm.cmd --prefix frontend audit --omit=dev` | 0 vulnerabilities | Puppeteer Core was updated to 25.16.0 after the first audit identified dev-tool advisories |
+| `python -m pytest -q` | 33 passed, 1 warning | Existing Starlette/HTTPX deprecation warning |
+| `python -m ruff check .` | Passed | All checks passed |
 
 ## Failing tests / bugs / blockers
 
-- Full CSV workflow has not yet been driven end-to-end in a browser. Starlette TestClient emits an HTTPX deprecation warning. No real Meta request has been made.
+- Vite reports a large JavaScript chunk (Three.js/WebGL sources; index about 1,003 kB uncompressed, about 268 kB gzip). Build succeeds; consider code splitting if startup performance becomes a concern.
+- Starlette TestClient emits an HTTPX deprecation warning. No live Meta API request was made or verified.
 
 ## Important files touched
 
@@ -59,11 +70,10 @@ The FastAPI app and deterministic CSV workflow remain in place. The new Vite/Rea
 
 ## Next 1–3 concrete actions
 
-1. Integrate GlassAiButton and the Sable dock from unchanged canonical sources, using documented ImportGuard adapters.
-2. Add the persisted dark/light toggle on landing, workspace and privacy; keep the selected hero scene dark.
-3. Connect the below-fold workflow preview to a real fixture and run browser upload, mapping, export and recipe replay checks.
-4. Run full tests, Hallmark page sweep and accessibility checks. Keep live Meta mapping disabled.
+1. Inspect `git status --short`, stage only implementation files and approved screenshots, then create the full-page local checkpoint.
+2. Commit the verified status/test/handoff documentation with the resulting commit hash.
+3. Keep Meta disabled and do not deploy, publish, push, or make real API calls without explicit authorization.
 
 ## Copyable instruction for next session
 
-Read `AGENTS.md`, the visual redesign plan and `CODEX_CONTINUITY_PROTOCOL.md`; inspect Git state before edits. Continue with the Glass CTA and Sable dock adapters. Keep `MODEL_API_KEY` server-side and `ALLOW_META_API_CALLS=false`; do not make Meta calls.
+Read `AGENTS.md`, `CODEX_CONTINUITY_PROTOCOL.md`, and this handoff; inspect Git status and recent commits. The redesign and browser verification are complete. Finish the explicitly scoped local checkpoint without staging pre-existing user references. Do not make Meta API calls or publish/deploy/push.

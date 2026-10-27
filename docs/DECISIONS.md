@@ -46,3 +46,17 @@ Add decisions below using:
 - Decision: Keep fetched ThreeUI canonical source files unchanged under `frontend/src/vendor/threeui/`; use separately named ImportGuard adapters and pin source verification hashes.
 - Reason/evidence: Exact-source integrity and small product-specific behavior changes are both required by the design plan.
 - Consequences and revisit condition: Re-run `npm run verify:sources` before changing vendor source or preparing public distribution.
+
+### Verified landing and workflow adapters — 2026-10-27
+- Decision: Keep the full-screen Predictive Arc scene dark in both page themes and persist the shared theme selection across landing, workspace, and privacy routes.
+- Reason/evidence: The chosen hero artwork is intentionally dark; browser navigation confirms the stored theme applies consistently to the existing FastAPI pages.
+- Decision: Keep the canonical GlassAiButton HTML in a sandboxed iframe for its visual canvas, with an accessible native anchor layered over it for the product CTA.
+- Reason/evidence: The source study's label and activation behavior are not ImportGuard navigation. A semantic anchor ensures keyboard focus, exact product text, and direct `/app` navigation while preserving the canonical canvas source. The app adapter is not byte-identical behavior.
+- Consequences and revisit condition: Keep the source bundle unchanged, test its source hashes, and review the overlay if the vendor source changes.
+- Decision: Connect the landing preview to the actual bundled synthetic CSV and the existing profile, local mapping, and process endpoints. Replay stays on the existing workspace and `/api/replay` path.
+- Reason/evidence: Browser testing verifies accepted/rejected CSV package output and the replayed recipe; no illustrative fake output is used.
+- Decision: Keep the compact Sable dock labels product-specific and route each to its real section/page. Use the native dock links at mobile widths.
+- Decision: Honor reduced motion in the Predictive Arc renderer and provide the existing Glass CTA link when WebGL is unavailable.
+- Reason/evidence: Browser tests exercised the no-WebGL fallback and a still arc under `prefers-reduced-motion`.
+- Decision: Record Hallmark waivers 44c and 79 for the intentional full-viewport arc scene only; no page Floor failures, Reflex warnings, or warnings remained in the final run.
+- License status: Retrieved canonical ThreeUI Community sources are under MIT terms and the Fragment Mono font is under OFL 1.1, with notices preserved in the vendor folder. Recheck current terms and attribution before public release.

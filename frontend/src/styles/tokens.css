@@ -9,6 +9,14 @@
   --bg-raised: #10121a;
   --surface: #141722;
   --surface-hover: #1b2030;
+  --button-ink: #f0eaff;
+  --button-surface: #5132a7;
+  --button-hover: #402581;
+  --glass-label-ink: #17131f;
+  --glass-surface: rgb(12 13 20 / 55%);
+  --dock-surface: rgb(14 15 22 / 74%);
+  --mobile-dock-border: rgb(255 255 255 / 20%);
+  --mobile-dock-surface: #11131c;
   --text: #f3f2f8;
   --muted: #a3a7b7;
   --subtle: #777d91;
@@ -53,8 +61,8 @@
 :root[data-theme="light"] {
   color-scheme: light;
   --bg: #f4f3ef;
-  --bg-raised: #ffffff;
-  --surface: #ffffff;
+  --bg-raised: #f6f5f2;
+  --surface: #fcfbf8;
   --surface-hover: #eeedf4;
   --text: #17171d;
   --muted: #5c6070;

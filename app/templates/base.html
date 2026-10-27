@@ -3,13 +3,16 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#111310">
+  <script>try{const t=localStorage.getItem('importguard-theme');document.documentElement.dataset.theme=t==='light'?'light':'dark'}catch{document.documentElement.dataset.theme='dark'}</script>
   <title>{% block title %}ImportGuard{% endblock %}</title>
   <link rel="icon" href="/web/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/static/css/styles.css">
+  <link rel="stylesheet" href="/static/css/theme.css">
   {% block head %}{% endblock %}
 </head>
 <body class="{% block body_class %}{% endblock %}">
   {% block content %}{% endblock %}
   {% block scripts %}{% endblock %}
+  <script src="/static/js/theme.js" defer></script>
 </body>
 </html>

@@ -1,0 +1,56 @@
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg:#090a10; --ink:#f1f0f6; --line:#2a2d3a;
+  --surface:#151722; --accent:#795fca; --accent-dark:#c4b5fd; --sage:#242b2a; --dark:#10121a; --muted:#b1b4c2;
+  background:var(--bg); color:var(--ink);
+}
+:root[data-theme="dark"] body,
+:root[data-theme="dark"] .workspace-page { background:var(--bg); color:var(--ink); }
+:root[data-theme="dark"] .panel,:root[data-theme="dark"] .aside-card,
+:root[data-theme="dark"] .sample-review { background:var(--surface); border-color:var(--line); color:var(--ink); }
+:root[data-theme="dark"] .aside-note,:root[data-theme="dark"] .drop-zone,
+:root[data-theme="dark"] .mapping-item,:root[data-theme="dark"] .profile-summary,
+:root[data-theme="dark"] .approval-row { background:#1b1e2a; border-color:var(--line); color:var(--ink); }
+:root[data-theme="dark"] .schema-table td,:root[data-theme="dark"] .schema-table th,
+:root[data-theme="dark"] .workspace-header { border-color:var(--line); }
+:root[data-theme="dark"] input[type=text],:root[data-theme="dark"] select,
+:root[data-theme="dark"] .sample-mappings select { color:var(--ink); background:#10121a; border-color:#393d4d; }
+:root[data-theme="dark"] .brand,:root[data-theme="dark"] .site-header nav>a:not(.button),
+:root[data-theme="dark"] .text-link,:root[data-theme="dark"] .workspace-title h1,
+:root[data-theme="dark"] .panel-heading h2,:root[data-theme="dark"] .aside-card h3,
+:root[data-theme="dark"] .privacy-content h1,:root[data-theme="dark"] .privacy-content h2 { color:var(--ink); }
+:root[data-theme="dark"] .privacy-content p,:root[data-theme="dark"] .drop-zone strong,
+:root[data-theme="dark"] .schema-toolbar label,:root[data-theme="dark"] .schema-toolbar select,
+:root[data-theme="dark"] .mapping-target,:root[data-theme="dark"] .file-label { color:var(--muted); }
+:root[data-theme="dark"] .message.error { color:#ffc4bd; background:#321e22; border-color:#61333a; }
+:root[data-theme="dark"] .message.success,:root[data-theme="dark"] .result-summary { color:#b8e6c4; background:#1a3027; border-color:#315541; }
+:root[data-theme="dark"] .button-secondary { color:var(--ink); background:#1c1f2b; border-color:#434758; }
+:root[data-theme="dark"] .button-quiet { color:var(--ink); }
+:root[data-theme="dark"] .page-theme-toggle { color:var(--ink); background:#1b1e2a; border-color:#414556; }
+:root[data-theme="dark"] .button:not(.button-secondary):not(.button-quiet) { background:#7658d6; border-color:#7658d6; }
+:root[data-theme="light"] {
+  color-scheme:light;
+  --muted:#515a50; --accent:#91401e; --accent-dark:#773519;
+}
+:root[data-theme="light"] .eyebrow,:root[data-theme="light"] .drop-zone,
+:root[data-theme="light"] .schema-toolbar label,:root[data-theme="light"] .schema-toolbar select,
+:root[data-theme="light"] .consent-row,:root[data-theme="light"] .empty-state,
+:root[data-theme="light"] .file-label,:root[data-theme="light"] .muted,
+:root[data-theme="light"] .hint { color:#515a50; }
+:root[data-theme="light"] .progress-list li { color:#515a50; }
+:root[data-theme="light"] .progress-list li.active { color:#773519; }
+:root[data-theme="light"] .progress-list span { color:#515a50; }
+:root[data-theme="light"] .schema-table th { color:#515a50; }
+:root[data-theme="light"] .upload-icon { color:#3f573a; background:#e9eee4; }
+:root[data-theme="dark"] .eyebrow,:root[data-theme="dark"] .local-badge,
+:root[data-theme="dark"] .progress-list li,:root[data-theme="dark"] .progress-list span,
+:root[data-theme="dark"] .drop-zone,:root[data-theme="dark"] .muted,
+:root[data-theme="dark"] .hint,:root[data-theme="dark"] .consent-row,
+:root[data-theme="dark"] .empty-state,:root[data-theme="dark"] .file-label,
+:root[data-theme="dark"] .schema-table th { color:#b1b4c2; }
+:root[data-theme="dark"] .progress-list li.active,
+:root[data-theme="dark"] .panel-index { color:#c4b5fd; }
+:root[data-theme="dark"] .upload-icon { color:#b7d7ac; background:#303c34; }
+.page-theme-toggle { min-height:36px; padding:0 12px; border:1px solid #d4d7d0; border-radius:999px; color:#25242d; background:#fff; font-size:12px; cursor:pointer; }
+.privacy-header-actions { display:flex; align-items:center; gap:12px; }
+:focus-visible { outline:3px solid #9d85f4; outline-offset:3px; }
