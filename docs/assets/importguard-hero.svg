@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="520" viewBox="0 0 1440 520" role="img" aria-labelledby="title desc">
+  <title id="title">ImportGuard CSV mapping and validation workflow</title>
+  <desc id="desc">A source CSV is mapped to a target schema, reviewed by a person, validated deterministically, and separated into accepted and rejected rows with a reusable recipe.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1420"/>
+      <stop offset="1" stop-color="#101f2c"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#56d6c5"/>
+      <stop offset="1" stop-color="#8be0bd"/>
+    </linearGradient>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" fill="none" stroke="#8ba3b8" stroke-opacity=".075" stroke-width="1"/>
+    </pattern>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#000" flood-opacity=".22"/>
+    </filter>
+    <style>
+      .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+      .sans{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+      .muted{fill:#91a4b7}
+      .light{fill:#edf5f8}
+      .line{stroke:#3c5264;stroke-width:1.5}
+      .panel{fill:#142433;stroke:#30495b;stroke-width:1.2}
+      .small{font-size:12px;letter-spacing:1.5px}
+    </style>
+  </defs>
+  <rect width="1440" height="520" rx="24" fill="url(#bg)"/>
+  <rect width="1440" height="520" rx="24" fill="url(#grid)"/>
+  <path d="M0 408H1440" stroke="#284052" stroke-opacity=".65"/>
+  <g transform="translate(72 62)">
+    <rect width="42" height="42" rx="12" fill="#173b43" stroke="#56d6c5"/>
+    <path d="M12 12h18v18H12zM17 17h8M17 22h8M17 27h5" fill="none" stroke="#8be0d0" stroke-width="1.8" stroke-linecap="round"/>
+    <text x="58" y="18" class="sans light" font-size="16" font-weight="700" letter-spacing=".4">IMPORTGUARD</text>
+    <text x="58" y="37" class="mono muted" font-size="10" letter-spacing="1.7">CSV MAPPING / VALIDATION</text>
+  </g>
+  <g transform="translate(72 148)">
+    <text class="sans light" font-size="42" font-weight="650" letter-spacing="-1.5">Make every import</text>
+    <text y="50" class="sans light" font-size="42" font-weight="650" letter-spacing="-1.5">reviewable.</text>
+    <text y="92" class="sans muted" font-size="16">Map columns. Validate rows. Keep the decisions.</text>
+    <rect y="126" width="204" height="34" rx="17" fill="#173b43" stroke="#3d8f85"/>
+    <circle cx="17" cy="17" r="4" fill="#68d9c5"/>
+    <text x="31" y="21" class="mono" fill="#b9eee4" font-size="11" letter-spacing=".8">DETERMINISTIC CORE</text>
+    <text y="204" class="mono muted" font-size="11">HUMAN APPROVAL  /  REPEATABLE OUTPUT</text>
+  </g>
+  <g filter="url(#shadow)" transform="translate(470 82)">
+    <rect class="panel" width="250" height="290" rx="14"/>
+    <text x="22" y="30" class="mono muted small">01 / SOURCE CSV</text>
+    <text x="22" y="61" class="sans light" font-size="19" font-weight="600">registrations.csv</text>
+    <rect x="20" y="82" width="210" height="34" rx="6" fill="#1d3445"/>
+    <text x="32" y="104" class="mono muted" font-size="11">Reg No</text>
+    <text x="116" y="104" class="mono muted" font-size="11">Mobile</text>
+    <text x="184" y="104" class="mono muted" font-size="11">Paid</text>
+    <g class="mono" font-size="11" fill="#d8e4eb">
+      <text x="32" y="143">A-104</text><text x="116" y="143">017…</text><text x="184" y="143">yes</text>
+      <text x="32" y="174">A-105</text><text x="116" y="174">018…</text><text x="184" y="174">no</text>
+      <text x="32" y="205">A-106</text><text x="116" y="205">019…</text><text x="184" y="205">yes</text>
+    </g>
+    <path d="M20 224H230" class="line"/>
+    <text x="22" y="252" class="mono muted" font-size="10">PROFILED LOCALLY</text>
+    <text x="22" y="272" class="mono" fill="#72d8c7" font-size="10">3 COLUMNS  ·  3 ROWS</text>
+  </g>
+  <g transform="translate(748 210)">
+    <path d="M0 0H44" stroke="url(#accent)" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M36 -6L44 0L36 6" fill="none" stroke="#72d8c7" stroke-width="2"/>
+    <text x="22" y="-14" text-anchor="middle" class="mono muted" font-size="9">REVIEW</text>
+  </g>
+  <g filter="url(#shadow)" transform="translate(800 82)">
+    <rect class="panel" width="250" height="290" rx="14"/>
+    <text x="22" y="30" class="mono muted small">02 / MAPPING REVIEW</text>
+    <text x="22" y="61" class="sans light" font-size="19" font-weight="600">Target schema</text>
+    <g class="mono" font-size="11">
+      <text x="22" y="103" fill="#91a4b7">SOURCE</text><text x="144" y="103" fill="#91a4b7">TARGET</text>
+      <path d="M22 115H228" class="line"/>
+      <text x="22" y="143" fill="#d8e4eb">Reg No</text><text x="144" y="143" fill="#bcebe2">student_id</text>
+      <text x="22" y="180" fill="#d8e4eb">Mobile</text><text x="144" y="180" fill="#bcebe2">phone</text>
+      <text x="22" y="217" fill="#d8e4eb">Paid</text><text x="144" y="217" fill="#bcebe2">payment_status</text>
+    </g>
+    <rect x="20" y="238" width="210" height="32" rx="6" fill="#173b43" stroke="#397f77"/>
+    <path d="M34 254l5 5 9-11" fill="none" stroke="#76ddc9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="58" y="259" class="mono" fill="#b9eee4" font-size="10">APPROVED BY USER</text>
+  </g>
+  <g transform="translate(1078 210)">
+    <path d="M0 0H44" stroke="url(#accent)" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M36 -6L44 0L36 6" fill="none" stroke="#72d8c7" stroke-width="2"/>
+    <text x="22" y="-14" text-anchor="middle" class="mono muted" font-size="9">VALIDATE</text>
+  </g>
+  <g filter="url(#shadow)" transform="translate(1130 82)">
+    <rect class="panel" width="238" height="290" rx="14"/>
+    <text x="22" y="30" class="mono muted small">03 / OUTPUT</text>
+    <text x="22" y="61" class="sans light" font-size="19" font-weight="600">Validation result</text>
+    <rect x="20" y="83" width="198" height="58" rx="8" fill="#173b37" stroke="#397f77"/>
+    <text x="34" y="107" class="mono" fill="#8fe1c7" font-size="10">ACCEPTED</text>
+    <text x="34" y="129" class="sans light" font-size="22" font-weight="650">2 rows</text>
+    <rect x="20" y="152" width="198" height="58" rx="8" fill="#3a2929" stroke="#87524d"/>
+    <text x="34" y="176" class="mono" fill="#e6a39a" font-size="10">REJECTED</text>
+    <text x="34" y="198" class="sans light" font-size="22" font-weight="650">1 row</text>
+    <g class="mono muted" font-size="10">
+      <text x="22" y="240">accepted.csv</text>
+      <text x="22" y="257">rejected.csv</text>
+      <text x="22" y="274">recipe.json  +  report.json</text>
+    </g>
+  </g>
+  <text x="72" y="466" class="mono muted" font-size="10" letter-spacing="1.2">LOCAL PROCESSING BY DEFAULT</text>
+  <text x="1368" y="466" text-anchor="end" class="mono muted" font-size="10" letter-spacing="1.2">OPTIONAL MODEL SUGGESTIONS · HUMAN REVIEW REQUIRED</text>
+</svg>
