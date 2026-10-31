@@ -1,102 +1,162 @@
-# ImportGuard
+<p align="center">
+  <img src="docs/assets/importguard-hero.svg" alt="ImportGuard workflow: profile a CSV, review source to target mappings, validate rows, and export accepted and rejected records" width="100%">
+</p>
 
-ImportGuard is a local-first CSV mapping and validation workspace. Review a source-to-target mapping, validate rows deterministically, export accepted and rejected records, and replay a saved recipe on a later file.
+<h1 align="center">MugdhoAI / <a href="https://github.com/MugdhoAI/ImportGuard">ImportGuard</a></h1>
 
-## What works
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.11%2B-3776AB?logo=python&logoColor=white" alt="Python 3.11 or newer">
+  <a href="https://github.com/MugdhoAI/ImportGuard/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT License"></a>
+</p>
 
-- UTF-8 and UTF-8 BOM CSV profile with 5 MB, 5,000 row, and 100 column limits.
-- Editable target fields with string, integer, decimal, boolean, and strict `YYYY-MM-DD` date validation.
-- Manual mapping and clearly labeled local normalized-header suggestions.
-- User approval before deterministic `identity`, `trim`, `collapse_whitespace`, `lowercase`, or `uppercase` operations run.
-- Accepted CSV, recoverable rejected CSV with row numbers and errors, versioned recipe JSON, and a report JSON in a ZIP.
-- Recipe replay without a model call.
-- Optional server-side Meta Muse Spark mapping adapter, disabled by default and requiring a deliberate UI request. Sample values are separately opt-in.
+**ImportGuard is a CSV mapping and validation workspace.** It helps turn an unfamiliar CSV export into a defined target format without silently applying ambiguous changes. Review the column mapping, approve the allowed transformations, validate each row, and keep the resulting recipe for repeatable imports.
 
-The default workflow does not contact Meta. One live smoke request was verified on 2026-10-30 (see Meta configuration below). Fake-provider tests exercise response validation only.
+The core workflow runs locally. Meta Muse Spark is an optional mapping assistant; it is not required to use the application.
 
-## Run on Windows PowerShell
+## The workflow
+
+1. **Import and profile.** Upload a CSV and inspect its columns, row count, and sample values.
+2. **Define the target.** Choose output fields, data types, and required fields.
+3. **Map and review.** Map columns manually, use local header suggestions, or explicitly request optional Meta suggestions. Review every mapping before processing.
+4. **Validate.** Apply the approved transformation allowlist and validate each row against the selected schema.
+5. **Export and replay.** Download accepted and rejected records with a report and reusable JSON recipe. Apply a saved recipe to another CSV without another model request.
+
+A row is accepted only when its mapped values pass the selected schema rules. Rejected rows retain their source row number and validation errors.
+
+## What is included
+
+| Area | Current behavior |
+| --- | --- |
+| CSV input | UTF-8 and UTF-8 BOM; 5 MB, 5,000 data row, and 100 column limits |
+| Target schema | Editable fields with string, integer, decimal, boolean, and strict YYYY-MM-DD date types |
+| Mapping | Manual mapping and local normalized-header suggestions |
+| Optional AI | Meta Muse Spark mapping suggestions through a server-side adapter |
+| Review | User approval before transformations are applied |
+| Transformations | identity, trim, collapse_whitespace, lowercase, and uppercase |
+| Validation | Deterministic, row-level checks against the selected schema |
+| Exports | Accepted CSV, rejected CSV, recipe JSON, report JSON, and a ZIP package |
+| Replay | Reapply a saved recipe without a model call |
+| Accounts and history | Guest and account export history with restorable downloads |
+| Billing | Provider-neutral plan and usage model; no payment provider or live checkout |
+
+The transformation engine uses a fixed allowlist. It does not execute arbitrary code from a recipe.
+
+## Run locally
+
+Requirements: Python 3.11 or newer and Node.js 18 or newer for building the landing page.
+
+On Windows PowerShell:
 
 ```powershell
+git clone https://github.com/MugdhoAI/ImportGuard.git
+cd ImportGuard
+
 py -3 -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
 pip install -r requirements.txt
+
 Copy-Item .env.example .env
+npm --prefix frontend install
+npm --prefix frontend run build
+
 python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 ```
 
-Open `http://127.0.0.1:8000`. If `py -3` is unavailable, use `python -m venv .venv`.
+Open http://127.0.0.1:8000.
 
-The landing page at `/` is served from a prebuilt bundle. Before starting the
-app (or after changing anything under `frontend/src`), build it once with
-Node 18+:
+If the Python launcher is unavailable, create the environment with python -m venv .venv. The landing page is served from the prebuilt frontend bundle. Rebuild it after changing files under frontend/src:
 
 ```powershell
 npm --prefix frontend run build
 ```
 
-Without this build, `/` falls back to a basic server-rendered page; `/app`,
-`/privacy`, and all API routes work either way.
+The FastAPI application serves the workspace and product pages. The backend entry point is app.main:app.
 
 ## Tests and checks
+
+Run the Python checks:
 
 ```powershell
 python -m pytest -q
 python -m ruff check .
 ```
 
-## Data handling and limitations
+Run the frontend checks:
 
-CSV content and downloads are processed in memory by the local server and are not intentionally persisted. Manual mapping and validation stay local. If Meta mapping is explicitly enabled and invoked, source headers and target schema are sent to Meta's API. Up to three values per column are included only when the separate unchecked option is selected. Do not send confidential data without authorization. See `/privacy` for the current disclosure.
+```powershell
+npm --prefix frontend test
+npm --prefix frontend run build
+npm --prefix frontend run test:browser
+```
 
-Spreadsheet exports prefix values beginning with `=`, `+`, `@`, tab, carriage return, and non-numeric `-` with an apostrophe. Ordinary negative numeric values such as `-15` remain unchanged. This is an export-only safeguard; the in-memory values and recipe are not rewritten. Rejected rows retain original values except for this documented export safeguard.
+The test suite includes CSV parsing, schema and mapping validation, deterministic transformations, exports, recipe replay, account and history behavior, and Meta adapter response handling. Fake-provider tests validate the adapter contract; they do not represent a live Meta request.
 
-Validation enforces only the selected schema rules. It does not deduplicate, infer date formats, normalize identifiers, or guarantee that accepted records are correct. Mapping suggestions can be wrong and require review.
+The latest recorded verification is in [docs/TEST_LOG.md](docs/TEST_LOG.md). It includes owner-run results and checks that remain blocked by the sandbox environment. Read the log before treating every test category as fully verified.
 
-## Meta configuration (optional)
+## Optional Meta integration
 
-The Meta Model API adapter follows the current official OpenAI-compatible Chat Completions and structured-output documentation, uses `muse-spark-1.3`, and accepts `MODEL_API_KEY` only on the server. To enable the UI action, configure local `.env` after verifying account/credit access:
+Meta mapping suggestions are disabled by default. The normal workflow uses manual mapping and local normalized-header suggestions and does not contact Meta.
+
+To enable the optional integration, configure the server-side environment:
 
 ```dotenv
 MODEL_API_KEY=your-local-key
 ALLOW_META_API_CALLS=true
 ```
 
-Restart the app, review the on-screen disclosure, then invoke Meta explicitly. Never put the key in frontend code. A live smoke test against `muse-spark-1.3` passed on 2026-10-30 (one synthetic-headers request, 3 mappings returned in 18.6s; see `docs/TEST_LOG.md`). That verifies the live round trip only; mapping quality on real user CSVs still requires review for every suggestion, and the app never presents mock or local output as a live result.
+Restart the application. The key must remain on the server and must never be placed in frontend code.
 
-To verify with exactly one minimal request (synthetic headers only, no sample
-values), after configuring `.env` as above:
+The user must deliberately invoke the Meta action. By default, the request contains source headers and target schema. Up to three example values per column are sent only when the separate opt-in control is selected. Those values may contain personal or confidential information; do not send them without authorization.
 
-```powershell
-python -m scripts.test_meta_api
-```
-
-The script does nothing unless `ALLOW_META_API_CALLS=true` and `MODEL_API_KEY`
-are both configured. It never runs under pytest or CI, never prints the key,
-and reports only success/failure, latency, and the returned mapping summary.
+A live smoke request to muse-spark-1.3 was verified on 2026-10-30 using synthetic headers only. It returned three mapping suggestions in 18.6 seconds. This confirms that the API round trip worked; it does not establish mapping quality on real data. Review every suggestion before approving it.
 
 Official references: [Meta Chat Completions quickstart](https://dev.meta.ai/docs/cookbook/quickstart-chat-completions), [structured output](https://dev.meta.ai/docs/structured-output), and [models](https://dev.meta.ai/docs/models).
 
-## Accounts, history, and billing
+## Data handling and privacy
 
-Guests can run the full CSV workflow without signing in. Each validated run is
-recorded (filename, row counts, recipe, report, and the ZIP package) for
-`EXPORT_RETENTION_DAYS` (default 7) so downloads stay restorable from history.
-Signing up or signing in claims the current browser's guest exports.
+CSV uploads are read and processed in memory. Source files are not saved as uploaded files. The application does retain export records for history and restoration: filename, row counts, recipe, report, and the ZIP package are stored in a local SQLite database for the configured retention period (7 days by default).
 
-- Accounts live in a local SQLite file (`IMPORTGUARD_DB`, default
-  `data/importguard.db`, gitignored). Passwords use PBKDF2-HMAC-SHA256;
-  sessions are server-side with HttpOnly cookies and CSRF-protected mutations.
-- `/login`, `/signup`, `/dashboard`, `/billing`, and `/payments` are
-  server-rendered pages in the product shell; `/dashboard` shows per-user or
-  per-guest history with download links.
-- Deleting your account on `/billing` removes the account, sessions, exports,
-  and subscription. See [privacy](http://127.0.0.1:8000/privacy) for retention.
-- Billing is provider-neutral: `free`/`pro`/`business` plans with usage
-  tracking exist, quotas stay off unless `BILLING_ENFORCE_QUOTAS=true`, and
-  checkout/webhooks explicitly refuse until a payment provider is selected and
-  approved. No provider is integrated and no charges can occur.
+The default workflow does not send data to Meta. If Meta mapping is enabled and invoked, headers and target schema are sent to the Meta API. Example values are included only after the separate opt-in described above. See the in-app [privacy notice](http://127.0.0.1:8000/privacy) for the current disclosure.
 
-## Project status
+CSV exports guard against spreadsheet formula interpretation. Values beginning with =, +, @, tab, carriage return, and non-numeric - are prefixed with an apostrophe. Ordinary negative numeric values such as -15 are left unchanged. This safeguard applies to exported CSV values; it does not rewrite the in-memory data or recipe.
 
-This is an MVP under active development, licensed under the [MIT License](LICENSE). Third-party components keep their own licenses; see [third-party notices](docs/THIRD_PARTY_NOTICES.md). See [project status](docs/PROJECT_STATUS.md), [architecture](docs/ARCHITECTURE.md), and [test plan](docs/TEST_PLAN.md).
+## Accounts and billing
+
+The CSV workflow can be used as a guest. Accounts allow users to claim guest exports and access their history from the dashboard. Account data, sessions, export records, and subscription state are stored in the configured local SQLite database.
+
+The billing interface currently provides plan and usage state only. No payment provider is integrated, checkout and webhooks are unavailable, and no charges can be made. Quota enforcement remains disabled unless explicitly configured.
+
+## Architecture
+
+ImportGuard uses FastAPI for the application and API routes, server-rendered templates and vanilla JavaScript for the workspace, and Python's standard library for bounded CSV processing.
+
+The main responsibilities are:
+
+- app/services/csv_service.py: CSV parsing, profiling, schema and mapping checks, transformations, row validation, exports, and recipe handling.
+- app/services/meta_client.py: optional Meta mapping request and structured response validation.
+- app/api/routes.py: CSV profile, mapping, processing, and replay endpoints.
+- app/api/accounts.py: account, session, export history, and download routes.
+- app/services/store.py: SQLite persistence for users, sessions, exports, and subscription state.
+- app/services/auth.py: password hashing, sessions, CSRF checks, and login throttling.
+- app/services/billing.py: plan and entitlement state with a provider-neutral billing interface.
+- app/main.py: FastAPI application, pages, static assets, and route registration.
+- frontend/: landing page source and production build.
+
+See [architecture notes](docs/ARCHITECTURE.md) for the data flow and core invariants.
+
+## Scope and limitations
+
+ImportGuard is an MVP under active development, built as a hackathon and portfolio project. It is not a certified data migration system, and passing validation does not guarantee that accepted records are semantically correct.
+
+- Mapping suggestions can be wrong. A person must review and approve them.
+- Validation enforces only the selected schema rules. It does not deduplicate records or infer ambiguous formats.
+- The optional Meta integration is not required for the core workflow.
+- Billing screens do not represent a functioning payment service.
+- Do not use the application with confidential or regulated data unless your deployment, access controls, retention, and operating environment have been independently reviewed.
+
+See [project status](docs/PROJECT_STATUS.md), [test plan](docs/TEST_PLAN.md), and [third-party notices](docs/THIRD_PARTY_NOTICES.md) for implementation status, verification scope, and dependency attributions.
+
+## License
+
+MIT. See [LICENSE](LICENSE).
