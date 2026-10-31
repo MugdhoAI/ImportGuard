@@ -77,9 +77,8 @@
       <text x="22" y="180" fill="#d8e4eb">Mobile</text><text x="144" y="180" fill="#bcebe2">phone</text>
       <text x="22" y="217" fill="#d8e4eb">Paid</text><text x="144" y="217" fill="#bcebe2">payment_status</text>
     </g>
-    <rect x="20" y="238" width="210" height="32" rx="6" fill="#173b43" stroke="#397f77"/>
-    <path d="M34 254l5 5 9-11" fill="none" stroke="#76ddc9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    <text x="58" y="259" class="mono" fill="#b9eee4" font-size="10">APPROVED BY USER</text>
+    <path d="M24 252l5 5 9-11" fill="none" stroke="#76ddc9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="48" y="258" class="mono" fill="#b9eee4" font-size="10" letter-spacing=".6">MAPPING APPROVED</text>
   </g>
   <g transform="translate(1078 210)">
     <path d="M0 0H44" stroke="url(#accent)" stroke-width="2.5" stroke-linecap="round"/>
