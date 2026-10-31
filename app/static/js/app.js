@@ -6,6 +6,8 @@
   let csvFile = null;
   let profile = null;
   let mappings = [];
+  let signedIn = null;
+  fetch('/api/auth/me').then(r=>r.json()).then(d=>{signedIn=!!d.authenticated;}).catch(()=>{signedIn=null;});
   const defaultSchema = [
     {name:'student_id',type:'string',required:true},
     {name:'full_name',type:'string',required:true},
@@ -42,7 +44,9 @@
       const response=await fetch('/api/profile',{method:'POST',body:form});
       const body=await response.json(); if(!response.ok) throw new Error(body.detail||'Could not read this CSV.');
       profile=body; $('profileSummary').hidden=false;
-      $('profileSummary').innerHTML=`<strong>${body.row_count} data rows</strong> · ${body.headers.length} columns<div class="summary-columns">${body.columns.map(c=>`<span>${esc(c.name)} <small>${c.empty_count} blank</small></span>`).join('')}</div><p class="hint">Up to 3 sample values per column (shown locally): ${body.columns.map(c=>`${esc(c.name)}: ${c.samples.map(v=>`“${esc(v)}”`).join(', ')}`).join(' · ')}</p>`;
+      const preview=Array.isArray(body.preview)?body.preview:[];
+      const previewTable=preview.length?`<div class="table-scroll"><table class="preview-table"><caption>First ${preview.length} of ${body.row_count} rows</caption><thead><tr>${body.headers.map(h=>`<th scope="col">${esc(h)}</th>`).join('')}</tr></thead><tbody>${preview.map(row=>`<tr>${body.headers.map(h=>`<td>${esc(row[h]??'')}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`:'';
+      $('profileSummary').innerHTML=`<strong>${body.row_count} data rows</strong> · ${body.headers.length} columns<div class="summary-columns">${body.columns.map(c=>`<span>${esc(c.name)} <small>${c.empty_count} blank</small></span>`).join('')}</div>${previewTable}<p class="hint">Up to 3 sample values per column (shown locally): ${body.columns.map(c=>`${esc(c.name)}: ${c.samples.map(v=>`“${esc(v)}”`).join(', ')}`).join(' · ')}</p>`;
       updateProgress(1); renderMappings(); $('processButton').disabled=false; $('approveMappings').checked=false;
     } catch(error) { csvFile=null; profile=null; $('fileName').textContent='No file selected'; showError('profileError',error.message); }
   }
@@ -93,7 +97,7 @@
     if(selected.some(m=>!m.source_column&&schema.find(f=>f.name===m.target_field)?.required)){showError('processError','Map every required field before processing.');return;}
     const form=new FormData();form.append('file',csvFile);form.append('schema_data',JSON.stringify(schema));form.append('mappings_json',JSON.stringify(selected));
     const button=$('processButton');button.disabled=true;button.firstChild.textContent='Processing… ';
-    try{const response=await fetch('/api/process',{method:'POST',body:form});if(!response.ok){const data=await response.json();throw new Error(data.detail||'Processing failed.');}const blob=await response.blob();download(blob,'importguard-export.zip');const accepted=response.headers.get('X-Accepted-Rows');const rejected=response.headers.get('X-Rejected-Rows');const summary=$('resultSummary');summary.innerHTML=`<strong>${accepted}</strong> accepted · <strong>${rejected}</strong> rejected<br><span>Every input row is accounted for. ZIP package downloaded.</span>`;summary.hidden=false;updateProgress(3);}catch(error){showError('processError',error.message);}finally{button.disabled=false;button.firstChild.textContent='Validate & download package ';}
+    try{const response=await fetch('/api/process',{method:'POST',body:form});if(!response.ok){const data=await response.json();throw new Error(data.detail||'Processing failed.');}const blob=await response.blob();download(blob,'importguard-export.zip');const accepted=response.headers.get('X-Accepted-Rows');const rejected=response.headers.get('X-Rejected-Rows');const exportId=response.headers.get('X-Export-Id');const summary=$('resultSummary');summary.innerHTML=`<strong>${accepted}</strong> accepted · <strong>${rejected}</strong> rejected<br><span>Every input row is accounted for. ZIP package downloaded.${exportId?` Saved to <a href="/dashboard">history</a>.${signedIn===false?' <a href="/signup">Create a free account</a> to keep it.':''}`:''}</span>`;summary.hidden=false;updateProgress(3);}catch(error){showError('processError',error.message);}finally{button.disabled=false;button.firstChild.textContent='Validate & download package ';}
   });
   function download(blob,name){const url=URL.createObjectURL(blob);const link=document.createElement('a');link.href=url;link.download=name;document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);}
   $('recipeFile').addEventListener('change',()=>{$('replayButton').disabled=!$('recipeFile').files.length;});

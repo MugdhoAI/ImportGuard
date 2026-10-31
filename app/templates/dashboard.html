@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — ImportGuard{% endblock %}
+{% block body_class %}product-page{% endblock %}
+{% block content %}
+<main class="product-content">
+  <header class="product-heading"><div><p class="eyebrow">OVERVIEW</p><h1>Dashboard</h1><p>{% if current_user %}Signed in as {{ current_user.email }}.{% else %}Guest session on this browser. <a href="/signup">Create an account</a> to keep history across devices.{% endif %}</p></div><a class="button" href="/app">New import <span aria-hidden="true">→</span></a></header>
+  <section class="dashboard-stats"><article class="product-card"><span>Saved imports</span><strong>{{ saved_count }}</strong><p>Stored for {{ retention_days }} days, then removed.</p></article><article class="product-card"><span>Rows processed</span><strong>{{ rows_total }}</strong><p>Accepted plus rejected across saved runs.</p></article><article class="product-card"><span>Needs attention</span><strong>{{ attention_count }}</strong><p>{% if attention_count %}<a href="/history?status=needs_review">Review flagged runs</a>{% else %}No runs with rejected rows.{% endif %}</p></article><article class="product-card"><span>Current plan</span><strong>{{ plan_name }}</strong><p>{% if current_user %}<a href="/billing">Manage billing</a>{% else %}Guests run on the free workspace.{% endif %}</p></article></section>
+  <section class="product-card"><h2>Recent activity</h2>
+  {% if exports %}
+  <div class="table-scroll"><table class="history-table"><thead><tr><th>File</th><th>Finished</th><th>Accepted</th><th>Rejected</th><th><span class="sr-only">Download</span></th></tr></thead><tbody>
+  {% for row in exports %}
+  <tr><td>{{ row.filename }}</td><td>{{ row.created_at[:16].replace('T', ' ') }}</td><td>{{ row.accepted_rows }}</td><td>{{ row.rejected_rows }}</td><td>{% if row.package_stored %}{% if current_user %}<a href="/api/exports/{{ row.id }}/download">Download</a>{% else %}<a href="/login?next=/dashboard">Sign in to download</a>{% endif %}{% else %}<span class="muted">Expired file</span>{% endif %}</td></tr>
+  {% endfor %}
+  </tbody></table></div>
+  {% else %}
+  <div class="empty-activity"><span aria-hidden="true">◷</span><div><strong>No saved activity yet</strong><p>Run an import in the workspace and it will appear here with a restorable download.</p></div><a href="/app">Start an import</a></div>
+  {% endif %}
+  </section>
+</main>
+{% endblock %}

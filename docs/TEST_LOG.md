@@ -29,6 +29,22 @@ Record commands actually run, exact outcomes, and failures. Do not record expect
 | 2026-10-27 | redesign working tree | `npm.cmd --prefix frontend audit --omit=dev` | 0 vulnerabilities | Full npm install audit also reported 0 after updating Puppeteer Core to 25.16.0 |
 | 2026-10-27 | redesign working tree | `python -m pytest -q` | 33 passed, 1 warning | Starlette TestClient warns that HTTPX support is deprecated |
 | 2026-10-27 | redesign working tree | `python -m ruff check .` | Passed | All checks passed |
+| 2026-10-30 | `22ff452` + CTA tree | `npm --prefix frontend test` | 2 passed | Glass CTA adapter unit tests, before and after the source-check fix |
+| 2026-10-30 | `22ff452` + CTA tree | `npm --prefix frontend run build` | Passed | tsc + Vite; known >500 kB chunk warning only |
+| 2026-10-30 | `22ff452` + CTA tree | `node --check frontend/scripts/browser-check.mjs` | Passed | Syntax check after CTA assertion updates |
+| 2026-10-30 | `22ff452` + CTA tree | CTA browser probe (built bundle + Chrome, 9 assertions) | 9 passed | Single CTA, exact label, IG mark, no demo branding; pointer click → /app; 9-tab keyboard focus + Enter → /app; no-WebGL fallback → /app; foreign postMessage ignored; reduced-motion click → /app; no page/console errors; 1280x800 screenshots reviewed |
+| 2026-10-30 | `22ff452` + CTA tree | `test:browser`, pytest, ruff | Not run | No usable Python interpreter in this sandbox; full backend-backed suite must run where Python is available |
+| 2026-10-30 | readiness tree | secret-pattern scan of tracked files | Clean | No key/token/private-key patterns outside vendor skill refs; no `.env`, uploads, or exports in tree |
+| 2026-10-30 | readiness tree | `npm --prefix frontend test` | 2 passed | CTA adapter unit tests after hygiene edits |
+| 2026-10-30 | readiness tree | `npm --prefix frontend run build` | Passed | Known large-chunk warning only |
+| 2026-10-30 | readiness tree | `npm --prefix frontend run verify:sources` | Passed | 24 vendor files + 15,176-byte font re-verified; VERIFICATION.json timestamp updated |
+| 2026-10-30 | readiness tree | `scripts/test_meta_api.py`, pytest, ruff, `test:browser`, CI | Script not run here | Unrunnable in this sandbox (no Python); pytest/ruff/test:browser later confirmed by owner runs below |
+| 2026-10-30 | readiness tree | `python -m scripts.test_meta_api` (owner-run, live) | Passed, exit 0 | Live call to `muse-spark-1.3`: 1 synthetic request succeeded in 18.6s with 3 mappings (student_id←Reg No medium, phone←Mobile high, payment_status←Paid medium). Synthetic headers only; no sample values sent. This verifies the live round trip, not mapping quality on real user CSVs |
+| 2026-10-30 | readiness tree | `python -m pytest -q` (owner-run, local shell) | 33 passed, 1 warning | Owner-reported: only the known Starlette/HTTPX deprecation warning |
+| 2026-10-30 | readiness tree | `python -m ruff check .` (owner-run, v0.16.10) | Passed | Owner-reported: all checks passed |
+| 2026-10-30 | readiness tree | `npm --prefix frontend test` (owner-run) | 2 passed, 1 file | Owner-reported: matches sandbox result |
+| 2026-10-30 | readiness tree | `npm --prefix frontend run build` (owner-run) | Passed | Owner-reported: known >500 kB chunk warning only |
+| 2026-10-30 | readiness tree | `npm --prefix frontend run test:browser` (owner-run) | Passed, exit 0 | Owner-reported clean run: sample + workspace profile/mapping/export/replay, Glass CTA + WebGL fallback, Sable navigation, persisted themes, dark/light axe scans, reduced motion, 8 viewport widths |
 
 ## Test categories
 
@@ -42,3 +58,26 @@ Record commands actually run, exact outcomes, and failures. Do not record expect
 - Clean-install/startup check
 
 For each failure, include the exact test name and a brief error summary. Do not store keys, raw CSV data, private output, or full sensitive payloads here.
+
+## Product completion loop — 2026-10-31
+
+| Date | Working tree | Command / check | Result | Notes |
+|---|---|---|---|---|
+| 2026-10-31 | product-shell changes | `C:\Users\rojina\AppData\Local\Python\pythoncore-3.14-64\python.exe -m pytest -q` | 34 passed | Includes route/nav/payment-boundary coverage; Starlette HTTPX deprecation and pytest cache warning only. `pytest.exe -q` could not run because its wrapper expected missing `_console_main`; `python` alias could not launch. |
+| 2026-10-31 | product-shell changes | `npm.cmd --prefix frontend run build` | Passed | Vite production build; existing >500 kB chunks warning. First sandboxed attempt could not write generated vendor assets; approved local run completed. |
+| 2026-10-31 | product-shell changes | Headless Chrome check at `http://127.0.0.1:8002` | Passed | `/home`, `/dashboard`, `/app`, `/billing`, `/payments` render with full nav; dark CSV preview text differs from its background; all five mobile nav links visible and no 390px horizontal overflow. |
+
+## Product completion loop — accounts/history/billing
+
+| Date | Working tree | Command / check | Result | Notes |
+|---|---|---|---|---|
+| 2026-10-31 | completion tree | `pytest -q` (sandbox) | 52 passed, 20 env-blocked | All 20 failures are TestClient/async socket PermissionError (sandbox denies loopback bind; bare `asyncio.run` fails too). Includes 23 new sync unit tests (store/auth/export/billing), all passing. TestClient suites need an owner/CI run |
+| 2026-10-31 | completion tree | `ruff check .` (sandbox) | Passed | Whole repo, including new store/auth/accounts/billing modules and 6 new test files |
+| 2026-10-31 | completion tree | `npm --prefix frontend test` + `run build` (sandbox) | Passed | 2/2 vitest; build with known chunk-size warning only |
+| 2026-10-31 | completion tree | Rendered-template visual sweep (sandbox Chrome) | Passed | 8 pages × 1280/390: no overflow (fixed one grid blowout with `min-width:0`); dark default + light reviewed with screenshots |
+| 2026-10-31 | console tree | `pytest -q` (sandbox) | 91 passed, 20 env-blocked | Same 20 TestClient loopback PermissionErrors. +39 runnable: `tests/test_console.py` (29 direct-call route tests) + 6 store + 4 auth. Covers gates, teams, admin, history filters, sweep of every page |
+| 2026-10-31 | console tree | `ruff check .` (sandbox) | Passed | Whole repo; fixed 6 pre-existing store E501s, 3 new-test E501s, 1 import sort, 1 redefined function (deduped) |
+| 2026-10-31 | console tree | `node --check app/static/js/app.js` | Passed | Syntax check for preview-table + guest-nudge workspace changes; behavior needs owner browser run |
+| 2026-10-31 | console tree | Updated TestClient suites (not run) | Not verified | `test_exports/nav/dashboard/accounts/api` updated for the download gate + new nav; owner/CI must run the full suite |
+| 2026-10-31 | console tree | Static QA script (51 routes × templates + app.js) | Passed | Zero dead links/fetches; only 2 unstyled classes, both in unreachable legacy `landing.html` fallback (dist build exists) |
+| 2026-10-31 | console tree | Headless Chrome review, 12 shots (`visual-qa/`) | Passed with fixes | 1280 dark/light + 768 + 390-emu reviewed pixel-by-pixel. Fixed mobile stats 2-col truncation (1fr), grid minmax, sidebar min-width guard. Headless-new crops sub-500 viewports, so 390 was verified via body-width emulation (identical media queries); tablet History table scrolls horizontally (spec-permitted) |

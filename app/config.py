@@ -17,6 +17,12 @@ class Settings:
     meta_model: str = os.getenv("META_MODEL", "muse-spark-1.3")
     meta_base_url: str = os.getenv("META_BASE_URL", "https://api.meta.ai/v1")
     allow_meta_api_calls: bool = os.getenv("ALLOW_META_API_CALLS", "false").lower() == "true"
+    database_path: str = os.getenv("IMPORTGUARD_DB", "data/importguard.db")
+    session_days: int = int(os.getenv("SESSION_DAYS", "30"))
+    export_retention_days: int = int(os.getenv("EXPORT_RETENTION_DAYS", "7"))
+    max_stored_package_bytes: int = int(os.getenv("MAX_STORED_PACKAGE_MB", "8")) * 1024 * 1024
+    billing_enforce_quotas: bool = os.getenv("BILLING_ENFORCE_QUOTAS", "false").lower() == "true"
+    admin_emails: str = os.getenv("ADMIN_EMAILS", "")
 
 
 settings = Settings()

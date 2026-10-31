@@ -11,7 +11,53 @@
   {% block head %}{% endblock %}
 </head>
 <body class="{% block body_class %}{% endblock %}">
+  {% if app_shell %}
+  <div class="app-shell">
+    <aside class="app-sidebar" aria-label="Application navigation">
+      <a class="brand app-brand" href="/home"><span class="brand-mark">IG</span><span>ImportGuard</span></a>
+      <p class="sidebar-label">WORKSPACE</p>
+      <nav class="sidebar-nav">
+        <a href="/home" {% if request.url.path == '/home' %}aria-current="page"{% endif %}><span aria-hidden="true">⌂</span>Home</a>
+        <a href="/dashboard" {% if request.url.path == '/dashboard' %}aria-current="page"{% endif %}><span aria-hidden="true">▦</span>Dashboard</a>
+        <a href="/app" {% if request.url.path in ['/app', '/workspace'] %}aria-current="page"{% endif %}><span aria-hidden="true">⇧</span>Workspace</a>
+      </nav>
+      <p class="sidebar-label sidebar-label-lower">YOUR DATA</p>
+      <nav class="sidebar-nav">
+        <a href="/history" {% if request.url.path == '/history' %}aria-current="page"{% endif %}><span aria-hidden="true">◷</span>History</a>
+        <a href="/exports" {% if request.url.path.startswith('/exports') %}aria-current="page"{% endif %}><span aria-hidden="true">⇩</span>Exports</a>
+      </nav>
+      <p class="sidebar-label sidebar-label-lower">ACCOUNT</p>
+      <nav class="sidebar-nav">
+        <a href="/billing" {% if request.url.path == '/billing' %}aria-current="page"{% endif %}><span aria-hidden="true">▤</span>Billing</a>
+        <a href="/payments" {% if request.url.path == '/payments' %}aria-current="page"{% endif %}><span aria-hidden="true">◇</span>Payments</a>
+        <a href="/teams" {% if request.url.path.startswith('/teams') %}aria-current="page"{% endif %}><span aria-hidden="true">◍</span>Teams</a>
+        <a href="/settings" {% if request.url.path == '/settings' %}aria-current="page"{% endif %}><span aria-hidden="true">⚙︎</span>Settings</a>
+        <a href="/help" {% if request.url.path == '/help' %}aria-current="page"{% endif %}><span aria-hidden="true">?</span>Help</a>
+      </nav>
+      {% if is_admin is defined and is_admin %}
+      <p class="sidebar-label sidebar-label-lower">ADMIN</p>
+      <nav class="sidebar-nav">
+        <a href="/admin" {% if request.url.path == '/admin' %}aria-current="page"{% endif %}><span aria-hidden="true">✦</span>Admin</a>
+      </nav>
+      {% endif %}
+      {% if sidebar_plan is defined and sidebar_plan %}
+      <div class="sidebar-plan"><span class="sidebar-user">{{ sidebar_plan.plan_name }} plan</span><span>{% if sidebar_plan.limit %}{{ sidebar_plan.usage }} of {{ sidebar_plan.limit }} exports{% else %}{{ sidebar_plan.usage }} exports · unlimited{% endif %} · <a href="/billing">Manage</a></span></div>
+      {% endif %}
+      <div class="sidebar-auth">
+        {% if current_user is defined and current_user %}
+        <span class="sidebar-user" title="{{ current_user.email }}">{{ current_user.name or current_user.email }}</span>
+        <form method="post" action="/auth/logout"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><button class="link-button" type="submit">Sign out</button></form>
+        {% else %}
+        <a href="/login">Sign in</a><a href="/signup">Create account</a>
+        {% endif %}
+      </div>
+      <div class="sidebar-bottom"><a href="/privacy">Privacy and data handling</a><button class="page-theme-toggle" type="button" data-theme-toggle aria-label="Switch theme">Theme</button></div>
+    </aside>
+    <div class="app-main">
+      <div class="topbar"><nav class="crumbs" aria-label="Breadcrumb">{% if request.url.path != '/home' %}<a href="/home">Home</a><span aria-hidden="true"> / </span>{% endif %}<span aria-current="page">{{ crumb }}</span></nav><button class="page-theme-toggle" type="button" data-theme-toggle aria-label="Switch theme">Theme</button></div>
+  {% endif %}
   {% block content %}{% endblock %}
+  {% if app_shell %}</div></div>{% endif %}
   {% block scripts %}{% endblock %}
   <script src="/static/js/theme.js" defer></script>
 </body>

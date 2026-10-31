@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Billing — ImportGuard{% endblock %}
+{% block body_class %}product-page{% endblock %}
+{% block content %}
+<main class="product-content">
+  <header class="product-heading"><div><p class="eyebrow">ACCOUNT</p><h1>Billing</h1><p>{% if current_user %}Plan, usage, and invoices for {{ current_user.email }}.{% else %}Plan and usage for this guest workspace.{% endif %}</p></div></header>
+  <section class="product-card plan-card"><div><span class="card-kicker">CURRENT PLAN</span><h2>{{ billing.plan_name }}</h2><p>{{ billing.usage }} of {{ billing.limit if billing.limit is not none else '∞' }} monthly exports used · {{ billing.features|join(', ') }}.</p></div><span class="status-pill">{{ billing.status|capitalize }}{% if not billing.provider %} · No provider{% endif %}</span></section>
+  <section class="product-card"><h2>Upgrade options</h2><div class="home-feature-grid">
+    <article><h3>Pro</h3><p>500 monthly exports and 90-day history.</p><p><button class="button button-secondary" type="button" disabled title="Checkout is unavailable until a payment provider is configured">Provider setup required</button></p></article>
+    <article><h3>Business</h3><p>Unlimited exports and team workspaces.</p><p><button class="button button-secondary" type="button" disabled title="Checkout is unavailable until a payment provider is configured">Provider setup required</button></p></article>
+    <article><h3>Checkout status</h3><p>No provider credentials are configured. This page never collects card details.</p></article>
+  </div></section>
+  <section class="product-card"><h2>Invoices</h2><div class="empty-activity"><span aria-hidden="true">▤</span><div><strong>No invoices available</strong><p>Invoices will appear here once a paid subscription and payment provider are configured.</p></div></div></section>
+  {% if current_user %}
+  <section class="product-card danger-zone"><h2>Delete my account</h2><p>Permanently removes your account, sessions, saved exports, recipes, and subscription. This cannot be undone.</p><form method="post" action="/auth/delete"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><label class="auth-field" for="delete-password">Confirm password<input id="delete-password" name="password" type="password" required autocomplete="current-password"></label><button class="button button-danger" type="submit">Delete everything</button></form></section>
+  {% endif %}
+</main>
+{% endblock %}

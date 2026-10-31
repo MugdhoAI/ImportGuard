@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { GlassImportButton } from "../components/GlassImportButton";
 import { ImportGuardDock } from "../components/ImportGuardDock";
 import { PredictiveArcBackdrop } from "../components/PredictiveArcBackdrop";
@@ -15,14 +15,6 @@ export function Landing() {
   const [approved, setApproved] = useState(false);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
-
-  useEffect(() => {
-    const open = (event: MessageEvent) => {
-      if (event.data?.type === "importguard:start-import") window.location.assign("/app");
-    };
-    window.addEventListener("message", open);
-    return () => window.removeEventListener("message", open);
-  }, []);
 
   async function loadSample() {
     setBusy(true); setMessage("Loading the bundled synthetic registration CSV…"); setApproved(false);

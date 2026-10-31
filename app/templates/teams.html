@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Teams — ImportGuard{% endblock %}
+{% block body_class %}product-page{% endblock %}
+{% block content %}
+<main class="product-content">
+  <header class="product-heading"><div><p class="eyebrow">ENTERPRISE</p><h1>Teams</h1><p>Shared workspaces with owner, admin, and member roles. Only team members can see a team.</p></div></header>
+  {% if error %}<p class="message error" role="alert">{{ error }}</p>{% endif %}
+  <section class="product-card"><h2>Your teams</h2>
+  {% if teams %}
+  <div class="table-scroll"><table class="history-table"><thead><tr><th>Team</th><th>Your role</th><th>Created</th></tr></thead><tbody>
+  {% for team in teams %}
+  <tr><td><a href="/teams/{{ team.id }}">{{ team.name }}</a></td><td>{{ team.role }}</td><td>{{ team.created_at[:16].replace('T', ' ') }}</td></tr>
+  {% endfor %}
+  </tbody></table></div>
+  {% else %}
+  <div class="empty-activity"><span aria-hidden="true">◍</span><div><strong>No teams yet</strong><p>Create one below or accept an invitation link from a teammate.</p></div></div>
+  {% endif %}
+  </section>
+  <section class="product-card"><h2>Create a team</h2>
+    <form method="post" action="/teams">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <p><label class="auth-field" for="team-name">Team name<input id="team-name" name="name" type="text" required maxlength="80"></label></p>
+      <p><button class="button button-secondary" type="submit">Create team</button></p>
+    </form>
+  </section>
+</main>
+{% endblock %}

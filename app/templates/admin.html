@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Admin — ImportGuard{% endblock %}
+{% block body_class %}product-page{% endblock %}
+{% block content %}
+<main class="product-content">
+  <header class="product-heading"><div><p class="eyebrow">RESTRICTED</p><h1>Admin</h1><p>Server overview. Access is enforced by the backend, not by hiding this link.</p></div></header>
+  <section class="dashboard-stats"><article class="product-card"><span>Users</span><strong>{{ overview.users }}</strong></article><article class="product-card"><span>Exports</span><strong>{{ overview.exports }}</strong></article><article class="product-card"><span>Teams</span><strong>{{ overview.teams }}</strong></article></section>
+  <section class="product-card"><h2>Payments</h2>
+    <p>Provider: <strong>{{ provider }}</strong>. {% if overview.payments_configured %}A payment provider is configured.{% else %}No payment provider is configured — upgrades stay unavailable and no charges can occur.{% endif %}</p>
+    {% if overview.revenue_usd is none %}<p class="muted">No revenue data: there is no provider to report it.</p>{% endif %}
+  </section>
+  <section class="product-card"><h2>Plan distribution</h2>
+  {% if overview.plan_distribution %}
+  <div class="table-scroll"><table class="history-table"><thead><tr><th>Plan</th><th>Subscriptions</th></tr></thead><tbody>
+  {% for plan, count in overview.plan_distribution.items() %}
+  <tr><td>{{ plan }}</td><td>{{ count }}</td></tr>
+  {% endfor %}
+  </tbody></table></div>
+  {% else %}
+  <p class="muted">No subscriptions on record.</p>
+  {% endif %}
+  </section>
+  <section class="product-card"><h2>Subscriptions ({{ subscriptions_total }})</h2>
+  {% if subscriptions %}
+  <div class="table-scroll"><table class="history-table"><thead><tr><th>Email</th><th>Plan</th><th>Status</th><th>Provider</th><th>Updated</th></tr></thead><tbody>
+  {% for sub in subscriptions %}
+  <tr><td>{{ sub.email }}</td><td>{{ sub.plan }}</td><td>{{ sub.status }}</td><td>{{ sub.provider or '—' }}</td><td>{{ sub.updated_at[:16].replace('T', ' ') }}</td></tr>
+  {% endfor %}
+  </tbody></table></div>
+  {% else %}
+  <p class="muted">No subscriptions on record.</p>
+  {% endif %}
+  </section>
+</main>
+{% endblock %}

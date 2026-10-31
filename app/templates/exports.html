@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Exports — ImportGuard{% endblock %}
+{% block body_class %}product-page{% endblock %}
+{% block content %}
+<main class="product-content">
+  <header class="product-heading"><div><p class="eyebrow">WORKSPACE</p><h1>Exports</h1><p>Corrected files ready to download. Packages expire; metadata stays while the export record lives.</p></div><a class="button" href="/app">New import <span aria-hidden="true">→</span></a></header>
+  {% if current_user and pending_count %}
+  <section class="product-card"><h2>{{ pending_count }} pending download{{ 's' if pending_count != 1 }}</h2><p class="muted">These finished but were never downloaded — including work restored from a guest session.</p><p><a class="button button-secondary" href="/exports/pending">Review pending</a></p></section>
+  {% endif %}
+  <section class="product-card"><h2>All exports</h2>
+  {% if exports %}
+  <div class="table-scroll"><table class="history-table"><thead><tr><th>File</th><th>Finished</th><th>Rows</th><th>Status</th><th><span class="sr-only">Download</span></th></tr></thead><tbody>
+  {% for row in exports %}
+  <tr><td><a href="/exports/{{ row.id }}">{{ row.filename }}</a></td><td>{{ row.created_at[:16].replace('T', ' ') }}</td><td>{{ row.accepted_rows + row.rejected_rows }}</td><td>{% if row.downloaded_at %}<span class="pill pill-downloaded">Downloaded</span>{% elif row.package_stored %}<span class="pill pill-pending">Pending</span>{% else %}<span class="pill pill-expired">File expired</span>{% endif %}</td><td>{% if row.package_stored %}{% if current_user %}<a href="/api/exports/{{ row.id }}/download">Download</a>{% else %}<a href="/login?next=/exports">Sign in to download</a>{% endif %}{% else %}<span class="muted">—</span>{% endif %}</td></tr>
+  {% endfor %}
+  </tbody></table></div>
+  {% else %}
+  <div class="empty-activity"><span aria-hidden="true">⇩</span><div><strong>No exports yet</strong><p>Processed files will be listed here with restorable downloads.</p></div><a href="/app">Start an import</a></div>
+  {% endif %}
+  </section>
+</main>
+{% endblock %}

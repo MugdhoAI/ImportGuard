@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Help — ImportGuard{% endblock %}
+{% block body_class %}product-page{% endblock %}
+{% block content %}
+<main class="product-content">
+  <header class="product-heading"><div><p class="eyebrow">SUPPORT</p><h1>Help</h1><p>How ImportGuard works, from first upload to final download.</p></div><a class="button" href="/app">Open workspace <span aria-hidden="true">→</span></a></header>
+  <section class="product-card"><h2>The import workflow</h2>
+    <ol class="help-steps">
+      <li><strong>Upload a CSV</strong> in the workspace. Files are profiled locally: headers, row counts, and sample values.</li>
+      <li><strong>Review the schema</strong> generated from your headers and adjust target fields.</li>
+      <li><strong>Map source columns</strong> to target fields. Deterministic matching proposes mappings first; optional AI assistance only suggests the unresolved ones and never runs your data.</li>
+      <li><strong>Validate and process.</strong> Every row is checked; accepted and rejected rows are reported separately.</li>
+      <li><strong>Review results</strong>, then <strong>export</strong> a corrected ZIP with accepted rows, rejected rows, a report, and a replayable recipe.</li>
+    </ol>
+  </section>
+  <section class="product-card"><h2>Guests and accounts</h2>
+    <p>Guests can run the full workflow up to the download step. Downloads require an account: sign in and pending guest work is claimed automatically on the <a href="/exports/pending">pending downloads</a> page.</p>
+    <p>Saved exports expire after {{ retention_days }} days. Deleting your account removes everything immediately. See <a href="/privacy">privacy and data handling</a> for details.</p>
+  </section>
+  <section class="product-card"><h2>Recipes and replay</h2>
+    <p>Each export package includes a recipe file describing the schema and mappings. Re-run the same recipe against a new file from the workspace replay panel instead of mapping again.</p>
+  </section>
+  <section class="product-card"><h2>Troubleshooting</h2>
+    <ul class="help-steps">
+      <li><strong>Upload rejected?</strong> Check the file is a UTF-8 CSV within the size and row limits shown in the workspace.</li>
+      <li><strong>Rows rejected?</strong> Open the rejected-rows file in the package; each row carries the reason it failed validation.</li>
+      <li><strong>Download expired?</strong> Stored packages expire with the export record; re-run the import to produce a new file.</li>
+      <li><strong>Locked out?</strong> Use <a href="/forgot-password">password recovery</a>. If email delivery is not configured on this server, contact the server operator.</li>
+    </ul>
+  </section>
+</main>
+{% endblock %}

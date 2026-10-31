@@ -60,3 +60,16 @@ Add decisions below using:
 - Reason/evidence: Browser tests exercised the no-WebGL fallback and a still arc under `prefers-reduced-motion`.
 - Decision: Record Hallmark waivers 44c and 79 for the intentional full-viewport arc scene only; no page Floor failures, Reflex warnings, or warnings remained in the final run.
 - License status: Retrieved canonical ThreeUI Community sources are under MIT terms and the Fragment Mono font is under OFL 1.1, with notices preserved in the vendor folder. Recheck current terms and attribution before public release.
+
+### Accounts, history, and billing — 2026-10-31
+- Date: 2026-10-31
+- Decision: SQLite (stdlib `sqlite3`, file `data/importguard.db`) for users, sessions, export records, and subscriptions; no new dependencies.
+- Reason/evidence: Single-file local persistence with zero install burden; stdlib PBKDF2 + `secrets` cover password hashing and tokens.
+- Alternatives considered: Supabase/Postgres (rejected: hosted dependency, signup, cost); JSON files (rejected: no atomicity for concurrent writes).
+- Consequences and revisit condition: Single-server file DB; revisit only if multi-instance or hosted deployment is approved.
+- Decision: Email/password auth with PBKDF2-HMAC-SHA256 (600k iterations), server-side sessions in HttpOnly SameSite=Lax cookies, per-session CSRF tokens on authenticated mutations, 10-failures-per-5-minutes login throttle. Signup/login forms carry no CSRF token (no pre-session); login-CSRF accepted as low risk for a local app.
+- Reason/evidence: Standard controls implementable in stdlib; verified by `tests/test_auth.py` + `tests/test_accounts.py`.
+- Decision: Guests keep the full no-login CSV flow. Each process/replay run records an export entry (counts, recipe, report, bounded ZIP bytes, 7-day expiry) owned by the user or a hashed guest token; signup/login claims guest rows. Recording failures never fail the download.
+- Reason/evidence: Preserves the anonymous MVP workflow while making history restorable; verified by `tests/test_store.py` + `tests/test_exports.py`.
+- Decision: Provider-neutral billing — plan/entitlement model (`free`/`pro`/`business`, no prices), subscription state machine, `BillingProvider` seam with a `NullProvider` that refuses checkout/webhooks, usage tracking with quotas off by default (`BILLING_ENFORCE_QUOTAS=false`). No provider integrated.
+- Reason/evidence: Satisfies the provider-neutral architecture requirement without accounts, credentials, or charges; verified by `tests/test_billing.py`.

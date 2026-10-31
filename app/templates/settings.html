@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Settings — ImportGuard{% endblock %}
+{% block body_class %}product-page{% endblock %}
+{% block content %}
+<main class="product-content">
+  <header class="product-heading"><div><p class="eyebrow">ACCOUNT</p><h1>Settings</h1><p>Signed in as {{ current_user.email }} · {{ plan_name }} plan (<a href="/billing">manage billing</a>).</p></div></header>
+  {% if notice %}<p class="message success" role="status">{{ notice }}</p>{% endif %}
+  {% if error %}<p class="message error" role="alert">{{ error }}</p>{% endif %}
+  <section class="product-card"><h2>Profile</h2>
+    <form method="post" action="/settings/profile">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <p><label class="auth-field" for="set-name">Display name<input id="set-name" name="name" type="text" maxlength="80" value="{{ current_user.name or '' }}" autocomplete="nickname"></label></p>
+      <p class="muted">Email {{ current_user.email }} cannot be changed.</p>
+      <p><button class="button button-secondary" type="submit">Save profile</button></p>
+    </form>
+  </section>
+  <section class="product-card"><h2>Change password</h2>
+    <form method="post" action="/settings/password">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <p><label class="auth-field" for="set-current">Current password<input id="set-current" name="current_password" type="password" required autocomplete="current-password" maxlength="128"></label></p>
+      <p><label class="auth-field" for="set-new">New password (at least 10 characters)<input id="set-new" name="new_password" type="password" required autocomplete="new-password" minlength="10" maxlength="128"></label></p>
+      <p><button class="button button-secondary" type="submit">Change password</button></p>
+      <p class="muted">Changing your password signs out every other session.</p>
+    </form>
+  </section>
+  <section class="product-card"><h2>Sessions</h2>
+  {% if sessions %}
+  <div class="table-scroll"><table class="history-table"><thead><tr><th>Started</th><th>Expires</th><th>Status</th><th><span class="sr-only">Revoke</span></th></tr></thead><tbody>
+  {% for session in sessions %}
+  <tr><td>{{ session.created_at[:16].replace('T', ' ') }}</td><td>{{ session.expires_at[:16].replace('T', ' ') }}</td><td>{% if session.id == current_session_id %}<span class="pill pill-downloaded">This session</span>{% else %}<span class="muted">Active</span>{% endif %}</td><td><form class="inline-form" method="post" action="/settings/sessions/revoke"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><input type="hidden" name="session_id" value="{{ session.id }}"><button class="link-button" type="submit">Revoke</button></form></td></tr>
+  {% endfor %}
+  </tbody></table></div>
+  {% else %}
+  <p class="muted">No active sessions.</p>
+  {% endif %}
+  </section>
+  <section class="product-card danger-zone"><h2>Delete my account</h2><p>Permanently removes your account, exports, teams you own alone, and sessions. This cannot be undone.</p>
+    <form method="post" action="/auth/delete">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <p><label class="auth-field" for="set-delete">Confirm with your password<input id="set-delete" name="password" type="password" required autocomplete="current-password" maxlength="128"></label></p>
+      <p><button class="button button-danger" type="submit">Delete my account</button></p>
+    </form>
+  </section>
+</main>
+{% endblock %}

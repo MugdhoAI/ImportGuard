@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}{{ export.filename }} — ImportGuard{% endblock %}
+{% block body_class %}product-page{% endblock %}
+{% block content %}
+<main class="product-content">
+  <header class="product-heading"><div><p class="eyebrow">EXPORT DETAIL</p><h1>{{ export.filename }}</h1><p>Finished {{ export.created_at[:16].replace('T', ' ') }} · {% if status == 'downloaded' %}<span class="pill pill-downloaded">Downloaded</span>{% elif status == 'pending' %}<span class="pill pill-pending">Pending</span>{% else %}<span class="pill pill-expired">File expired</span>{% endif %}</p></div><a class="button button-secondary" href="/exports">All exports</a></header>
+  <section class="product-card"><h2>Run summary</h2>
+    <dl class="detail-list">
+      <dt>Input rows</dt><dd>{{ export.input_rows }}</dd>
+      <dt>Accepted rows</dt><dd>{{ export.accepted_rows }}</dd>
+      <dt>Rejected rows</dt><dd>{{ export.rejected_rows }}</dd>
+      <dt>Source checksum</dt><dd><code>{{ export.file_sha256[:16] }}…</code></dd>
+      <dt>Downloads</dt><dd>{{ export.download_count }}{% if export.downloaded_at %} · first {{ export.downloaded_at[:16].replace('T', ' ') }}{% endif %}</dd>
+      <dt>Record expires</dt><dd>{{ export.expires_at[:16].replace('T', ' ') }}</dd>
+    </dl>
+    <p>{% if export.package_stored %}{% if current_user %}<a class="button" href="/api/exports/{{ export.id }}/download">Download package</a>{% else %}<a class="button" href="/login?next=/exports/{{ export.id }}">Sign in to download</a>{% endif %}{% else %}<span class="muted">The stored package expired; re-run the import to produce a new file.</span>{% endif %}</p>
+  </section>
+</main>
+{% endblock %}

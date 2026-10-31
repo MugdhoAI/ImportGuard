@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}{{ page|capitalize }} — ImportGuard{% endblock %}
+{% block body_class %}product-page{% endblock %}
+{% block content %}
+<main class="product-content">
+  {% if page == 'payments' %}
+  <header class="product-heading"><div><p class="eyebrow">ACCOUNT</p><h1>Payment options</h1><p>Choose how payment methods should be offered once secure checkout is configured.</p></div></header>
+  <section class="product-card payment-options"><div class="payment-option"><div class="payment-icon" aria-hidden="true">▰</div><div><h2>Credit or debit card</h2><p>Checkout provider not configured</p></div><span class="status-pill">Unavailable</span></div><div class="payment-option"><div class="payment-icon" aria-hidden="true">⇄</div><div><h2>Bank transfer</h2><p>Settlement and account verification required</p></div><span class="status-pill">Unavailable</span></div><div class="payment-option"><div class="payment-icon" aria-hidden="true">＋</div><div><h2>Other local payment methods</h2><p>Provider and country availability must be confirmed</p></div><span class="status-pill">Not configured</span></div></section>
+  <section class="product-card payment-blocker"><h2>Checkout is not active</h2><p>No payment credentials or account service are configured. A secure payment flow needs an authenticated customer, server-side provider credentials, verified webhook handling, and account approval. This screen does not collect or store card details.</p><button class="button button-secondary" type="button" disabled>Payment setup required</button></section>
+  {% endif %}
+</main>
+{% endblock %}

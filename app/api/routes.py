@@ -1,15 +1,18 @@
-"""Stateless API routes; upload data is processed in request memory only."""
+"""CSV API routes; uploads are processed in memory, export packages recorded."""
 
 import json
+import logging
 from pathlib import Path
-from typing import Annotated
+from typing import Annotated, Any
 
-from fastapi import APIRouter, File, Form, HTTPException, UploadFile
-from fastapi.responses import Response
+from fastapi import APIRouter, File, Form, HTTPException, Request, UploadFile
+from fastapi.responses import JSONResponse, Response
 from pydantic import ValidationError
 
+from app.api.accounts import GUEST_COOKIE, clear_session, current_user, get_viewer, require_user
 from app.config import settings
 from app.models.schemas import MappingEntry, TargetField
+from app.services import store
 from app.services.csv_service import (
     CSVError,
     build_zip,
@@ -19,6 +22,8 @@ from app.services.csv_service import (
     suggest_local,
 )
 from app.services.meta_client import MetaUnavailable, suggest_mappings
+
+logger = logging.getLogger("importguard.exports")
 
 router = APIRouter()
 ROOT = Path(__file__).resolve().parents[2]
@@ -56,6 +61,57 @@ def parse_or_http(data: bytes):
         raise HTTPException(400, str(exc)) from exc
 
 
+def export_identity(request: Request) -> dict[str, Any]:
+    """Resolve the export owner: signed-in user, guest cookie, or new guest."""
+    viewer = get_viewer(request)
+    if viewer["user"] is not None:
+        return {"user_id": viewer["user"]["id"], "guest_token": None, "issue_guest": False}
+    guest_token = request.cookies.get(GUEST_COOKIE)
+    if guest_token:
+        return {"user_id": None, "guest_token": guest_token, "issue_guest": False}
+    return {"user_id": None, "guest_token": store.new_token(), "issue_guest": True}
+
+
+def maybe_record_export(
+    request: Request,
+    response: Response,
+    filename: str,
+    parsed: dict[str, Any],
+    result: dict[str, Any],
+    report: dict[str, Any],
+    package: bytes,
+) -> None:
+    """Persist a restorable export record. Never fails the user's download."""
+    try:
+        identity = export_identity(request)
+        row = store.record_export(
+            filename=filename,
+            file_sha256=parsed["sha256"],
+            input_rows=report["input_rows"],
+            accepted_rows=report["accepted_rows"],
+            rejected_rows=report["rejected_rows"],
+            recipe_json=json.dumps(result["recipe"], ensure_ascii=False),
+            report_json=json.dumps(result["report"], ensure_ascii=False),
+            package=package,
+            user_id=identity["user_id"],
+            guest_token=identity["guest_token"],
+        )
+        store.purge_expired_exports()
+        response.headers["X-Export-Id"] = row["id"]
+        if identity["issue_guest"] and identity["guest_token"]:
+            response.set_cookie(
+                GUEST_COOKIE,
+                identity["guest_token"],
+                max_age=90 * 24 * 3600,
+                httponly=True,
+                samesite="lax",
+                secure=request.url.scheme == "https",
+                path="/",
+            )
+    except Exception as exc:
+        logger.warning("Export recording skipped: %s", type(exc).__name__)
+
+
 @router.get("/health")
 def health():
     return {"status": "ok"}
@@ -86,6 +142,7 @@ async def profile(file: Annotated[UploadFile, File()]):
         "headers": parsed["headers"],
         "row_count": parsed["row_count"],
         "columns": parsed["columns"],
+        "preview": parsed["rows"][:10],
         "sha256": parsed["sha256"],
     }
 
@@ -115,6 +172,7 @@ async def mappings(
 
 @router.post("/api/process")
 async def process(
+    request: Request,
     file: Annotated[UploadFile, File()],
     schema_data: Annotated[str, Form()],
     mappings_json: Annotated[str, Form()],
@@ -124,8 +182,9 @@ async def process(
     mappings = json_model(mappings_json, list, "mappings")
     try:
         result, report = process_csv(parsed, schema, mappings)
-        return Response(
-            build_zip(result, schema),
+        package = build_zip(result, schema)
+        response = Response(
+            package,
             media_type="application/zip",
             headers={
                 "Content-Disposition": 'attachment; filename="importguard-export.zip"',
@@ -135,12 +194,21 @@ async def process(
                 "Cache-Control": "no-store",
             },
         )
+        maybe_record_export(
+            request, response, Path(file.filename or "upload.csv").name,
+            parsed, result, report, package,
+        )
+        return response
     except CSVError as exc:
         raise HTTPException(422, str(exc)) from exc
 
 
 @router.post("/api/replay")
-async def replay(file: Annotated[UploadFile, File()], recipe_file: Annotated[UploadFile, File()]):
+async def replay(
+    request: Request,
+    file: Annotated[UploadFile, File()],
+    recipe_file: Annotated[UploadFile, File()],
+):
     parsed = parse_or_http(await read_upload(file))
     raw_recipe = await recipe_file.read(64 * 1024 + 1)
     try:
@@ -148,8 +216,9 @@ async def replay(file: Annotated[UploadFile, File()], recipe_file: Annotated[Upl
         result, report = process_csv(parsed, recipe.schema_fields, recipe.mappings)
     except CSVError as exc:
         raise HTTPException(422, str(exc)) from exc
-    return Response(
-        build_zip(result, recipe.schema_fields),
+    package = build_zip(result, recipe.schema_fields)
+    response = Response(
+        package,
         media_type="application/zip",
         headers={
             "Content-Disposition": 'attachment; filename="importguard-replay.zip"',
@@ -159,3 +228,34 @@ async def replay(file: Annotated[UploadFile, File()], recipe_file: Annotated[Upl
             "Cache-Control": "no-store",
         },
     )
+    maybe_record_export(
+        request, response, Path(file.filename or "upload.csv").name,
+        parsed, result, report, package,
+    )
+    return response
+
+
+@router.get("/api/auth/me")
+def auth_me(request: Request) -> JSONResponse:
+    user = current_user(request)
+    if user is None:
+        return JSONResponse({"authenticated": False, "user": None})
+    return JSONResponse(
+        {
+            "authenticated": True,
+            "user": {"id": user["id"], "email": user["email"], "name": user["name"]},
+        }
+    )
+
+
+@router.post("/api/auth/logout")
+def auth_logout(request: Request) -> JSONResponse:
+    response = JSONResponse({"ok": True})
+    clear_session(request, response)
+    return response
+
+
+@router.get("/api/exports/pending")
+def pending_exports(request: Request) -> list[dict[str, Any]]:
+    user = require_user(request)
+    return store.list_exports(user_id=user["id"], only_pending=True)

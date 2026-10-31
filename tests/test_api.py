@@ -17,6 +17,31 @@ def test_pages_health_and_examples():
     assert client.get("/examples/registrations.csv").status_code == 200
 
 
+def test_product_shell_pages_and_payment_boundary():
+    for path, heading in (
+        ("/home", "Good work starts with a clean import."),
+        ("/dashboard", "Dashboard"),
+        ("/app", "Choose your source"),
+        ("/billing", "Billing"),
+        ("/payments", "Payment options"),
+        ("/workspace", "Choose your source"),
+        ("/history", "Import history"),
+        ("/exports", "Exports"),
+        ("/help", "Help"),
+    ):
+        response = client.get(path)
+        assert response.status_code == 200
+        assert heading in response.text
+        for destination in (
+            "/home", "/dashboard", "/app", "/history", "/exports",
+            "/billing", "/payments", "/teams", "/settings", "/help",
+        ):
+            assert f'href="{destination}"' in response.text
+    payments = client.get("/payments").text
+    assert "Checkout is not active" in payments
+    assert "does not collect or store card details" in payments
+
+
 def test_profile_rejects_bad_extension_and_reports_local_profile():
     assert client.post("/api/profile", files={"file": ("data.txt", b"id\n1\n")}).status_code == 400
     response = client.post("/api/profile", files={"file": ("data.csv", b"id,name\n001,Amina\n")})

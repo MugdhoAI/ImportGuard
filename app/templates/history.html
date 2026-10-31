@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}History — ImportGuard{% endblock %}
+{% block body_class %}product-page{% endblock %}
+{% block content %}
+<main class="product-content">
+  <header class="product-heading"><div><p class="eyebrow">WORKSPACE</p><h1>Import history</h1><p>{% if current_user %}Every import you ran with this account.{% else %}Imports run in this browser as a guest. <a href="/signup">Create an account</a> to keep them across devices.{% endif %}</p></div><a class="button" href="/app">New import <span aria-hidden="true">→</span></a></header>
+  <section class="product-card"><h2>All runs{% if total_count %} ({{ total_count }}){% endif %}</h2>
+  <form class="filter-row" method="get" action="/history">
+    <label for="history-q">Search files<input id="history-q" name="q" type="search" value="{{ q }}" maxlength="80" placeholder="Filename contains…"></label>
+    <label for="history-status">Status<select id="history-status" name="status"><option value=""{% if not status %} selected{% endif %}>All</option><option value="completed"{% if status == 'completed' %} selected{% endif %}>Completed</option><option value="needs_review"{% if status == 'needs_review' %} selected{% endif %}>Needs review</option></select></label>
+    <button class="button button-secondary button-small" type="submit">Filter</button>
+    {% if q or status %}<a href="/history">Clear</a>{% endif %}
+  </form>
+  {% if exports %}
+  <div class="table-scroll"><table class="history-table"><thead><tr><th>File</th><th>Finished</th><th>Accepted</th><th>Rejected</th><th>Status</th><th><span class="sr-only">Download</span></th></tr></thead><tbody>
+  {% for row in exports %}
+  <tr><td><a href="/exports/{{ row.id }}">{{ row.filename }}</a></td><td>{{ row.created_at[:16].replace('T', ' ') }}</td><td>{{ row.accepted_rows }}</td><td>{{ row.rejected_rows }}</td><td>{% if row.rejected_rows %}<span class="pill pill-pending">Needs review</span>{% else %}<span class="pill pill-downloaded">Completed</span>{% endif %}</td><td>{% if row.package_stored %}{% if current_user %}<a href="/api/exports/{{ row.id }}/download">Download</a>{% else %}<a href="/login?next=/history">Sign in to download</a>{% endif %}{% else %}<span class="muted">—</span>{% endif %}</td></tr>
+  {% endfor %}
+  </tbody></table></div>
+  {% if total_pages > 1 %}
+  <nav class="pager" aria-label="History pages"><span>Page {{ page_number }} of {{ total_pages }}</span>{% if page_number > 1 %}<a href="/history?q={{ q|urlencode }}&amp;status={{ status }}&amp;page={{ page_number - 1 }}">← Previous</a>{% endif %}{% if page_number < total_pages %}<a href="/history?q={{ q|urlencode }}&amp;status={{ status }}&amp;page={{ page_number + 1 }}">Next →</a>{% endif %}</nav>
+  {% endif %}
+  {% elif q or status %}
+  <div class="empty-activity"><span aria-hidden="true">◷</span><div><strong>No imports match these filters</strong><p>Try a different filename or status.</p></div><a href="/history">Clear filters</a></div>
+  {% else %}
+  <div class="empty-activity"><span aria-hidden="true">◷</span><div><strong>No imports yet</strong><p>Run an import in the workspace and it will appear here.</p></div><a href="/app">Start an import</a></div>
+  {% endif %}
+  </section>
+</main>
+{% endblock %}

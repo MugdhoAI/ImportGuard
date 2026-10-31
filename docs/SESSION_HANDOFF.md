@@ -2,84 +2,93 @@
 
 > This file is the first handoff source for any new model/session. Update at each major checkpoint and before ending a session or nearing a context/usage limit.
 
-- Updated at: 2026-10-27
-- Session/model: Codex implementation session
-- Current branch: master
-- Last verified code commit: local Hallmark landing repair checkpoint
-- Working tree state: Repair is committed. Pre-existing modified user docs, supplied briefs/references, and intermediate captures remain untouched.
-- Checkpoint type: Hallmark redesign, working sample workflow, shared theme, and browser/a11y verification
+- Updated at: 2026-10-31
+- Session/model: master-directive console/interior implementation session
+- Current branch: main
+- Last verified code commit: `22ff452` (docs: preserve visual redesign references and handoff)
+- Working tree state: Uncommitted by owner gate. Modified tracked files plus untracked console templates/modules/tests and `PRODUCT_COMPLETION_LOOP.md`; vendor sources untouched.
+- Checkpoint type: Master directive execution; export gate, console screens, teams/admin, interior shell implemented and sandbox-verified
 
-## Project state
+## Completion status (2026-10-31)
 
-The FastAPI app and deterministic CSV workflow remain in place. The new Vite/React landing entry is served by the same FastAPI app after `npm.cmd --prefix frontend run build`.
+- All applicable stages are complete. Remaining work is blocked only by explicit approval gates (payment provider, credentials, live checkout, and commit/publish/deploy decisions).
+- No account/auth/payment-provider work was implemented because the verified repository requirements reviewed for this checkpoint explicitly exclude accounts/authentication and require payment methods to remain visibly unavailable.
+- 34 backend tests pass; Vite production build passed; headless Chrome checks passed for `/home`, `/dashboard`, `/app`, `/billing`, and `/payments`.
 
-## Completed work
+## Current task and state
 
-- CSV profile/caps, strict schema and transformations, mapping approval, accepted/rejected export package, recipe/report, replay, landing/workspace/privacy pages, fake-provider validation.
+Already implemented in the dirty tree: dark preview contrast fix; persistent left navigation; `/home`, `/dashboard`, `/billing`, `/payments`, and `/workspace`; payment methods explicitly unavailable; one product-shell API test.
 
-## Current work / last action completed
+- `tests/test_api.py` covers product shell pages and payments boundary.
+- No changes were made to backend behavior, CSV pipeline, exports, recipe replay, or Meta integration beyond the shell.
+- Prompt files read: `prompts/01_START_OR_CONTINUE.md`, `prompts/03_VISUAL_REDESIGN.md`, `prompts/05_FINAL_AUDIT.md`, `prompts/02_PHASE_CHECKPOINT.md`, `prompts/03_HANDOFF_BEFORE_LIMIT.md`, and `prompts/04_RESUME_FROM_HANDOFF.md`.
+- Modified-vs-new-file status: modified tracked files are listed in `git status`; new untracked product shell files are `app/templates/product_page.html`, `frontend/scripts/browser-check.mjs` (modified, not new), and `PRODUCT_COMPLETION_LOOP.md`, plus untracked process files already present before this task.
 
-- Core implementation and prior checkpoint completed; current landing-only repair is implemented and browser verified.
-- Replaced the old landing page with a dark Predictive Arc hero, the required headline, responsive below-fold sections, and a real sample pipeline using the existing profile/local-suggestion/process APIs.
-- Integrated all canonical ThreeUI sources without editing vendor files. `verify:sources` checks all 24 files and the 15,176-byte Fragment Mono font. MIT/OFL notices are under `frontend/src/vendor/threeui/`.
-- The Glass source renderer is retained in a sandboxed iframe; a native accessible anchor overlays it and routes to `/app`. This is a documented product adapter and is not byte-identical integration behavior.
-- The original Glass source, Sable dock source, and Predictive Arc source hashes match owner-supplied pins. Recheck licenses/attribution before release.
-- The animated dock has working home, section, workspace, and privacy navigation. Small screens use a native bottom navigation.
-- Dark is the default; a persisted theme switch works on landing, workspace, and privacy. The arc stays dark in light theme.
-- The landing preview calls the actual bundled synthetic CSV, profile endpoint, and local mapping endpoint. Visitors can edit and approve mappings, validate, and download a real package.
-- Workspace UI browser flow exercised the bundled fixture, manual mapping corrections, approval, process package download, and recipe replay through the existing file controls.
-- Before/after and final screenshots were captured and reviewed in `docs/visual-qa/`; browser checks cover 1920, 1440, 1280, 1024, 768, 430, 390, and 360 CSS px.
-- Landing repair: reduced the extra canvas wash, removed the duplicate static mobile nav, restored exact hero support/CTA copy, fixed dock typography and pointer interception of the landing theme toggle, improved light-theme contrast, and shortened lower-section copy. See `docs/visual-qa/landing-repair.md` and its captured proof images.
-- The Predictive Arc canvas is verified as 2D Canvas (the supplied renderer is not WebGL). A sampled 320x240 crop changed 49,734/76,800 pixels over two seconds after repair. No browser console errors; actual dock stayed within the tested viewport sizes.
-- Intermediate screenshots from earlier layout iterations (`live-full.png` and the non-`-viewport` files for 1024, 1280, 1920, 360, 430, and 768) remain untracked and untouched. The staged screenshot set contains the final reviewed viewport images plus reviewed 1440/390 full pages and workspace theme captures.
+## Test report
 
-## Tests and commands
+- Command: `C:\Users\rojina\AppData\Local\Python\pythoncore-3.14-64\python.exe -m pytest -q`
+- Result: 34 passed.
+- Only warnings: one Starlette TestClient/HTTPX deprecation and `.pytest_cache` warnings.
+- `python -m pytest` could not run because the default Python alias would not start on this machine. `pytest.exe -q` could not run because its console wrapper expected a missing entry point. The direct Python 3.14 interpreter worked.
+- Command: `npm.cmd --prefix frontend run build`
+- Result: Passed. Known existing warning only: chunks larger than 500 kB.
+- Command: headless Chrome screenshot/layout check at `http://127.0.0.1:8002`
+- Result: Passed. `/home`, `/dashboard`, `/app`, `/billing`, and `/payments` render with complete nav. Dark CSV preview text differs from the dark background. All five nav links are available at 390px with no horizontal overflow.
+- Evidence: TEST_LOG.md recorded productshell changes.
 
-| Command | Result | Notes |
-|---|---|---|
-| `python -m pytest -q` | 33 passed, 1 warning | Starlette TestClient HTTPX deprecation warning only |
-| `python -m ruff check .` | Passed | All checks passed |
-| Uvicorn + six loopback GET requests | Passed | All pages/fixtures returned HTTP 200 |
-| `npm.cmd --prefix frontend run verify:sources` | Passed | 24 source files and exact Fragment Mono SHA-256 verified |
-| `npm.cmd --prefix frontend run build` | Passed | Vite production build; FastAPI serves the built landing from `/` and assets from `/web/` |
-| `npm.cmd --prefix frontend test` | 2 passed | Glass adapter product label/source guard |
-| `npm.cmd --prefix frontend run test:browser` | Passed | Full workspace sample and recipe replay, dock, keyboard action, themes, axe on three pages in both themes, WebGL fallback, reduced motion, and eight widths |
-| `npm.cmd --prefix frontend run test:browser` | Passed | Landing toggle persisted after reload; axe found no A/AA issues on landing, workspace, or privacy in either theme; real workspace profile/mapping/export/replay; dock fit at eight widths |
-| `npm.cmd --prefix frontend run verify:sources` | Passed | Reverified 24 ThreeUI source files and 15,176-byte Fragment Mono asset; vendor source files unchanged |
-| `npm.cmd --prefix frontend run build` | Passed | Final production build; existing large JS chunk warning remains |
-| Hallmark `sloplint` page render | 0 FAIL, 0 WARN, 2 WAIVED, 1 NOTE | Rendered 1280, 1440, 1920, 1440 full page, 375 full page. The 13-word support sentence is retained exactly as required; two existing full-bleed hero waivers remain. |
-| Hallmark rendered page sweep | 0 FAIL, 0 WARN, 2 WAIVED, 1 NOTE | 1280x800, 1440x900, 1920x1080, 1440 and 375 full pages |
-| `npm.cmd --prefix frontend audit --omit=dev` | 0 vulnerabilities | Puppeteer Core was updated to 25.16.0 after the first audit identified dev-tool advisories |
-| `python -m pytest -q` | 33 passed, 1 warning | Existing Starlette/HTTPX deprecation warning |
-| `python -m ruff check .` | Passed | All checks passed |
+## Mock/placeholderบัญชี
+
+No new mock, placeholder, fake, or illustrative product behavior was introduced. Payments remain explicitly unavailable with a visible product reason.
 
 ## Failing tests / bugs / blockers
 
-- Vite reports a large JavaScript chunk (Three.js/WebGL sources; index about 1,003 kB uncompressed, about 268 kB gzip). Build succeeds; consider code splitting if startup performance becomes a concern.
-- Starlette TestClient emits an HTTPX deprecation warning. No live Meta API request was made or verified.
+- No failing tests. No unresolved bugs in the implemented shell scope.
+- Blocked on owner approval: payment provider choice/credentials, live checkout, paid verification, commit/publish/deploy, and any production behavior beyond the approved local shell.
 
-## Important files touched
+## Environment variables needed
 
-- `app/`, `examples/`, `tests/`, `README.md`, and implementation docs.
+- Existing local values only: Meta/API/upload settings and theme behavior are unchanged.
+- No new environment variables were introduced.
 
-## Decisions to preserve
+## Local run/build commands
 
-- Follow `AGENTS.md` and `CODEX_CONTINUITY_PROTOCOL.md`.
-- Manual mapping and local CSV processing must work without Meta API.
-- Do not claim the real Meta API works until verified by a real request.
-- Do not push/deploy/publish without approval.
+- Backend tests: `C:\Users\rojina\AppData\Local\Python\pythoncore-3.14-64\python.exe -m pytest -q`
+- Frontend build: `npm.cmd --prefix frontend run build`
+- App: `npm.cmd --prefix frontend run build` then `python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000`
+- Browser check: start the app, then `npm.cmd --prefix frontend run test:browser`
 
-## Environment variables needed (names only; never values)
+## Product completion loop checkpoint — 2026-10-31
 
-- `MODEL_API_KEY` (only if configured locally)
-- `ALLOW_META_API_CALLS` (must remain false until user explicitly enables real calls)
+- `PRODUCT_COMPLETION_LOOP.md` is the authoritative checklist for the remaining product work.
+- Contrast fix, left nav shell, Home/Dashboard/Billing/Payments pages, payment methods unavailable, prompt-file review, tests, status docs, and both verification rounds are complete.
+- Account flows: not implemented because verified repository requirements explicitly exclude accounts/authentication.
+- Guest-to-export review: no changes needed; existing guest behavior already satisfies it.
+- Pending export restoration/user history: no changes needed; no stored export data exists.
+- Dashboard/user history: static reporting-only page because no stored user data exists.
+- Navigation: complete with all five links/routes; mobile top bar has all five links plus theme toggle.
+- Provider-neutral billing UI/data layer: implemented as unavailable-by-design with no provider selected.
 
-## Next 1–3 concrete actions
+## Accounts/history/billing completion — 2026-10-31
 
-1. Preserve the pre-existing dirty instructions/references and intermediate captures; do not stage them accidentally.
-2. The supplied standalone Predictive Arc `skill.md` was not found under the workspace or installed skill roots; source/API verification was used instead.
-3. Keep Meta disabled and do not deploy, publish, push, or make real API calls without explicit authorization.
+- Owner direction changed: authentication, guest-to-export history, user dashboard, complete navigation, and provider-neutral billing architecture are now implemented in the dirty tree (stdlib-only SQLite + PBKDF2; no new dependencies; no provider integrated).
+- New modules: `app/services/store.py`, `app/services/auth.py`, `app/services/billing.py`, `app/api/accounts.py`; new templates `auth.html`, `dashboard.html`, `billing.html`; new tests `test_store.py`, `test_auth.py`, `test_accounts.py`, `test_exports.py`, `test_dashboard.py`, `test_nav.py`, `test_billing.py`; `tests/conftest.py` isolates the test DB.
+- Verification: 52 passed in sandbox (all 23 new sync unit tests green); `ruff check .` clean; vitest 2/2 + Vite build green; 8 rendered templates × 1280/390 screenshot-verified with no overflow (one grid blowout fixed). 20 TestClient tests cannot run in the sandbox (loopback sockets denied — bare `asyncio.run` fails too); they need an owner or CI run.
+- Docs incident: `docs/PROJECT_STATUS.md` and `docs/SESSION_HANDOFF.md` were found reverted to pre-shell content mid-turn (cause undetermined, no concurrent writes observed); both were restored from verified turn-start reads and updated with this entry. TEST_LOG, the loop file, and all code were unaffected.
+- Remaining: owner/CI full pytest run; commit/publish/deploy, video recording, and submission gates stay with the owner. No live Meta calls made; no charges; no provider.
 
-## Copyable instruction for next session
+## Master directive console/interior checkpoint — 2026-10-31
 
-Read the current landing repair brief, this handoff, and inspect Git status. The repair is complete; preserve pre-existing modified user instructions/references and intermediate screenshots. No Meta calls or publishing/deployment/push.
+- Figma MCP: BLOCKED (no MCP tools in session; host config access-denied). Implemented against `IMPORTGUARD_APP_INTERIOR_VISUAL_SPEC.md` as interim authority; landing/hero untouched.
+- Implemented: auth-only re-download gate + `/exports/pending` restoration; settings (profile/password/sessions/delete), help, searchable/filtered history, exports center, export detail; teams (roles/invites/shared history metadata); ADMIN_EMAILS-gated admin; grouped sidebar + plan footer + breadcrumb topbar; operational home; workspace preview table + guest save-nudge.
+- Fixed: `list_exports` cross-user/guest leak (regression test added); removed dead `mark_downloaded` duplicate; converged on pre-existing `set_user_name`/`list_sessions`/`revoke_session`.
+- Deviations from spec (documented): first process download stays open (preserves verified behavior + browser suite); re-downloads gated. No fake checkout, prices, or revenue; team downloads stay owner-only; password-reset email honestly unavailable.
+- Verification: 91 passed + ruff clean in sandbox; 20 TestClient tests updated but env-blocked (need owner/CI); `node --check` on workspace JS; every page render-swept for status + `None` leaks. No commits, pushes, deploys, live Meta calls, or charges.
+- Next: owner/CI full pytest + browser suite; Figma host setup; commit/publish decisions (all owner-gated).
+
+## Visual QA + handoff checkpoint — 2026-10-31
+
+- Static QA: 51 routes cross-checked against every template link/form-action and `app.js` fetch — zero dead. CSS class cross-check clean except 2 classes in the unreachable legacy `landing.html` fallback (left untouched).
+- Visual QA: 12 headless-Chrome screenshots in `visual-qa/` (synthetic data), all reviewed: dashboard 1280 dark/light + 768 + 390-emu, history 1280 + 768, settings 1280 + 390-emu, team-detail, admin, home-user, exports. Two mobile defects found and fixed (stats truncation, grid/sidebar min guards). Sandbox Chrome cannot lay out below ~500px viewports, so 390 was verified via body-width emulation with identical media queries — owner should confirm on a real device.
+- Handoff: `design/` as-built package (notes, screen index, component inventory, implementation map, Figma unblock steps). No `.fig` claimed.
+- DESIGN APPROVAL REQUESTED: the as-built interior (`visual-qa/*.png` + `design/`) is submitted for owner review. Figma file work remains blocked (see `design/FIGMA_UNBLOCK.md`). On approval, Figma becomes source of truth and implementation reconciles to it.
+- Independent QA limitation: no separate QA agent exists in this session; QA was a labeled manual pass (tests + static checks + screenshot review) by the implementer. Owner browser run still required.

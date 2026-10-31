@@ -19,15 +19,17 @@ try {
   await page.goto(origin, { waitUntil: "networkidle0" });
   await page.waitForSelector(".animated-top-dock__nav button[data-importguard-href]");
   assert.equal(await page.$eval("h1", element => element.innerText), "Make every CSV import predictable.");
-  assert.equal(await page.$eval(".glass-import-frame", element => element.title), "Start an import");
+  assert.equal(await page.$eval(".glass-import-frame", element => element.title), "ImportGuard import action");
   const dockItems = await page.$$eval(".dock-mount [data-importguard-href]", buttons => buttons.map(button => [button.getAttribute("aria-label"), button.dataset.importguardHref]));
   assert.deepEqual(dockItems.map(([label]) => label), ["Home", "How", "Workflow", "Import", "Privacy", "Guide"]);
   const navRect = await page.$eval(".animated-top-dock__nav", element => { const r = element.getBoundingClientRect(); return { x: r.x, width: r.width }; });
   const windowWidth = await page.evaluate(() => innerWidth);
   assert(Math.abs(navRect.x + navRect.width / 2 - windowWidth / 2) < 2, "Sable dock is horizontally centered");
   for (let i = 0; i < 9; i++) await page.keyboard.press("Tab");
-  assert.equal(await page.evaluate(() => document.activeElement?.className), "glass-import-action", "CTA remains keyboard reachable after the dock");
-  assert.notEqual(await page.$eval(".glass-import-action", element => getComputedStyle(element).outlineStyle), "none", "CTA shows keyboard focus");
+  assert.equal(await page.evaluate(() => document.activeElement?.className), "glass-import-frame", "CTA remains keyboard reachable after the dock");
+  const ctaFrame = await (await page.$(".glass-import-frame")).contentFrame();
+  assert.equal(await ctaFrame.evaluate(() => document.activeElement?.id), "activate", "Keyboard focus reaches the CTA native button");
+  assert.notEqual(await ctaFrame.$eval("#activate", element => getComputedStyle(element).outlineStyle), "none", "CTA shows keyboard focus");
   await page.keyboard.down("Shift"); await page.keyboard.press("Tab"); await page.keyboard.up("Shift");
   await page.click('[data-importguard-href="#how"]'); assert.equal(await page.evaluate(() => location.hash), "#how");
   await page.click('[data-importguard-href="#workflow"]'); assert.equal(await page.evaluate(() => location.hash), "#workflow");
@@ -85,7 +87,7 @@ try {
   assert.equal(replay.ok, true, `Recipe replay failed: ${replay.detail}`); assert.equal(replay.accepted, "2"); assert.equal(replay.rejected, "1");
   assert.deepEqual(Object.keys(unzipSync(new Uint8Array(replay.zip))).sort(), Object.keys(archive).sort());
 
-  await page.click(".glass-import-action");
+  await page.click(".glass-import-shell");
   await page.waitForFunction(() => location.pathname === "/app");
   await page.waitForFunction(() => document.readyState === "complete");
   assert(await page.$("#csvFile"));
@@ -194,7 +196,9 @@ try {
   });
   await fallbackPage.goto(origin, { waitUntil: "domcontentloaded" });
   await fallbackPage.waitForSelector(".glass-import-fallback");
-  assert.equal(await fallbackPage.$eval(".glass-import-fallback", element => element.textContent.trim().startsWith("Start an import")), true);
+  const fallbackText = await fallbackPage.$eval(".glass-import-fallback", element => element.textContent);
+  assert.match(fallbackText, /Start an import/);
+  assert.match(fallbackText, /IG/);
   await fallbackPage.click(".glass-import-fallback");
   await fallbackPage.waitForFunction(() => location.pathname === "/app");
   await fallbackPage.close();

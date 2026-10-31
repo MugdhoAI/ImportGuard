@@ -12,6 +12,7 @@ dist/
 *.egg-info/
 uploads/
 outputs/
+data/
 *.zip
 frontend/node_modules/
 frontend/dist/
