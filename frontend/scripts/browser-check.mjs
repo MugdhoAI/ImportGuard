@@ -5,18 +5,19 @@ import { resolve } from "node:path";
 import { unzipSync } from "fflate";
 import puppeteer from "puppeteer-core";
 
-const origin = process.env.IMPORTGUARD_URL ?? "http://127.0.0.1:8001";
+const origin = process.env.IMPORTGUARD_URL ?? "http://127.0.0.1:8000";
 const executablePath = process.env.CHROME_PATH ?? "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
 assert(existsSync(executablePath), `Chrome not found at ${executablePath}; set CHROME_PATH.`);
 const browser = await puppeteer.launch({ executablePath, headless: true, args: ["--no-sandbox", "--disable-dev-shm-usage"] });
 const errors = [];
 const recipePath = resolve(tmpdir(), `importguard-browser-recipe-${process.pid}.json`);
-const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 });
+const page = await browser.newPage();
+await page.setViewport({ width: 1440, height: 900, deviceScaleFactor: 1 });
 page.on("pageerror", error => errors.push(error.message));
 page.on("console", msg => { if (msg.type() === "error") errors.push(msg.text()); });
 
 try {
-  await page.goto(origin, { waitUntil: "networkidle0" });
+  await page.goto(origin, { waitUntil: "domcontentloaded" });
   await page.waitForSelector(".animated-top-dock__nav button[data-importguard-href]");
   assert.equal(await page.$eval("h1", element => element.innerText), "Make every CSV import predictable.");
   assert.equal(await page.$eval(".glass-import-frame", element => element.title), "ImportGuard import action");
@@ -36,9 +37,9 @@ try {
   await page.click('[data-importguard-href="#guide"]'); assert.equal(await page.evaluate(() => location.hash), "#guide");
   await page.click('[data-importguard-href="#top"]'); assert.equal(await page.evaluate(() => location.hash), "#top");
   await page.click('[data-importguard-href="/privacy"]'); await page.waitForFunction(() => location.pathname === "/privacy");
-  await page.goto(origin, { waitUntil: "networkidle0" });
+  await page.goto(origin, { waitUntil: "domcontentloaded" });
   await page.click('[data-importguard-href="/app"]'); await page.waitForFunction(() => location.pathname === "/app");
-  await page.goto(origin, { waitUntil: "networkidle0" });
+  await page.goto(origin, { waitUntil: "domcontentloaded" });
 
   await page.click("#workflow");
   await page.click(".sample-button");
@@ -144,7 +145,7 @@ try {
   await page.addScriptTag({ path: resolve("node_modules/axe-core/axe.min.js") });
   const privacyDarkAxe = await page.evaluate(async () => (await axe.run(document, { runOnly: { type: "tag", values: ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"] } })).violations.map(item => ({ id: item.id, nodes: item.nodes.map(node => node.target) })));
   assert.deepEqual(privacyDarkAxe, [], `Dark privacy axe violations: ${JSON.stringify(privacyDarkAxe)}`);
-  await page.goto(origin, { waitUntil: "networkidle0" });
+  await page.goto(origin, { waitUntil: "domcontentloaded" });
   await page.waitForSelector(".theme-toggle");
   await page.addScriptTag({ path: resolve("node_modules/axe-core/axe.min.js") });
   const axeResult = await page.evaluate(async () => {
@@ -188,6 +189,7 @@ try {
   await page.waitForFunction(() => location.pathname === "/privacy");
 
   const fallbackPage = await browser.newPage();
+  await fallbackPage.setViewport({ width: 1440, height: 900 });
   await fallbackPage.evaluateOnNewDocument(() => {
     const getContext = HTMLCanvasElement.prototype.getContext;
     HTMLCanvasElement.prototype.getContext = function(type, ...args) {
@@ -204,6 +206,7 @@ try {
   await fallbackPage.close();
 
   const motionPage = await browser.newPage();
+  await motionPage.setViewport({ width: 1440, height: 900 });
   await motionPage.emulateMediaFeatures([{ name: "prefers-reduced-motion", value: "reduce" }]);
   await motionPage.goto(origin, { waitUntil: "domcontentloaded" });
   await motionPage.waitForSelector(".arc-backdrop canvas");

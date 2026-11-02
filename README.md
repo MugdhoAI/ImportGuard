@@ -38,6 +38,19 @@ npm --prefix frontend run build
 Without this build, `/` falls back to a basic server-rendered page; `/app`,
 `/privacy`, and all API routes work either way.
 
+### If the local URL does not open
+
+ImportGuard does not currently have a public deployment URL. Start Uvicorn from
+the repository root and open the exact local address shown below:
+
+```powershell
+python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
+```
+
+Open `http://127.0.0.1:8000` rather than port `8001`. The browser workflow
+check uses the same default and accepts `IMPORTGUARD_URL` when a different
+local port is intentional.
+
 ## Tests and checks
 
 ```powershell

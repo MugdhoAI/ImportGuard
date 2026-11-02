@@ -2,12 +2,22 @@
 
 > This file is the first handoff source for any new model/session. Update at each major checkpoint and before ending a session or nearing a context/usage limit.
 
-- Updated at: 2026-10-31
-- Session/model: master-directive console/interior implementation session
+- Updated at: 2026-11-03
+- Session/model: local URL diagnosis and browser verification repair session
 - Current branch: main
-- Last verified code commit: `22ff452` (docs: preserve visual redesign references and handoff)
-- Working tree state: Uncommitted by owner gate. Modified tracked files plus untracked console templates/modules/tests and `PRODUCT_COMPLETION_LOOP.md`; vendor sources untouched.
-- Checkpoint type: Master directive execution; export gate, console screens, teams/admin, interior shell implemented and sandbox-verified
+- Last verified code commit: `b94da00` plus the browser harness repair in this working tree
+- Working tree state: `README.md`, status/handoff/test records, and `frontend/scripts/browser-check.mjs` are modified for this checkpoint; pre-existing untracked `browser-run.log` and `tatus --short` are preserved; no private data staged.
+- Checkpoint type: Local startup diagnosis; browser workflow aligned with the documented port and current Puppeteer behavior
+
+## Current checkpoint — 2026-11-03
+
+- **Diagnosis:** The repository has no public deployment URL or deployment configuration. The intended local entry point is `app.main:app` on `http://127.0.0.1:8000`. The browser harness incorrectly defaulted to the historical test port `8001`, which caused connection refusal when the documented server was running on `8000`.
+- **Repair:** `frontend/scripts/browser-check.mjs` now defaults to `8000`, keeps `IMPORTGUARD_URL` as an override, explicitly sets Puppeteer viewports, and uses `domcontentloaded` navigation waits instead of requiring network idle.
+- **Verified startup:** After `npm.cmd --prefix frontend run build`, Uvicorn returned HTTP 200 for `/health`, `/`, `/app`, `/privacy`, the built JS/CSS, and both example assets.
+- **Verified checks:** `py -3 -m pytest -q` — 111 passed, 1 warning; `py -3 -m ruff check .` — passed; frontend Vitest — 2 passed; Vite build — passed; browser workflow — passed against `http://127.0.0.1:8000`.
+- **Remaining:** No deployment has been created or claimed. Payment-provider work remains owner-gated. Meta live verification is the prior owner-run synthetic smoke status recorded in `TEST_LOG.md`; no new Meta request was made.
+
+Historical sections below preserve earlier checkpoints; the current checkpoint above is authoritative for the present tree.
 
 ## Completion status (2026-10-31)
 
