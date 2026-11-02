@@ -5,9 +5,9 @@
 - Updated at: 2026-11-03
 - Session/model: local URL diagnosis and browser verification repair session
 - Current branch: main
-- Last verified code commit: `b94da00` plus the browser harness repair in this working tree
-- Working tree state: `README.md`, status/handoff/test records, and `frontend/scripts/browser-check.mjs` are modified for this checkpoint; pre-existing untracked `browser-run.log` and `tatus --short` are preserved; no private data staged.
-- Checkpoint type: Local startup diagnosis; browser workflow aligned with the documented port and current Puppeteer behavior
+- Last verified code commit: `5d370b9` (`fix(qa): align browser check with local server`)
+- Working tree state: clean tracked state; pre-existing untracked `browser-run.log` and `tatus --short` are preserved and remain unstaged; no private data staged.
+- Checkpoint type: Local startup diagnosis and committed browser verification repair
 
 ## Current checkpoint — 2026-11-03
 

@@ -5,8 +5,8 @@
 - Current phase: Local URL diagnosis and browser verification repair complete; full console and CSV workflow remain implemented
 - Last updated: 2026-11-03
 - Current branch: main
-- Last verified implementation: `b94da00` plus the browser harness repair currently being checkpointed
-- Working tree: `README.md`, `docs/PROJECT_STATUS.md`, `docs/SESSION_HANDOFF.md`, `docs/TEST_LOG.md`, and `frontend/scripts/browser-check.mjs` are being updated for this checkpoint; pre-existing untracked `browser-run.log` and `tatus --short` are preserved
+- Last verified implementation: `5d370b9` (`fix(qa): align browser check with local server`)
+- Working tree: clean tracked state; pre-existing untracked `browser-run.log` and `tatus --short` are preserved and remain unstaged
 - Local app startup command: `npm.cmd --prefix frontend run build` then `C:\Users\rojina\AppData\Local\Python\pythoncore-3.14-64\python.exe -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000`
 - Core workflow status: Pipeline, API, UI, exports, replay, accounts, history, dashboard, provider-neutral billing, teams, admin, export gate, pending restoration implemented
 - Meta API status: Adapter implemented; live smoke request verified 2026-10-30 (1 synthetic call, 3 mappings, 18.6s); mapping quality on real CSVs still needs per-suggestion review

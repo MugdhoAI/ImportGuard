@@ -6,11 +6,11 @@ Record commands actually run, exact outcomes, and failures. Do not record expect
 
 | Working tree | Command / check | Result | Notes |
 |---|---|---|---|
-| `b94da00` + working tree | `py -3 -m pytest -q` | 111 passed, 1 warning | Full local suite passed. Warning is the known Starlette/httpx deprecation; pytest also reported a Windows temp cleanup PermissionError at interpreter exit after the successful run. |
-| `b94da00` + working tree | `py -3 -m ruff check .` | Passed | Ruff passed; the sandbox emitted access-denied warnings while scanning protected temporary directories. |
-| `b94da00` + working tree | `npm.cmd --prefix frontend test` | 2 passed | Vitest component tests passed. |
-| `b94da00` + working tree | `npm.cmd --prefix frontend run build` | Passed | Vite build passed with the existing large-chunk warning. |
-| `b94da00` + working tree | Uvicorn on `127.0.0.1:8000` plus `Invoke-WebRequest` smoke | Passed | `/health`, `/`, `/app`, `/privacy`, built JS/CSS, and both example assets returned HTTP 200. No public deployment URL or deployment configuration is present. |
+| `5d370b9` | `py -3 -m pytest -q` | 111 passed, 1 warning | Full local suite passed. Warning is the known Starlette/httpx deprecation; pytest also reported a Windows temp cleanup PermissionError at interpreter exit after the successful run. |
+| `5d370b9` | `py -3 -m ruff check .` | Passed | Ruff passed; the sandbox emitted access-denied warnings while scanning protected temporary directories. |
+| `5d370b9` | `npm.cmd --prefix frontend test` | 2 passed | Vitest component tests passed. |
+| `5d370b9` | `npm.cmd --prefix frontend run build` | Passed | Vite build passed with the existing large-chunk warning. |
+| `5d370b9` | Uvicorn on `127.0.0.1:8000` plus `Invoke-WebRequest` smoke | Passed | `/health`, `/`, `/app`, `/privacy`, built JS/CSS, and both example assets returned HTTP 200. No public deployment URL or deployment configuration is present. |
 | Browser-harness working tree | `npm.cmd --prefix frontend run test:browser` before repair | Failed, diagnosed | The script defaulted to obsolete port `8001` while the documented server uses `8000`; after changing the port, Puppeteer also required explicit viewport setup and DOM-ready navigation waits. |
 | Browser-harness working tree | `node --check frontend/scripts/browser-check.mjs` | Passed | Browser harness syntax check after the repair. |
 | Browser-harness working tree | `npm.cmd --prefix frontend run test:browser` | Passed | Real local flow passed on `http://127.0.0.1:8000`: sample/workspace profile, mapping, approval, export, replay, CTA, Sable routes, themes, axe scans, WebGL fallback, reduced motion, and eight viewport widths. |
