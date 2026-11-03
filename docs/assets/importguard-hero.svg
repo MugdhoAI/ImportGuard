@@ -1,0 +1,116 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="520" viewBox="0 0 1440 520" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1440" y2="520" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#04090B"/><stop offset=".55" stop-color="#060F13"/><stop offset="1" stop-color="#08161A"/>
+    </linearGradient>
+    <radialGradient id="glow" cx=".5" cy=".5" r=".5">
+      <stop stop-color="#2DD4BF" stop-opacity=".16"/><stop offset="1" stop-color="#2DD4BF" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="ivory" x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#FFFFFF"/><stop offset="1" stop-color="#D7E2DB"/>
+    </linearGradient>
+    <linearGradient id="teal" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#5EEAD4"/><stop offset="1" stop-color="#0D9488"/>
+    </linearGradient>
+    <linearGradient id="card" x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#0C1A20"/><stop offset="1" stop-color="#081318"/>
+    </linearGradient>
+    <linearGradient id="cardHi" x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#0E2129"/><stop offset="1" stop-color="#0A161C"/>
+    </linearGradient>
+    <linearGradient id="greenB" x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#0F2E22"/><stop offset="1" stop-color="#0A2018"/>
+    </linearGradient>
+    <linearGradient id="rustB" x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#352117"/><stop offset="1" stop-color="#251511"/>
+    </linearGradient>
+    <pattern id="grid" width="36" height="36" patternUnits="userSpaceOnUse">
+      <path d="M36 0H0V36" stroke="#FFFFFF" stroke-opacity=".032"/>
+    </pattern>
+    <filter id="soft" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="18"/></filter>
+  </defs>
+
+  <rect width="1440" height="520" rx="20" fill="url(#bg)"/>
+  <rect width="1440" height="520" rx="20" fill="url(#grid)"/>
+  <ellipse cx="1180" cy="30" rx="720" ry="300" fill="url(#glow)"/>
+  <rect x="1" y="1" width="1438" height="518" rx="19" stroke="#1C3038" stroke-width="2"/>
+
+  <!-- Brand block -->
+  <rect x="56" y="62" width="46" height="46" rx="12" fill="url(#teal)"/>
+  <g stroke="#05302A" stroke-width="2.6" stroke-linecap="round">
+    <path d="M71 76h16"/><path d="M71 85h16"/><path d="M71 94h10"/>
+  </g>
+  <text x="118" y="84" fill="url(#ivory)" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="21" font-weight="800" letter-spacing="1">IMPORTGUARD</text>
+  <text x="118" y="106" fill="#7FA3A8" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="10.5" letter-spacing="3">CSV MAPPING / VALIDATION</text>
+
+  <text x="56" y="198" fill="url(#ivory)" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="44" font-weight="800" letter-spacing="-1">Make every import</text>
+  <text x="56" y="250" fill="url(#ivory)" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="44" font-weight="800" letter-spacing="-1">reviewable.</text>
+  <text x="56" y="288" fill="#A7BDB9" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="15.5">Map columns. Validate rows. Keep the decisions.</text>
+
+  <rect x="56" y="314" width="368" height="34" rx="17" fill="#0A1F1B" stroke="#1E4D43"/>
+  <circle cx="76" cy="331" r="4" fill="#34D399"/>
+  <text x="90" y="335" fill="#8FE3C0" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="10" letter-spacing="0.8">DETERMINISTIC CORE · NO ARBITRARY CODE</text>
+  <text x="56" y="378" fill="#5F7A76" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="10" letter-spacing="2">HUMAN APPROVAL · REPEATABLE OUTPUT</text>
+
+  <!-- Card 1: Source CSV -->
+  <g>
+    <rect x="488" y="118" width="272" height="284" rx="16" fill="url(#card)" stroke="#1E3A42" stroke-width="1.5"/>
+    <text x="512" y="152" fill="#6E939B" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="10.5" letter-spacing="2.5">01 / SOURCE CSV</text>
+    <text x="512" y="184" fill="url(#ivory)" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="19" font-weight="700">registrations.csv</text>
+    <path d="M512 204H736" stroke="#1B3038"/>
+    <text x="512" y="228" fill="#5F7A76" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="9.5" letter-spacing="2">REG NO</text>
+    <text x="622" y="228" fill="#5F7A76" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="9.5" letter-spacing="2">PAYMENT</text>
+    <g font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="13.5">
+      <text x="512" y="258" fill="#D9E6E0">00127</text><text x="622" y="258" fill="#9FB4AC">yes</text><path d="M713 252l5 5 9-10" stroke="#34D399" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="512" y="290" fill="#D9E6E0">00128</text><text x="622" y="290" fill="#9FB4AC">no</text><path d="M713 284l5 5 9-10" stroke="#34D399" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="512" y="322" fill="#D9E6E0">00129</text><text x="622" y="322" fill="#E8A58F">maybe</text><path d="M714 315l10 10M724 315l-10 10" stroke="#E07856" stroke-width="2.4" stroke-linecap="round"/>
+    </g>
+    <path d="M512 348H736" stroke="#1B3038"/>
+    <text x="512" y="372" fill="#5F7A76" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="9.5" letter-spacing="1.5">PROFILED LOCALLY</text>
+    <text x="512" y="390" fill="#5F7A76" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="9.5" letter-spacing="1.5">4 COLUMNS · 3 ROWS</text>
+  </g>
+
+  <!-- Arrow 1 -->
+  <path d="M768 260h20M782 252l8 8-8 8" stroke="#2DD4BF" stroke-width="2.5" fill="none"/>
+
+  <!-- Card 2: Mapping review -->
+  <g>
+    <rect x="800" y="118" width="272" height="284" rx="16" fill="url(#cardHi)" stroke="#1E3A42" stroke-width="1.5"/>
+    <text x="824" y="152" fill="#6E939B" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="10.5" letter-spacing="2.5">02 / MAPPING REVIEW</text>
+    <text x="824" y="184" fill="url(#ivory)" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="19" font-weight="700">Target schema</text>
+    <path d="M824 204H1048" stroke="#1B3038"/>
+    <g font-size="12.5">
+      <text x="824" y="240" fill="#C4D6CF" font-family="Inter,Segoe UI,Arial,sans-serif">Reg No</text><path d="M938 236h14M946 230l7 6-7 6" stroke="#2DD4BF" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="962" y="240" fill="#EAF4EF" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="11.5">student_id</text>
+      <text x="824" y="274" fill="#C4D6CF" font-family="Inter,Segoe UI,Arial,sans-serif">Full Name</text><path d="M938 270h14M946 264l7 6-7 6" stroke="#2DD4BF" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="962" y="274" fill="#EAF4EF" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="11.5">full_name</text>
+      <text x="824" y="308" fill="#C4D6CF" font-family="Inter,Segoe UI,Arial,sans-serif">Email</text><path d="M938 304h14M946 298l7 6-7 6" stroke="#2DD4BF" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="962" y="308" fill="#EAF4EF" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="11.5">email</text>
+      <text x="824" y="342" fill="#C4D6CF" font-family="Inter,Segoe UI,Arial,sans-serif">Payment</text><path d="M938 338h14M946 332l7 6-7 6" stroke="#2DD4BF" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="962" y="342" fill="#EAF4EF" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="11.5">payment_status</text>
+    </g>
+    <path d="M824 362H1048" stroke="#1B3038"/>
+    <path d="M824 382l5 5 9-10" stroke="#4ADE80" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="846" y="388" fill="#4ADE80" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="10.5" letter-spacing="1.5">MAPPING APPROVED</text>
+  </g>
+
+  <!-- Arrow 2 -->
+  <path d="M1080 260h20M1094 252l8 8-8 8" stroke="#2DD4BF" stroke-width="2.5" fill="none"/>
+
+  <!-- Card 3: Output -->
+  <g>
+    <circle cx="1248" cy="260" r="150" fill="#2DD4BF" opacity=".07" filter="url(#soft)"/>
+    <rect x="1112" y="118" width="272" height="284" rx="16" fill="url(#cardHi)" stroke="#2DD4BF" stroke-opacity=".45" stroke-width="1.5"/>
+    <text x="1136" y="152" fill="#6E939B" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="10.5" letter-spacing="2.5">03 / OUTPUT</text>
+    <text x="1136" y="184" fill="url(#ivory)" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="19" font-weight="700">Validation result</text>
+    <rect x="1136" y="202" width="224" height="58" rx="10" fill="url(#greenB)" stroke="#1E4D38"/>
+    <text x="1152" y="226" fill="#7BC9A4" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="9.5" letter-spacing="2">ACCEPTED</text>
+    <text x="1152" y="250" fill="#D9F5E5" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="20" font-weight="800">2 rows</text>
+    <rect x="1136" y="272" width="224" height="58" rx="10" fill="url(#rustB)" stroke="#6E3520"/>
+    <text x="1152" y="296" fill="#D89A83" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="9.5" letter-spacing="2">REJECTED</text>
+    <text x="1152" y="320" fill="#F7E3D7" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="20" font-weight="800">1 row</text>
+    <text x="1352" y="320" fill="#C98F76" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="9.5" text-anchor="end">“maybe” is not a boolean</text>
+    <text x="1136" y="362" fill="#9FB4AC" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="11">accepted.csv · rejected.csv</text>
+    <text x="1136" y="384" fill="#9FB4AC" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="11">recipe.json · report.json · ZIP</text>
+  </g>
+
+  <!-- Footer -->
+  <path d="M56 446H1384" stroke="#12262D"/>
+  <text x="56" y="474" fill="#55706B" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="10" letter-spacing="2.5">LOCAL PROCESSING BY DEFAULT</text>
+  <text x="1384" y="474" fill="#55706B" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="10" letter-spacing="2.5" text-anchor="end">OPTIONAL MODEL SUGGESTIONS · HUMAN REVIEW REQUIRED</text>
+</svg>
