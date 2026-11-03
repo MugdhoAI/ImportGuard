@@ -32,7 +32,7 @@ def test_register_duplicate_and_authenticate(tmp_path):
     db = str(tmp_path / "auth.db")
     user = auth.register("uma@example.test", "a-strong-password", "10.1.0.1", db)
     assert user["email"] == "uma@example.test"
-    with pytest.raises(auth.AuthError, match="already exists"):
+    with pytest.raises(auth.AuthError, match="Unable to create an account"):
         auth.register("uma@example.test", "another-password", "10.1.0.2", db)
     assert auth.authenticate("uma@example.test", "a-strong-password", "10.1.0.3", db)["id"]
     with pytest.raises(auth.AuthError, match="Invalid email or password"):

@@ -15,6 +15,9 @@ from app.services import billing as billing_state
 
 ROOT = Path(__file__).resolve().parent
 FRONTEND_DIST = ROOT.parent / "frontend" / "dist"
+FAVICON = FRONTEND_DIST / "favicon.svg"
+if not FAVICON.is_file():
+    FAVICON = ROOT.parent / "frontend" / "public" / "favicon.svg"
 LANDING_CACHE_HEADERS = {
     "Cache-Control": "no-cache, max-age=0, must-revalidate",
     "Pragma": "no-cache",
@@ -26,6 +29,11 @@ app.include_router(router)
 app.include_router(accounts_router)
 if FRONTEND_DIST.is_dir():
     app.mount("/web", StaticFiles(directory=FRONTEND_DIST), name="frontend")
+
+
+@app.get("/favicon.ico", include_in_schema=False)
+def favicon():
+    return FileResponse(FAVICON, media_type="image/svg+xml")
 
 
 @app.get("/")
@@ -104,7 +112,9 @@ def billing(request: Request):
     user = viewer["user"]
     state = billing_state.current_state(user["id"] if user else None)
     return templates.TemplateResponse(
-        request, "billing.html", {**shell_context(request), "billing": state}
+        request,
+        "billing.html",
+        {**shell_context(request), "billing": state, "plans": billing_state.PLANS},
     )
 
 

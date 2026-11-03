@@ -2,15 +2,15 @@
 
 > Update after every major milestone. Only record verified state.
 
-- Current phase: Reference-based interior workspace/dashboard/billing/auth pass complete; landing hero preserved
-- Last updated: 2026-11-03
+- Current phase: Pricing, configuration-gated Google/GitHub OAuth, and local security hardening complete; landing hero preserved
+- Last updated: 2026-11-04
 - Current branch: main
-- Last verified implementation: `1821c4f` (`fix(interior): make preview control actionable`)
-- Working tree: clean tracked state; pre-existing untracked `browser-run.log`, `omni.txt`, `Last_execution_prompt.md`, `importguard-workspace-full.png`, and `tatus --short` remain unstaged
+- Last verified implementation: pending final checkpoint commit from this task
+- Working tree: intended pricing/auth/security changes are uncommitted; pre-existing generated visual QA captures remain modified and intentionally unstaged; untracked `browser-run.log`, `omni.txt`, `Last_execution_prompt.md`, `importguard-workspace-full.png`, and `tatus --short` remain preserved and unstaged
 - Local app startup command: `.\start-local.bat`, which builds the frontend and starts Uvicorn at `http://127.0.0.1:8000`
 - Core workflow status: Pipeline, API, UI, exports, replay, accounts, history, dashboard, provider-neutral billing, teams, admin, export gate, pending restoration implemented
 - Meta API status: Adapter implemented; live smoke request verified 2026-10-30 (1 synthetic call, 3 mappings, 18.6s); mapping quality on real CSVs still needs per-suggestion review
-- Latest verified tests: 112 passed + Ruff clean; frontend Vitest 2 passed, Vite build passed, source verification remains unchanged and previously passed for 24 files plus Fragment Mono, and browser workflow plus custom interior QA passed against `127.0.0.1:8000`; only the known deprecation/build-size warnings remain
+- Latest verified tests: 123 passed + Ruff clean; frontend Vitest 2 passed, Vite build passed, source verification remains unchanged and previously passed for 24 files plus Fragment Mono, browser workflow passed, and final custom browser QA passed against `127.0.0.1:8000`; known warnings are the Starlette/httpx deprecation, Windows pytest temp cleanup, protected-temp Ruff scan warnings, and Vite large-chunk warning
 - URL diagnosis: no public deployment URL or deployment manifest is configured. The application is locally reachable at `http://127.0.0.1:8000` after running the launcher.
 
 ## Milestone status
@@ -40,6 +40,7 @@
 | Interior shell + workspace | Implemented | `b94da00`, `base.html`, `home.html`, `app.js`, `styles.css` | Grouped nav, plan footer, breadcrumb topbar, preview table, guest save-nudge; JS syntax-checked |
 | Export isolation fix | Implemented | `b94da00`, `app/services/store.py`, `tests/test_store.py` | `list_exports` no longer leaks rows across users/guests; regression test added |
 | Reference-based interior pass | Implemented | Pending local checkpoint | Full-width CSV intake/preview/quality stage, data-backed dashboard metrics and usage, honest plan cards/payment state, account form polish and optional display-name persistence; landing hero untouched |
+| Pricing, OAuth, and security hardening | Implemented | Pending local checkpoint | Planned prices, configuration-gated Google/GitHub authorization-code + PKCE flow, verified identity linking, auth/API throttles, bounded processing, upload/recipe caps, SQLite busy timeout, and honest unavailable states |
 
 ## Decisions needed
 
@@ -48,9 +49,11 @@
 ## Risks/blockers
 
 - Payment provider setup, credentials, live checkout, and any paid verification remain blocked on owner approval.
+- Google/GitHub OAuth credentials are not configured locally, so the real provider redirects and callbacks were not live-tested; the server flow is implemented and remains disabled until all provider variables are set.
+- Abuse controls are in-process and single-server scoped; a public deployment still needs proxy-level limits, HTTPS, and a deployment-specific security review.
 - The current local Python environment ran the full 111-test suite; the prior sandbox-only TestClient limitation is no longer present in this verification.
 - Do not infer billing behavior beyond the verified seam: paid checkout, webhooks, and quota enforcement are absent.
 
 ## Next action
 
-Next: review the local checkpoint and choose a deployment target only if a public URL is required; no deployment or push has been performed. Optional performance follow-up remains lazy-loading/splitting the Three.js bundle and addressing the Starlette/HTTPX deprecation. Do not make Meta API calls without explicit authorization.
+Next: create and verify the local checkpoint commit, push `main` to `origin/main` as explicitly requested, and stop. No deployment or live OAuth/payment request was made. Do not make additional Meta API calls without explicit authorization.

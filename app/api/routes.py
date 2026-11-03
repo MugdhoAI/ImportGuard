@@ -1,5 +1,6 @@
 """CSV API routes; uploads are processed in memory, export packages recorded."""
 
+import asyncio
 import json
 import logging
 from pathlib import Path
@@ -22,11 +23,27 @@ from app.services.csv_service import (
     suggest_local,
 )
 from app.services.meta_client import MetaUnavailable, suggest_mappings
+from app.services.rate_limit import RateLimitExceeded, api_limiter
 
 logger = logging.getLogger("importguard.exports")
 
 router = APIRouter()
 ROOT = Path(__file__).resolve().parents[2]
+PROCESSING_GATE = asyncio.Semaphore(max(1, settings.max_concurrent_processing))
+
+
+def _api_limit(request: Request, bucket: str, limit: int) -> None:
+    try:
+        client_host = request.client.host if request.client else "unknown"
+        api_limiter.check(
+            f"{bucket}:{client_host}", limit, settings.auth_rate_window_seconds
+        )
+    except RateLimitExceeded as exc:
+        raise HTTPException(
+            429,
+            "This endpoint is receiving too many requests. Try again shortly.",
+            headers={"Retry-After": str(exc.retry_after)},
+        ) from exc
 
 
 async def read_upload(upload: UploadFile) -> bytes:
@@ -40,6 +57,8 @@ async def read_upload(upload: UploadFile) -> bytes:
 
 def json_model(raw: str, model: type, label: str):
     try:
+        if len(raw) > 64 * 1024:
+            raise ValueError("request field too large")
         value = json.loads(raw)
         if model is list:
             item_model = TargetField if label == "schema" else MappingEntry
@@ -135,7 +154,8 @@ def example_schema():
 
 
 @router.post("/api/profile")
-async def profile(file: Annotated[UploadFile, File()]):
+async def profile(request: Request, file: Annotated[UploadFile, File()]):
+    _api_limit(request, "profile", settings.api_profile_limit_per_window)
     parsed = parse_or_http(await read_upload(file))
     return {
         "filename": Path(file.filename or "upload.csv").name,
@@ -149,11 +169,13 @@ async def profile(file: Annotated[UploadFile, File()]):
 
 @router.post("/api/suggest-mappings")
 async def mappings(
+    request: Request,
     file: Annotated[UploadFile, File()],
     schema_data: Annotated[str, Form()],
     mode: Annotated[str, Form()] = "local",
     include_samples: Annotated[bool, Form()] = False,
 ):
+    _api_limit(request, "suggest", settings.api_suggest_limit_per_window)
     parsed = parse_or_http(await read_upload(file))
     schema = json_model(schema_data, list, "schema")
     if mode == "local":
@@ -177,17 +199,59 @@ async def process(
     schema_data: Annotated[str, Form()],
     mappings_json: Annotated[str, Form()],
 ):
-    parsed = parse_or_http(await read_upload(file))
-    schema = json_model(schema_data, list, "schema")
-    mappings = json_model(mappings_json, list, "mappings")
-    try:
-        result, report = process_csv(parsed, schema, mappings)
-        package = build_zip(result, schema)
+    _api_limit(request, "process", settings.api_process_limit_per_window)
+    async with PROCESSING_GATE:
+        parsed = parse_or_http(await read_upload(file))
+        schema = json_model(schema_data, list, "schema")
+        mappings = json_model(mappings_json, list, "mappings")
+        try:
+            result, report = process_csv(parsed, schema, mappings)
+            package = build_zip(result, schema)
+            response = Response(
+                package,
+                media_type="application/zip",
+                headers={
+                    "Content-Disposition": 'attachment; filename="importguard-export.zip"',
+                    "X-Input-Rows": str(report["input_rows"]),
+                    "X-Accepted-Rows": str(report["accepted_rows"]),
+                    "X-Rejected-Rows": str(report["rejected_rows"]),
+                    "Cache-Control": "no-store",
+                },
+            )
+            maybe_record_export(
+                request, response, Path(file.filename or "upload.csv").name,
+                parsed, result, report, package,
+            )
+            return response
+        except CSVError as exc:
+            raise HTTPException(422, str(exc)) from exc
+
+
+@router.post("/api/replay")
+async def replay(
+    request: Request,
+    file: Annotated[UploadFile, File()],
+    recipe_file: Annotated[UploadFile, File()],
+):
+    _api_limit(request, "replay", settings.api_replay_limit_per_window)
+    async with PROCESSING_GATE:
+        parsed = parse_or_http(await read_upload(file))
+        if not recipe_file.filename or Path(recipe_file.filename).suffix.lower() != ".json":
+            raise HTTPException(400, "Choose a recipe.json file.")
+        raw_recipe = await recipe_file.read(64 * 1024 + 1)
+        if len(raw_recipe) > 64 * 1024:
+            raise HTTPException(413, "Recipe exceeds the 64 KB limit.")
+        try:
+            recipe = load_recipe(raw_recipe)
+            result, report = process_csv(parsed, recipe.schema_fields, recipe.mappings)
+        except CSVError as exc:
+            raise HTTPException(422, str(exc)) from exc
+        package = build_zip(result, recipe.schema_fields)
         response = Response(
             package,
             media_type="application/zip",
             headers={
-                "Content-Disposition": 'attachment; filename="importguard-export.zip"',
+                "Content-Disposition": 'attachment; filename="importguard-replay.zip"',
                 "X-Input-Rows": str(report["input_rows"]),
                 "X-Accepted-Rows": str(report["accepted_rows"]),
                 "X-Rejected-Rows": str(report["rejected_rows"]),
@@ -199,40 +263,6 @@ async def process(
             parsed, result, report, package,
         )
         return response
-    except CSVError as exc:
-        raise HTTPException(422, str(exc)) from exc
-
-
-@router.post("/api/replay")
-async def replay(
-    request: Request,
-    file: Annotated[UploadFile, File()],
-    recipe_file: Annotated[UploadFile, File()],
-):
-    parsed = parse_or_http(await read_upload(file))
-    raw_recipe = await recipe_file.read(64 * 1024 + 1)
-    try:
-        recipe = load_recipe(raw_recipe)
-        result, report = process_csv(parsed, recipe.schema_fields, recipe.mappings)
-    except CSVError as exc:
-        raise HTTPException(422, str(exc)) from exc
-    package = build_zip(result, recipe.schema_fields)
-    response = Response(
-        package,
-        media_type="application/zip",
-        headers={
-            "Content-Disposition": 'attachment; filename="importguard-replay.zip"',
-            "X-Input-Rows": str(report["input_rows"]),
-            "X-Accepted-Rows": str(report["accepted_rows"]),
-            "X-Rejected-Rows": str(report["rejected_rows"]),
-            "Cache-Control": "no-store",
-        },
-    )
-    maybe_record_export(
-        request, response, Path(file.filename or "upload.csv").name,
-        parsed, result, report, package,
-    )
-    return response
 
 
 @router.get("/api/auth/me")

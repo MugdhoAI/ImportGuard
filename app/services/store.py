@@ -79,6 +79,24 @@ CREATE TABLE IF NOT EXISTS password_resets (
     expires_at TEXT NOT NULL,
     used_at TEXT NULL
 );
+CREATE TABLE IF NOT EXISTS oauth_states (
+    state TEXT PRIMARY KEY,
+    provider TEXT NOT NULL,
+    code_verifier TEXT NOT NULL,
+    next_path TEXT NOT NULL,
+    user_id INTEGER NULL REFERENCES users(id) ON DELETE CASCADE,
+    created_at TEXT NOT NULL,
+    expires_at TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS oauth_accounts (
+    provider TEXT NOT NULL,
+    subject TEXT NOT NULL,
+    user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    email TEXT NOT NULL,
+    created_at TEXT NOT NULL,
+    PRIMARY KEY (provider, subject),
+    UNIQUE (user_id, provider)
+);
 """
 
 MIGRATIONS: dict[str, dict[str, str]] = {
@@ -94,9 +112,10 @@ class StoreError(ValueError):
 def _connect(db_path: str | None = None) -> sqlite3.Connection:
     path = Path(db_path or settings.database_path)
     path.parent.mkdir(parents=True, exist_ok=True)
-    conn = sqlite3.connect(str(path))
+    conn = sqlite3.connect(str(path), timeout=5.0)
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA foreign_keys = ON")
+    conn.execute("PRAGMA busy_timeout = 5000")
     conn.executescript(SCHEMA)
     for table, columns in MIGRATIONS.items():
         existing = {row[1] for row in conn.execute(f"PRAGMA table_info({table})").fetchall()}
@@ -120,6 +139,102 @@ def hash_guest_token(token: str) -> str:
 
 def new_token(length: int = 32) -> str:
     return secrets.token_urlsafe(length)
+
+
+def create_oauth_state(
+    *, provider: str, code_verifier: str, next_path: str, user_id: int | None = None,
+    ttl_seconds: int | None = None, db_path: str | None = None,
+) -> str:
+    state = new_token(32)
+    now = _utcnow()
+    ttl = ttl_seconds if ttl_seconds is not None else settings.oauth_state_ttl_seconds
+    with _connect(db_path) as conn:
+        conn.execute("DELETE FROM oauth_states WHERE expires_at <= ?", (_iso(now),))
+        conn.execute(
+            "INSERT INTO oauth_states (state, provider, code_verifier, next_path, user_id, "
+            "created_at, expires_at)"
+            " VALUES (?, ?, ?, ?, ?, ?, ?)",
+            (
+                state, provider, code_verifier, next_path, user_id, _iso(now),
+                _iso(now + timedelta(seconds=ttl)),
+            ),
+        )
+    return state
+
+
+def consume_oauth_state(state: str, db_path: str | None = None) -> dict[str, Any] | None:
+    with _connect(db_path) as conn:
+        row = conn.execute("SELECT * FROM oauth_states WHERE state = ?", (state,)).fetchone()
+        conn.execute("DELETE FROM oauth_states WHERE state = ?", (state,))
+    if row is None or datetime.fromisoformat(row["expires_at"]) <= _utcnow():
+        return None
+    return dict(row)
+
+
+def get_oauth_account(
+    provider: str, subject: str, db_path: str | None = None,
+) -> dict[str, Any] | None:
+    with _connect(db_path) as conn:
+        row = conn.execute(
+            "SELECT * FROM oauth_accounts WHERE provider = ? AND subject = ?",
+            (provider, subject),
+        ).fetchone()
+    return dict(row) if row else None
+
+
+def list_oauth_accounts(user_id: int, db_path: str | None = None) -> list[dict[str, Any]]:
+    with _connect(db_path) as conn:
+        rows = conn.execute(
+            "SELECT provider, email, created_at FROM oauth_accounts "
+            "WHERE user_id = ? ORDER BY provider",
+            (user_id,),
+        ).fetchall()
+    return [dict(row) for row in rows]
+
+
+def link_oauth_account(
+    *, provider: str, subject: str, user_id: int, email: str, db_path: str | None = None,
+) -> None:
+    try:
+        with _connect(db_path) as conn:
+            conn.execute(
+                "INSERT INTO oauth_accounts (provider, subject, user_id, email, created_at) "
+                "VALUES (?, ?, ?, ?, ?)",
+                (provider, subject, user_id, email, _iso(_utcnow())),
+            )
+    except sqlite3.IntegrityError as exc:
+        raise StoreError("This OAuth identity is already linked to an account.") from exc
+
+
+def create_oauth_user(
+    *,
+    email: str,
+    password_hash: str,
+    provider: str,
+    subject: str,
+    name: str = "",
+    db_path: str | None = None,
+) -> dict[str, Any]:
+    """Create a password-backed OAuth user and identity in one transaction."""
+    try:
+        with _connect(db_path) as conn:
+            cursor = conn.execute(
+                "INSERT INTO users (email, password_hash, created_at) VALUES (?, ?, ?)",
+                (email, password_hash, _iso(_utcnow())),
+            )
+            user_id = int(cursor.lastrowid)
+            cleaned_name = name.strip()[:80]
+            if cleaned_name:
+                conn.execute("UPDATE users SET name = ? WHERE id = ?", (cleaned_name, user_id))
+            conn.execute(
+                "INSERT INTO oauth_accounts (provider, subject, user_id, email, created_at) "
+                "VALUES (?, ?, ?, ?, ?)",
+                (provider, subject, user_id, email, _iso(_utcnow())),
+            )
+            row = conn.execute("SELECT * FROM users WHERE id = ?", (user_id,)).fetchone()
+            return dict(row)
+    except sqlite3.IntegrityError as exc:
+        raise StoreError("The OAuth identity is already linked to an account.") from exc
 
 
 def create_user(email: str, password_hash: str, db_path: str | None = None) -> dict[str, Any]:

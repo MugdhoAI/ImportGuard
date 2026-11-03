@@ -11,11 +11,14 @@ from app.services import billing, store
 client = TestClient(app)
 
 
-def test_plans_define_limits_without_prices():
+def test_plans_define_limits_and_planned_prices():
     assert set(billing.PLANS) == {"free", "pro", "business"}
     for code, plan in billing.PLANS.items():
         assert plan["name"] and plan["history_days"] > 0
-        assert "price" not in plan and "amount" not in plan, code
+        assert plan["price_usd"] >= 0 and plan["price_label"], code
+    assert billing.PLANS["free"]["price_usd"] == 0
+    assert billing.PLANS["pro"]["price_usd"] == 6.99
+    assert billing.PLANS["business"]["price_usd"] == 19.99
     assert billing.PLANS["free"]["monthly_exports"] == 25
     assert billing.PLANS["business"]["monthly_exports"] is None
 

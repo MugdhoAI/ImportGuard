@@ -210,6 +210,19 @@ a { color: inherit; }
 .password-control input { width: 100%; padding-right: 58px; }
 .password-control button { position: absolute; top: 50%; right: 10px; transform: translateY(-50%); border: 0; color: var(--ig-accent-soft); background: transparent; font-size: 11px; }
 .auth-card form > .button { width: 100%; min-height: 46px; margin-top: 4px; }
+.oauth-divider { display: flex; align-items: center; gap: 10px; margin: 20px 0 12px; color: var(--ig-subtle); font-size: 10px; }
+.oauth-divider::before, .oauth-divider::after { height: 1px; flex: 1; content: ""; background: var(--ig-line); }
+.oauth-options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+.oauth-button { display: flex; min-height: 40px; align-items: center; justify-content: center; border: 1px solid var(--ig-line-strong); border-radius: 9px; color: var(--ig-text); background: var(--ig-bg); font-size: 11px; font-weight: 650; text-align: center; text-decoration: none; }
+.oauth-button:hover { border-color: var(--ig-accent-bright); background: var(--ig-surface-raised); }
+.oauth-button.is-loading { cursor: wait; opacity: .72; }
+.oauth-button.is-disabled { color: var(--ig-muted); cursor: not-allowed; opacity: .8; }
+.oauth-button small { display: block; margin-left: 4px; color: var(--ig-subtle); font-size: 8px; font-weight: 500; }
+.oauth-settings-list { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+.oauth-setting-row { display: inline-flex; min-height: 37px; align-items: center; gap: 10px; padding: 0 12px; border: 1px solid var(--ig-line); border-radius: 9px; color: var(--ig-text); font-size: 11px; }
+.oauth-setting-row.is-unavailable { color: var(--ig-muted); }
+.oauth-setting-row.is-unavailable span { color: var(--ig-subtle); font-size: 10px; }
+.planned-price { display: block; margin-top: 3px; color: var(--ig-accent-soft); font-size: 9px; }
 .auth-switch { color: var(--ig-muted); }
 .auth-switch a { color: var(--ig-accent-soft); }
 
@@ -254,6 +267,7 @@ a { color: inherit; }
   .auth-tools { top: 20px; right: 18px; gap: 9px; }
   .auth-tools .page-theme-toggle { min-height: 32px; padding-inline: 10px; }
   .auth-card { padding: 24px 20px; }
+  .oauth-options { grid-template-columns: 1fr; }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -2,6 +2,20 @@
 
 Record commands actually run, exact outcomes, and failures. Do not record expected results as completed results.
 
+## Pricing, OAuth, and security hardening — 2026-11-04
+
+| Working tree | Command / check | Result | Notes |
+|---|---|---|---|
+| security/OAuth changes | `py -3 -m pytest tests/test_security_oauth.py tests/test_auth.py tests/test_billing.py -q` | 26 passed, 1 warning | Focused auth, pricing, OAuth, upload, malformed encoding, concurrency, and provider-state coverage. |
+| security/OAuth changes | `py -3 -m pytest tests/test_security_oauth.py -q` | 11 passed, 1 warning | Per-IP/per-account throttles, API limit, upload size, malformed encoding, concurrent processing, OAuth state/PKCE, identity reuse, and exact-email linking. |
+| security/OAuth changes | `py -3 -m pytest -q` | 123 passed, 1 warning | Known Starlette/httpx deprecation; Windows pytest temp cleanup warning appears after successful completion. |
+| security/OAuth changes | `py -3 -m ruff check .` | Passed | Ruff reports protected temporary-directory access warnings only. |
+| security/OAuth changes | `node --check app/static/js/auth.js` and `git diff --check` | Passed | Auth loading/password-toggle script syntax and whitespace checks clean. |
+| security/OAuth changes | `npm --prefix frontend test` | 2 passed | Vitest passed. |
+| security/OAuth changes | `npm --prefix frontend run build` | Passed | Vite build passed; existing large-chunk warning remains. |
+| security/OAuth changes | `npm --prefix frontend run test:browser` | Passed | Existing CSV workflow, landing CTA/dock, themes, accessibility, fallback, reduced motion, and responsive checks passed. |
+| security/OAuth changes | Final Puppeteer QA at `http://127.0.0.1:8000` | Passed | Route reloads, planned prices, honest OAuth unavailable states, signup/login, authenticated Settings, cleanup, workspace controls, and no unexpected console/network failures. `/favicon.ico` also returned 200 after the alias fix. |
+
 ## Reference-based interior UI — 2026-11-03
 
 | Working tree | Command / check | Result | Notes |

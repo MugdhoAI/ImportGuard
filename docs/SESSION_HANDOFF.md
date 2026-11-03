@@ -2,19 +2,19 @@
 
 > This file is the first handoff source for any new model/session. Update at each major checkpoint and before ending a session or nearing a context/usage limit.
 
-- Updated at: 2026-11-03
-- Session/model: reference-based internal UI implementation session
+- Updated at: 2026-11-04
+- Session/model: pricing, OAuth, and security hardening session
 - Current branch: main
-- Last verified code commit: `1821c4f` (`fix(interior): make preview control actionable`)
-- Working tree state: clean tracked state; pre-existing untracked `browser-run.log`, `omni.txt`, `Last_execution_prompt.md`, `importguard-workspace-full.png`, and `tatus --short` are preserved and remain unstaged; no private data staged.
-- Checkpoint type: Reference-based interior UI and final workflow verification
+- Last verified code commit: pending final checkpoint commit from this task
+- Working tree state: intended implementation and documentation changes are uncommitted; generated visual QA captures are intentionally unstaged; pre-existing untracked `browser-run.log`, `omni.txt`, `Last_execution_prompt.md`, `importguard-workspace-full.png`, and `tatus --short` remain preserved and unstaged; no private data staged.
+- Checkpoint type: Pricing, configuration-gated OAuth, security hardening, and final verification
 
-## Current checkpoint — 2026-11-03
+## Current checkpoint — 2026-11-04
 
-- **Scope:** `importguard-workspace-full.png` was used as the internal reference. The landing React hero was not modified.
-- **Implementation:** Added `app/static/css/interior.css` and `app/static/js/auth.js`; reshaped `app.html` into a full-width upload/preview/quality stage with a real continue action; added data-backed dashboard success rate/usage cards; added honest Free/Pro/Business plan presentation and payment-history empty state; added optional full-name persistence and password visibility to signup.
-- **Verified checks:** `py -3 -m pytest -q` — 112 passed, 1 warning; `py -3 -m ruff check .` — passed; frontend Vitest — 2 passed; Vite build — passed; browser workflow — passed; custom interior QA — passed for workspace sample preview/continue, dashboard metrics, billing, signup controls, theme, direct routes and reloads.
-- **Remaining:** Payment provider, OAuth, real payment history, and checkout remain unavailable by design. No deployment or Meta request was made.
+- **Scope:** Updated the existing interior implementation only. The landing React hero and CSV business logic were preserved.
+- **Implementation:** Added planned Free/Pro/Business pricing (`$0`, `$6.99`, `$19.99` per month) with provider-disabled copy; added server-side Google/GitHub authorization-code OAuth with PKCE, one-time expiring state, verified identities, exact-email account linking, atomic OAuth user creation, and Settings linking; added configurable per-IP/per-account auth failure limits, endpoint sliding-window limits, bounded processing, upload/recipe size checks, SQLite busy timeout, favicon alias, loading feedback, and focused regression tests.
+- **Verified checks:** `py -3 -m pytest -q` — 123 passed, 1 warning; `py -3 -m ruff check .` — passed with protected-temp access warnings; `npm --prefix frontend test` — 2 passed; `npm --prefix frontend run build` — passed with the existing large-chunk warning; `npm --prefix frontend run test:browser` — passed; final Puppeteer QA — passed for routes/reloads, pricing, honest OAuth states, signup/login, authenticated Settings, cleanup, and workspace controls.
+- **Remaining:** Payment provider and real checkout/payment history remain unavailable. OAuth provider credentials are not configured locally, so no live Google/GitHub redirect or callback was exercised. No deployment or new Meta request was made.
 
 Historical sections below preserve earlier checkpoints; the current checkpoint above is authoritative for the present tree.
 

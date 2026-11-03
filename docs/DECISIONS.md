@@ -40,6 +40,14 @@ Add decisions below using:
 - Reason/evidence: The current billing seam is a `NullProvider`; honest unavailable states satisfy the reference structure without claiming transactions or credentials.
 - Consequences and revisit condition: A real provider, prices, OAuth credentials, or payment records require owner-approved backend integrations before those controls can become active.
 
+### Pricing, OAuth, and local abuse controls — 2026-11-04
+- Decision: Display Free at `$0/month`, Pro at `$6.99/month`, and Business at `$19.99/month` as planned prices only; keep Free active and paid actions disabled behind the existing `NullProvider`.
+- Reason/evidence: The requested commercial values can be shown without fabricating checkout, subscriptions, invoices, or payment history.
+- Decision: Implement Google and GitHub as configuration-gated server-side authorization-code flows with PKCE, one-time expiring state, verified provider identities, exact-email Settings linking, and atomic new-user creation.
+- Reason/evidence: This preserves email/password auth, prevents open redirects and login CSRF, avoids silent account merging, and leaves the options visibly unavailable when provider variables are absent.
+- Decision: Use configurable in-process sliding-window limits for authentication failures and CSV endpoints, plus a bounded processing semaphore, upload/recipe caps, and SQLite busy timeouts.
+- Reason/evidence: These are proportional protections for the existing single-server local architecture; public deployment still requires proxy-level controls and a separate review.
+
 ### Implementation decisions — 2026-10-27
 - Decision: Keep uploads stateless and in memory; the browser re-uploads the selected file to each endpoint.
 - Reason/evidence: CSVs are capped at 5 MB and 5,000 rows, so a database/session store is unnecessary for this MVP.

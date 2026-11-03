@@ -9,7 +9,7 @@ from fastapi.responses import RedirectResponse, Response
 from fastapi.templating import Jinja2Templates
 
 from app.config import settings
-from app.services import auth, store
+from app.services import auth, oauth, store
 from app.services import billing as billing_state
 
 router = APIRouter()
@@ -158,7 +158,7 @@ def _set_session(response: Response, session_id: str, request: Request) -> None:
     response.set_cookie(
         SESSION_COOKIE,
         session_id,
-        max_age=30 * 24 * 3600,
+        max_age=settings.session_days * 24 * 3600,
         httponly=True,
         samesite="lax",
         secure=_secure(request),
@@ -192,6 +192,8 @@ def _auth_page(
             "error": error,
             "notice": notice,
             "retention_days": settings.export_retention_days,
+            "oauth_options": oauth.options(),
+            "oauth_next": _safe_next(request.query_params.get("next")),
         },
         status_code=status,
     )
@@ -234,6 +236,10 @@ def login_page(request: Request):
     notice = None
     if request.query_params.get("notice") == "reset":
         notice = "Password reset. Sign in with your new password."
+    oauth_status = request.query_params.get("oauth_status")
+    oauth_provider = request.query_params.get("oauth_provider", "").capitalize()
+    if oauth_status == "unavailable":
+        notice = f"{oauth_provider or 'OAuth'} sign-in is not configured on this server."
     return _auth_page(request, "login", None, notice=notice)
 
 
@@ -241,7 +247,68 @@ def login_page(request: Request):
 def signup_page(request: Request):
     if get_viewer(request)["user"] is not None:
         return RedirectResponse("/dashboard", status_code=303)
-    return _auth_page(request, "signup", None)
+    oauth_status = request.query_params.get("oauth_status")
+    oauth_provider = request.query_params.get("oauth_provider", "").capitalize()
+    notice = (
+        f"{oauth_provider or 'OAuth'} sign-in is not configured on this server."
+        if oauth_status == "unavailable" else None
+    )
+    return _auth_page(request, "signup", None, notice=notice)
+
+
+@router.get("/auth/oauth/{provider}")
+def oauth_start(request: Request, provider: str, next: str = "/dashboard"):
+    viewer = get_viewer(request)
+    user_id = viewer["user"]["id"] if viewer["user"] is not None else None
+    try:
+        target = "/settings" if user_id else _safe_next(next)
+        return RedirectResponse(
+            oauth.begin(provider, next_path=target, user_id=user_id), status_code=307
+        )
+    except oauth.OAuthError:
+        safe_provider = provider.lower() if provider.lower() in {"google", "github"} else "oauth"
+        target = (
+            "/settings?notice=oauth-unavailable"
+            if user_id
+            else f"/login?oauth_status=unavailable&oauth_provider={safe_provider}"
+        )
+        return RedirectResponse(target, status_code=303)
+
+
+@router.get("/auth/oauth/{provider}/callback")
+def oauth_callback(
+    request: Request,
+    provider: str,
+    code: str | None = None,
+    state: str | None = None,
+    error: str | None = None,
+):
+    record = store.consume_oauth_state(state or "") if state else None
+    current = current_user(request)
+    if record is None:
+        return _auth_page(request, "login", "The sign-in session expired. Start again.", status=400)
+    target = record.get("next_path", "/dashboard")
+    if error or not code:
+        if record.get("user_id"):
+            return RedirectResponse("/settings?notice=oauth-cancelled", status_code=303)
+        return _auth_page(
+            request, "login", "Sign-in was cancelled. You can continue with email and password.",
+            status=400,
+        )
+    try:
+        result = oauth.finish(provider, record, code, current)
+    except oauth.OAuthError as exc:
+        if record.get("user_id") and current is not None:
+            session = store.get_session(request.cookies.get(SESSION_COOKIE))
+            if session is not None:
+                return _page(
+                    request, "settings.html",
+                    {**_settings_context(current, session), "error": str(exc)}, status=400,
+                )
+        return _auth_page(request, "login", str(exc), status=400)
+    if result["linked"]:
+        return RedirectResponse("/settings?notice=oauth-linked", status_code=303)
+    return _start_session_response(request, result["user"], target)
 
 
 @router.post("/auth/signup")
@@ -452,6 +519,8 @@ def _settings_context(user: dict[str, Any], session: dict[str, Any]) -> dict[str
         "plan_name": billing_state.current_state(user["id"])["plan_name"],
         "sessions": store.list_sessions(user["id"]),
         "current_session_id": session["id"],
+        "oauth_options": oauth.options(),
+        "oauth_accounts": store.list_oauth_accounts(user["id"]),
     }
 
 
@@ -465,6 +534,9 @@ def settings_page(request: Request):
         "password": "Password changed. Other sessions were signed out.",
         "session": "Session revoked.",
         "profile": "Profile updated.",
+        "oauth-linked": "OAuth provider linked to this account.",
+        "oauth-cancelled": "OAuth linking was cancelled.",
+        "oauth-unavailable": "OAuth linking is not configured on this server.",
     }
     return _page(
         request,

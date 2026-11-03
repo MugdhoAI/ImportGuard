@@ -23,6 +23,21 @@ class Settings:
     max_stored_package_bytes: int = int(os.getenv("MAX_STORED_PACKAGE_MB", "8")) * 1024 * 1024
     billing_enforce_quotas: bool = os.getenv("BILLING_ENFORCE_QUOTAS", "false").lower() == "true"
     admin_emails: str = os.getenv("ADMIN_EMAILS", "")
+    auth_failure_limit_per_ip: int = int(os.getenv("AUTH_FAILURE_LIMIT_PER_IP", "10"))
+    auth_failure_limit_per_account: int = int(os.getenv("AUTH_FAILURE_LIMIT_PER_ACCOUNT", "10"))
+    auth_rate_window_seconds: int = int(os.getenv("AUTH_RATE_WINDOW_SECONDS", "300"))
+    api_profile_limit_per_window: int = int(os.getenv("API_PROFILE_LIMIT_PER_WINDOW", "120"))
+    api_suggest_limit_per_window: int = int(os.getenv("API_SUGGEST_LIMIT_PER_WINDOW", "60"))
+    api_process_limit_per_window: int = int(os.getenv("API_PROCESS_LIMIT_PER_WINDOW", "30"))
+    api_replay_limit_per_window: int = int(os.getenv("API_REPLAY_LIMIT_PER_WINDOW", "30"))
+    max_concurrent_processing: int = int(os.getenv("MAX_CONCURRENT_PROCESSING", "2"))
+    oauth_state_ttl_seconds: int = int(os.getenv("OAUTH_STATE_TTL_SECONDS", "600"))
+    google_oauth_client_id: str = os.getenv("GOOGLE_OAUTH_CLIENT_ID", "")
+    google_oauth_client_secret: str = os.getenv("GOOGLE_OAUTH_CLIENT_SECRET", "")
+    google_oauth_redirect_uri: str = os.getenv("GOOGLE_OAUTH_REDIRECT_URI", "")
+    github_oauth_client_id: str = os.getenv("GITHUB_OAUTH_CLIENT_ID", "")
+    github_oauth_client_secret: str = os.getenv("GITHUB_OAUTH_CLIENT_SECRET", "")
+    github_oauth_redirect_uri: str = os.getenv("GITHUB_OAUTH_REDIRECT_URI", "")
 
 
 settings = Settings()

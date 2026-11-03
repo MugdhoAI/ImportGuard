@@ -21,6 +21,10 @@
       {% if mode == 'login' %}<input type="hidden" name="next" value="{{ request.query_params.get('next', '/dashboard') }}">{% endif %}
       <button class="button" type="submit">{{ 'Create account' if mode == 'signup' else 'Sign in' }}</button>
     </form>
+    <div class="oauth-divider"><span>or continue with</span></div>
+    <div class="oauth-options" aria-label="Other sign-in options">
+      {% for option in oauth_options %}{% if option.configured %}<a class="oauth-button" data-oauth-link data-provider="{{ option.label }}" href="/auth/oauth/{{ option.key }}?next={{ oauth_next|urlencode }}">Continue with {{ option.label }}</a>{% else %}<span class="oauth-button is-disabled" aria-disabled="true" title="{{ option.label }} sign-in requires server OAuth configuration">{{ option.label }} unavailable <small>Configure server</small></span>{% endif %}{% endfor %}
+    </div>
     {% if mode == 'signup' %}
     <p class="auth-switch">Already have an account? <a href="/login">Sign in</a></p>
     {% else %}

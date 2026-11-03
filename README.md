@@ -11,6 +11,7 @@ ImportGuard is a local-first CSV mapping and validation workspace. Review a sour
 - Accepted CSV, recoverable rejected CSV with row numbers and errors, versioned recipe JSON, and a report JSON in a ZIP.
 - Recipe replay without a model call.
 - Optional server-side Meta Muse Spark mapping adapter, disabled by default and requiring a deliberate UI request. Sample values are separately opt-in.
+- Planned billing display: Free $0/month, Pro $6.99/month, and Business $19.99/month. These are not active payment offers until a provider is configured; checkout and payment history remain unavailable.
 
 The default workflow does not contact Meta. One live smoke request was verified on 2026-10-30 (see Meta configuration below). Fake-provider tests exercise response validation only.
 
@@ -88,6 +89,40 @@ are both configured. It never runs under pytest or CI, never prints the key,
 and reports only success/failure, latency, and the returned mapping summary.
 
 Official references: [Meta Chat Completions quickstart](https://dev.meta.ai/docs/cookbook/quickstart-chat-completions), [structured output](https://dev.meta.ai/docs/structured-output), and [models](https://dev.meta.ai/docs/models).
+
+## Optional Google and GitHub sign-in
+
+Email/password authentication works without external credentials. Google and
+GitHub OAuth options remain visibly unavailable until each provider is fully
+configured on the server. The integration uses server-side authorization-code
+exchange, PKCE, one-time expiring state, verified email identities, and an
+explicit link flow from Settings. Configure these names in `.env` (never in
+frontend code):
+
+```dotenv
+OAUTH_STATE_TTL_SECONDS=600
+GOOGLE_OAUTH_CLIENT_ID=
+GOOGLE_OAUTH_CLIENT_SECRET=
+GOOGLE_OAUTH_REDIRECT_URI=http://127.0.0.1:8000/auth/oauth/google/callback
+GITHUB_OAUTH_CLIENT_ID=
+GITHUB_OAUTH_CLIENT_SECRET=
+GITHUB_OAUTH_REDIRECT_URI=http://127.0.0.1:8000/auth/oauth/github/callback
+```
+
+The redirect URI must exactly match the URI registered with the provider.
+Existing password accounts are not silently merged with an OAuth identity;
+the provider email must be verified and matching for an explicit Settings link.
+
+## Abuse and resource limits
+
+The local server applies configurable in-process sliding-window limits to login
+and signup failures and the profile, mapping, process, and replay endpoints.
+Processing concurrency is bounded, uploads are capped before parsing, recipes
+are capped at 64 KB, SQLite uses a busy timeout, and OAuth state expires after
+the configured TTL. Defaults and environment variable names are listed in
+`.env.example`. These protections are intended for a single local server and
+are not a substitute for a deployment-specific proxy, distributed limiter, or
+security review.
 
 ## Accounts, history, and billing
 
