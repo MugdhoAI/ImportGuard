@@ -5,8 +5,8 @@
 - Current phase: Pricing, configuration-gated Google/GitHub OAuth, and local security hardening complete; landing hero preserved
 - Last updated: 2026-11-04
 - Current branch: main
-- Last verified implementation: pending final checkpoint commit from this task
-- Working tree: intended pricing/auth/security changes are uncommitted; pre-existing generated visual QA captures remain modified and intentionally unstaged; untracked `browser-run.log`, `omni.txt`, `Last_execution_prompt.md`, `importguard-workspace-full.png`, and `tatus --short` remain preserved and unstaged
+- Last verified implementation: `eb2ec6c` (`feat(auth): add gated OAuth, pricing, and security hardening`)
+- Working tree: implementation checkpoint committed; pre-existing generated visual QA captures remain modified and intentionally unstaged; untracked `browser-run.log`, `omni.txt`, `Last_execution_prompt.md`, `importguard-workspace-full.png`, and `tatus --short` remain preserved and unstaged
 - Local app startup command: `.\start-local.bat`, which builds the frontend and starts Uvicorn at `http://127.0.0.1:8000`
 - Core workflow status: Pipeline, API, UI, exports, replay, accounts, history, dashboard, provider-neutral billing, teams, admin, export gate, pending restoration implemented
 - Meta API status: Adapter implemented; live smoke request verified 2026-10-30 (1 synthetic call, 3 mappings, 18.6s); mapping quality on real CSVs still needs per-suggestion review
@@ -40,7 +40,7 @@
 | Interior shell + workspace | Implemented | `b94da00`, `base.html`, `home.html`, `app.js`, `styles.css` | Grouped nav, plan footer, breadcrumb topbar, preview table, guest save-nudge; JS syntax-checked |
 | Export isolation fix | Implemented | `b94da00`, `app/services/store.py`, `tests/test_store.py` | `list_exports` no longer leaks rows across users/guests; regression test added |
 | Reference-based interior pass | Implemented | Pending local checkpoint | Full-width CSV intake/preview/quality stage, data-backed dashboard metrics and usage, honest plan cards/payment state, account form polish and optional display-name persistence; landing hero untouched |
-| Pricing, OAuth, and security hardening | Implemented | Pending local checkpoint | Planned prices, configuration-gated Google/GitHub authorization-code + PKCE flow, verified identity linking, auth/API throttles, bounded processing, upload/recipe caps, SQLite busy timeout, and honest unavailable states |
+| Pricing, OAuth, and security hardening | Implemented | `eb2ec6c` | Planned prices, configuration-gated Google/GitHub authorization-code + PKCE flow, verified identity linking, auth/API throttles, bounded processing, upload/recipe caps, SQLite busy timeout, and honest unavailable states |
 
 ## Decisions needed
 
@@ -56,4 +56,4 @@
 
 ## Next action
 
-Next: create and verify the local checkpoint commit, push `main` to `origin/main` as explicitly requested, and stop. No deployment or live OAuth/payment request was made. Do not make additional Meta API calls without explicit authorization.
+Next: push `main` to `origin/main` as explicitly requested, verify the remote commit, and stop. No deployment or live OAuth/payment request was made. Do not make additional Meta API calls without explicit authorization.

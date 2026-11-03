@@ -5,8 +5,8 @@
 - Updated at: 2026-11-04
 - Session/model: pricing, OAuth, and security hardening session
 - Current branch: main
-- Last verified code commit: pending final checkpoint commit from this task
-- Working tree state: intended implementation and documentation changes are uncommitted; generated visual QA captures are intentionally unstaged; pre-existing untracked `browser-run.log`, `omni.txt`, `Last_execution_prompt.md`, `importguard-workspace-full.png`, and `tatus --short` remain preserved and unstaged; no private data staged.
+- Last verified code commit: `eb2ec6c` (`feat(auth): add gated OAuth, pricing, and security hardening`)
+- Working tree state: implementation checkpoint committed; generated visual QA captures are intentionally unstaged; pre-existing untracked `browser-run.log`, `omni.txt`, `Last_execution_prompt.md`, `importguard-workspace-full.png`, and `tatus --short` remain preserved and unstaged; no private data staged.
 - Checkpoint type: Pricing, configuration-gated OAuth, security hardening, and final verification
 
 ## Current checkpoint — 2026-11-04
