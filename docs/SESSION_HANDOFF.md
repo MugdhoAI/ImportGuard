@@ -5,8 +5,8 @@
 - Updated at: 2026-11-03
 - Session/model: local startup/reload reliability repair session
 - Current branch: main
-- Last verified code commit: `fcdfa8b` plus pending local startup/reload repair changes
-- Working tree state: intended changes are uncommitted; pre-existing untracked `browser-run.log`, `omni.txt`, `Last_execution_prompt.md`, and `tatus --short` are preserved and remain unstaged; no private data staged.
+- Last verified code commit: `f1965a7` (`fix(startup): make local app launch and reload reliably`)
+- Working tree state: clean tracked state; pre-existing untracked `browser-run.log`, `omni.txt`, `Last_execution_prompt.md`, and `tatus --short` are preserved and remain unstaged; no private data staged.
 - Checkpoint type: Local launcher, cache revalidation, and final browser verification
 
 ## Current checkpoint — 2026-11-03
