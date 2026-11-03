@@ -110,7 +110,9 @@ a { color: inherit; }
 .data-preview-card, .quality-card { padding: 20px 22px; border: 1px solid var(--ig-line-strong); border-radius: var(--ig-radius); }
 .insight-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
 .insight-heading h2 { margin: 0; }
-.insight-heading > span { color: var(--ig-accent-soft); font-size: 12px; font-weight: 700; }
+.insight-heading > span, .insight-heading > button { color: var(--ig-accent-soft); font-size: 12px; font-weight: 700; }
+.insight-heading > button { padding: 0; border: 0; background: transparent; cursor: pointer; }
+.insight-heading > button:disabled { color: var(--ig-subtle); cursor: not-allowed; opacity: 1; }
 .data-preview { min-width: 0; overflow: hidden; }
 .preview-empty { min-height: 112px; display: grid; place-items: center; margin: 0; border: 1px dashed var(--ig-line); border-radius: 10px; color: var(--ig-muted); font-size: 12px; text-align: center; }
 .data-preview .table-scroll { border: 1px solid var(--ig-line); border-radius: 10px; }

@@ -11,6 +11,7 @@
   const sourceActions = document.querySelector('.source-actions');
   let csvFile = null;
   let profile = null;
+  let previewExpanded = false;
   let mappings = [];
   let signedIn = null;
   fetch('/api/auth/me').then(r=>r.json()).then(d=>{signedIn=!!d.authenticated;}).catch(()=>{signedIn=null;});
@@ -48,8 +49,10 @@
       dataPreview.innerHTML='<p class="preview-empty">No preview rows are available for this file.</p>';
     } else {
       const visibleHeaders=headers.slice(0,4);
-      dataPreview.innerHTML=`<div class="table-scroll"><table class="preview-table"><thead><tr>${visibleHeaders.map(h=>`<th scope="col">${esc(h)}</th>`).join('')}</tr></thead><tbody>${preview.slice(0,4).map(row=>`<tr>${visibleHeaders.map(h=>`<td>${esc(row[h]??'')}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+      const visibleRows=previewExpanded ? preview : preview.slice(0,4);
+      dataPreview.innerHTML=`<div class="table-scroll"><table class="preview-table"><thead><tr>${visibleHeaders.map(h=>`<th scope="col">${esc(h)}</th>`).join('')}</tr></thead><tbody>${visibleRows.map(row=>`<tr>${visibleHeaders.map(h=>`<td>${esc(row[h]??'')}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
     }
+    if ($('previewAction')) { $('previewAction').disabled=preview.length<=4; $('previewAction').innerHTML=previewExpanded?'Show first rows <span aria-hidden="true">←</span>':'View profile rows <span aria-hidden="true">→</span>'; }
     const blankCount=(body.columns||[]).reduce((total,column)=>total+Number(column.empty_count||0),0);
     $('qualityIcon').classList.add('is-ready');
     $('qualityIcon').textContent='✓';
@@ -71,7 +74,7 @@
       const preview=Array.isArray(body.preview)?body.preview:[];
       const previewTable=preview.length?`<div class="table-scroll"><table class="preview-table"><caption>First ${preview.length} of ${body.row_count} rows</caption><thead><tr>${body.headers.map(h=>`<th scope="col">${esc(h)}</th>`).join('')}</tr></thead><tbody>${preview.map(row=>`<tr>${body.headers.map(h=>`<td>${esc(row[h]??'')}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`:'';
       $('profileSummary').innerHTML=`<strong>${body.row_count} data rows</strong> · ${body.headers.length} columns<div class="summary-columns">${body.columns.map(c=>`<span>${esc(c.name)} <small>${c.empty_count} blank</small></span>`).join('')}</div>${previewTable}<p class="hint">Up to 3 sample values per column (shown locally): ${body.columns.map(c=>`${esc(c.name)}: ${c.samples.map(v=>`“${esc(v)}”`).join(', ')}`).join(' · ')}</p>`;
-       sourceActions?.classList.add('has-file'); renderFileOverview(body); renderMappings(); $('processButton').disabled=false; $('approveMappings').checked=false;
+       sourceActions?.classList.add('has-file'); previewExpanded=false; renderFileOverview(body); renderMappings(); $('processButton').disabled=false; $('approveMappings').checked=false;
     } catch(error) { csvFile=null; profile=null; sourceActions?.classList.remove('has-file'); $('fileName').textContent='No file selected'; showError('profileError',error.message); }
   }
   function renderMappings(values=mappings) {
@@ -130,7 +133,8 @@
       try{const response=await fetch('/api/replay',{method:'POST',body:form});if(!response.ok){const data=await response.json();throw new Error(data.detail||'Recipe replay failed.');}download(await response.blob(),'importguard-replay.zip');$('replayMessage').className='message success';$('replayMessage').textContent=`Replay complete: ${response.headers.get('X-Accepted-Rows')} accepted, ${response.headers.get('X-Rejected-Rows')} rejected. No model request was made.`;$('replayMessage').hidden=false;}catch(error){$('replayMessage').className='message error';$('replayMessage').textContent=error.message;$('replayMessage').hidden=false;}finally{$('replayButton').disabled=false;}
     });source.click();
   });
-  $('resetButton').addEventListener('click',()=>{csvFile=null;profile=null;mappings=[];csvInput.value='';sourceActions?.classList.remove('has-file');$('fileName').textContent='No file selected';$('qualityIcon').classList.remove('is-ready');$('qualityIcon').textContent='·';qualityTitle.textContent='Waiting for a file';qualityDetails.textContent='Your file profile and row checks will appear here.';$('profileSummary').hidden=true;$('approveMappings').checked=false;$('resultSummary').hidden=true;['profileError','mappingError','processError'].forEach(clearError);renderSchema(defaultSchema);updateProgress(0);});
+  $('resetButton').addEventListener('click',()=>{csvFile=null;profile=null;mappings=[];previewExpanded=false;csvInput.value='';sourceActions?.classList.remove('has-file');$('fileName').textContent='No file selected';$('qualityIcon').classList.remove('is-ready');$('qualityIcon').textContent='·';qualityTitle.textContent='Waiting for a file';qualityDetails.textContent='Your file profile and row checks will appear here.';$('previewAction').disabled=true;$('previewAction').innerHTML='View profile rows <span aria-hidden="true">→</span>';$('profileSummary').hidden=true;$('approveMappings').checked=false;$('resultSummary').hidden=true;['profileError','mappingError','processError'].forEach(clearError);renderSchema(defaultSchema);updateProgress(0);});
+  $('previewAction')?.addEventListener('click',()=>{if(!profile)return;previewExpanded=!previewExpanded;renderFileOverview(profile);});
   continueSourceButton?.addEventListener('click',()=>{updateProgress(1);$('schema-heading').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'start'});});
   dataPreview && (dataPreview.innerHTML='<p class="preview-empty">Upload a CSV to preview its first rows.</p>');
   if (continueSourceButton) continueSourceButton.disabled=true;
