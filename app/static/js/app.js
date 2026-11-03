@@ -3,6 +3,12 @@
   const csvInput = $('csvFile');
   const dropZone = $('dropZone');
   const schemaBody = $('schemaBody');
+  const dataPreview = $('dataPreview');
+  const qualityTitle = $('qualityTitle');
+  const qualityDetails = $('qualityDetails');
+  const continueSourceButton = $('continueSourceButton');
+  const sourceStepStatus = $('sourceStepStatus');
+  const sourceActions = document.querySelector('.source-actions');
   let csvFile = null;
   let profile = null;
   let mappings = [];
@@ -34,6 +40,24 @@
   function showError(id, message) { const el=$(id); el.textContent=message; el.hidden=false; }
   function clearError(id) { $(id).hidden=true; $(id).textContent=''; }
   function updateProgress(step) { document.querySelectorAll('.progress-list li').forEach((li,i)=>li.classList.toggle('active',i===step)); }
+  function renderFileOverview(body) {
+    const preview=Array.isArray(body.preview)?body.preview:[];
+    const headers=Array.isArray(body.headers)?body.headers:[];
+    if (!dataPreview) return;
+    if (!preview.length || !headers.length) {
+      dataPreview.innerHTML='<p class="preview-empty">No preview rows are available for this file.</p>';
+    } else {
+      const visibleHeaders=headers.slice(0,4);
+      dataPreview.innerHTML=`<div class="table-scroll"><table class="preview-table"><thead><tr>${visibleHeaders.map(h=>`<th scope="col">${esc(h)}</th>`).join('')}</tr></thead><tbody>${preview.slice(0,4).map(row=>`<tr>${visibleHeaders.map(h=>`<td>${esc(row[h]??'')}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+    }
+    const blankCount=(body.columns||[]).reduce((total,column)=>total+Number(column.empty_count||0),0);
+    $('qualityIcon').classList.add('is-ready');
+    $('qualityIcon').textContent='✓';
+    qualityTitle.textContent=blankCount ? 'Profile ready with blanks' : 'No critical issues found';
+    qualityDetails.textContent=`${body.row_count} rows profiled · ${blankCount} blank values · ${headers.length} columns`;
+    sourceStepStatus.textContent=`Step 1 of 4 — ${$('fileName').textContent}`;
+    if (continueSourceButton) continueSourceButton.disabled=false;
+  }
   async function loadFile(file) {
     clearError('profileError'); clearError('mappingError'); $('resultSummary').hidden=true;
     if (!file || (!file.name.toLowerCase().endsWith('.csv') && file.type !== 'text/csv')) { showError('profileError','Choose a file with the .csv extension.'); return; }
@@ -47,8 +71,8 @@
       const preview=Array.isArray(body.preview)?body.preview:[];
       const previewTable=preview.length?`<div class="table-scroll"><table class="preview-table"><caption>First ${preview.length} of ${body.row_count} rows</caption><thead><tr>${body.headers.map(h=>`<th scope="col">${esc(h)}</th>`).join('')}</tr></thead><tbody>${preview.map(row=>`<tr>${body.headers.map(h=>`<td>${esc(row[h]??'')}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`:'';
       $('profileSummary').innerHTML=`<strong>${body.row_count} data rows</strong> · ${body.headers.length} columns<div class="summary-columns">${body.columns.map(c=>`<span>${esc(c.name)} <small>${c.empty_count} blank</small></span>`).join('')}</div>${previewTable}<p class="hint">Up to 3 sample values per column (shown locally): ${body.columns.map(c=>`${esc(c.name)}: ${c.samples.map(v=>`“${esc(v)}”`).join(', ')}`).join(' · ')}</p>`;
-      updateProgress(1); renderMappings(); $('processButton').disabled=false; $('approveMappings').checked=false;
-    } catch(error) { csvFile=null; profile=null; $('fileName').textContent='No file selected'; showError('profileError',error.message); }
+       sourceActions?.classList.add('has-file'); renderFileOverview(body); renderMappings(); $('processButton').disabled=false; $('approveMappings').checked=false;
+    } catch(error) { csvFile=null; profile=null; sourceActions?.classList.remove('has-file'); $('fileName').textContent='No file selected'; showError('profileError',error.message); }
   }
   function renderMappings(values=mappings) {
     mappings=values;
@@ -106,6 +130,9 @@
       try{const response=await fetch('/api/replay',{method:'POST',body:form});if(!response.ok){const data=await response.json();throw new Error(data.detail||'Recipe replay failed.');}download(await response.blob(),'importguard-replay.zip');$('replayMessage').className='message success';$('replayMessage').textContent=`Replay complete: ${response.headers.get('X-Accepted-Rows')} accepted, ${response.headers.get('X-Rejected-Rows')} rejected. No model request was made.`;$('replayMessage').hidden=false;}catch(error){$('replayMessage').className='message error';$('replayMessage').textContent=error.message;$('replayMessage').hidden=false;}finally{$('replayButton').disabled=false;}
     });source.click();
   });
-  $('resetButton').addEventListener('click',()=>{csvFile=null;profile=null;mappings=[];csvInput.value='';$('fileName').textContent='No file selected';$('profileSummary').hidden=true;$('approveMappings').checked=false;$('resultSummary').hidden=true;['profileError','mappingError','processError'].forEach(clearError);renderSchema(defaultSchema);updateProgress(0);});
+  $('resetButton').addEventListener('click',()=>{csvFile=null;profile=null;mappings=[];csvInput.value='';sourceActions?.classList.remove('has-file');$('fileName').textContent='No file selected';$('qualityIcon').classList.remove('is-ready');$('qualityIcon').textContent='·';qualityTitle.textContent='Waiting for a file';qualityDetails.textContent='Your file profile and row checks will appear here.';$('profileSummary').hidden=true;$('approveMappings').checked=false;$('resultSummary').hidden=true;['profileError','mappingError','processError'].forEach(clearError);renderSchema(defaultSchema);updateProgress(0);});
+  continueSourceButton?.addEventListener('click',()=>{updateProgress(1);$('schema-heading').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'start'});});
+  dataPreview && (dataPreview.innerHTML='<p class="preview-empty">Upload a CSV to preview its first rows.</p>');
+  if (continueSourceButton) continueSourceButton.disabled=true;
   renderSchema(defaultSchema);
 })();

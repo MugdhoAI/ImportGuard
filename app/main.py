@@ -78,7 +78,10 @@ def dashboard(request: Request):
     viewer = get_viewer(request)
     user = viewer["user"]
     exports = list_for_viewer(request)
-    plan_name = billing_state.current_state(user["id"] if user else None)["plan_name"]
+    billing = billing_state.current_state(user["id"] if user else None)
+    total_rows = sum(row["accepted_rows"] + row["rejected_rows"] for row in exports)
+    accepted_rows = sum(row["accepted_rows"] for row in exports)
+    success_rate = f"{(accepted_rows / total_rows) * 100:.1f}%" if total_rows else "—"
     return templates.TemplateResponse(
         request,
         "dashboard.html",
@@ -86,9 +89,10 @@ def dashboard(request: Request):
             **shell_context(request),
             "exports": exports,
             "saved_count": len(exports),
-            "rows_total": sum(row["accepted_rows"] + row["rejected_rows"] for row in exports),
+            "rows_total": total_rows,
             "attention_count": sum(1 for row in exports if row["rejected_rows"] > 0),
-            "plan_name": plan_name,
+            "success_rate": success_rate,
+            "billing": billing,
             "retention_days": settings.export_retention_days,
         },
     )

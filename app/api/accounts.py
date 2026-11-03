@@ -249,9 +249,13 @@ def signup(
     request: Request,
     email: Annotated[str, Form()],
     password: Annotated[str, Form()],
+    full_name: Annotated[str, Form()] = "",
 ):
     try:
         user = auth.register(email, password, client_ip(request))
+        if full_name.strip():
+            store.set_user_name(user["id"], full_name)
+            user = store.get_user_by_id(user["id"]) or user
     except auth.AuthError as exc:
         return _auth_page(request, "signup", str(exc), status=400)
     return _start_session_response(request, user, "/dashboard")

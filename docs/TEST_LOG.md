@@ -2,6 +2,17 @@
 
 Record commands actually run, exact outcomes, and failures. Do not record expected results as completed results.
 
+## Reference-based interior UI — 2026-11-03
+
+| Working tree | Command / check | Result | Notes |
+|---|---|---|---|
+| interior UI | `py -3 -m pytest -q` | 112 passed, 1 warning | Added account display-name coverage; known Starlette/httpx deprecation and Windows temp cleanup warning remain. |
+| interior UI | `py -3 -m ruff check .` | Passed | Protected temporary-directory access warnings only. |
+| interior UI | `npm --prefix frontend test` | 2 passed | Landing component tests remain green. |
+| interior UI | `npm --prefix frontend run build` | Passed | Landing bundle builds unchanged; existing large-chunk warning remains. |
+| interior UI | `npm --prefix frontend run test:browser` | Passed | Existing CSV workflow, landing CTA/dock, themes, accessibility, fallback, reduced motion and responsive checks passed. |
+| interior UI | Custom Puppeteer interior QA | Passed | Workspace full-width stage, real sample preview, Continue step, dashboard metrics, honest billing, signup fields/password toggle, theme, direct routes and reloads; no console or request failures. |
+
 ## Local startup/reload repair — 2026-11-03
 
 | Working tree | Command / check | Result | Notes |

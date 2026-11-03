@@ -2,15 +2,15 @@
 
 > Update after every major milestone. Only record verified state.
 
-- Current phase: Local startup/reload repair complete; full console and CSV workflow browser-verified
+- Current phase: Reference-based interior workspace/dashboard/billing/auth pass complete; landing hero preserved
 - Last updated: 2026-11-03
 - Current branch: main
-- Last verified implementation: `f1965a7` (`fix(startup): make local app launch and reload reliably`)
-- Working tree: clean tracked state; pre-existing untracked `browser-run.log`, `omni.txt`, `Last_execution_prompt.md`, and `tatus --short` remain unstaged
+- Last verified implementation: pending local reference-based interior checkpoint
+- Working tree: intended interior changes are pending commit; pre-existing untracked `browser-run.log`, `omni.txt`, `Last_execution_prompt.md`, `importguard-workspace-full.png`, and `tatus --short` remain unstaged
 - Local app startup command: `.\start-local.bat`, which builds the frontend and starts Uvicorn at `http://127.0.0.1:8000`
 - Core workflow status: Pipeline, API, UI, exports, replay, accounts, history, dashboard, provider-neutral billing, teams, admin, export gate, pending restoration implemented
 - Meta API status: Adapter implemented; live smoke request verified 2026-10-30 (1 synthetic call, 3 mappings, 18.6s); mapping quality on real CSVs still needs per-suggestion review
-- Latest verified tests: 111 passed + Ruff clean; frontend Vitest 2 passed, Vite build passed, source verification passed for 24 files plus Fragment Mono, and browser workflow passed against `127.0.0.1:8000`; only the known deprecation/build-size warnings remain
+- Latest verified tests: 112 passed + Ruff clean; frontend Vitest 2 passed, Vite build passed, source verification remains unchanged and previously passed for 24 files plus Fragment Mono, and browser workflow plus custom interior QA passed against `127.0.0.1:8000`; only the known deprecation/build-size warnings remain
 - URL diagnosis: no public deployment URL or deployment manifest is configured. The application is locally reachable at `http://127.0.0.1:8000` after running the launcher.
 
 ## Milestone status
@@ -39,6 +39,7 @@
 | Teams + admin | Implemented | `b94da00`, teams/team_detail/invite_accept/admin templates | Owner/admin/member roles, invite links, shared history metadata, ADMIN_EMAILS gate; backend-enforced |
 | Interior shell + workspace | Implemented | `b94da00`, `base.html`, `home.html`, `app.js`, `styles.css` | Grouped nav, plan footer, breadcrumb topbar, preview table, guest save-nudge; JS syntax-checked |
 | Export isolation fix | Implemented | `b94da00`, `app/services/store.py`, `tests/test_store.py` | `list_exports` no longer leaks rows across users/guests; regression test added |
+| Reference-based interior pass | Implemented | Pending local checkpoint | Full-width CSV intake/preview/quality stage, data-backed dashboard metrics and usage, honest plan cards/payment state, account form polish and optional display-name persistence; landing hero untouched |
 
 ## Decisions needed
 

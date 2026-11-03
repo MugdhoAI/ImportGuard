@@ -3,19 +3,18 @@
 > This file is the first handoff source for any new model/session. Update at each major checkpoint and before ending a session or nearing a context/usage limit.
 
 - Updated at: 2026-11-03
-- Session/model: local startup/reload reliability repair session
+- Session/model: reference-based internal UI implementation session
 - Current branch: main
-- Last verified code commit: `f1965a7` (`fix(startup): make local app launch and reload reliably`)
-- Working tree state: clean tracked state; pre-existing untracked `browser-run.log`, `omni.txt`, `Last_execution_prompt.md`, and `tatus --short` are preserved and remain unstaged; no private data staged.
-- Checkpoint type: Local launcher, cache revalidation, and final browser verification
+- Last verified code commit: `4e7e78e` plus pending interior UI changes
+- Working tree state: intended interior changes are uncommitted; pre-existing untracked `browser-run.log`, `omni.txt`, `Last_execution_prompt.md`, `importguard-workspace-full.png`, and `tatus --short` are preserved and remain unstaged; no private data staged.
+- Checkpoint type: Reference-based interior UI and final workflow verification
 
 ## Current checkpoint — 2026-11-03
 
-- **Diagnosis:** The repository has no public deployment URL. The reliable local entry point is `app.main:app` on `http://127.0.0.1:8000`; the prior workflow required a separate frontend build and did not explicitly revalidate the built landing HTML.
-- **Repair:** Added `start-local.bat` to build the Vite frontend and start loopback Uvicorn in one command. `/` now sends `Cache-Control: no-cache, max-age=0, must-revalidate` and `Pragma: no-cache` for both the built bundle and fallback template. `tests/test_api.py` covers the headers.
-- **Verified startup:** Starting from a stopped port with `start-local.bat` returned HTTP 200 for `/health` and `/`; direct browser navigation and reload passed for `/`, `/app`, `/workspace`, `/privacy`, `/home`, `/dashboard`, `/billing`, and `/payments`.
-- **Verified checks:** `py -3 -m pytest -q` — 111 passed, 1 warning; `py -3 -m ruff check .` — passed; frontend Vitest — 2 passed; Vite build — passed; ThreeUI source verification — 24 files plus Fragment Mono passed; browser workflow — passed against `http://127.0.0.1:8000`; no page or console errors.
-- **Remaining:** No deployment has been created or claimed. Payment-provider work remains owner-gated. No new Meta request was made; the existing owner-run synthetic status remains recorded in `TEST_LOG.md`.
+- **Scope:** `importguard-workspace-full.png` was used as the internal reference. The landing React hero was not modified.
+- **Implementation:** Added `app/static/css/interior.css` and `app/static/js/auth.js`; reshaped `app.html` into a full-width upload/preview/quality stage with a real continue action; added data-backed dashboard success rate/usage cards; added honest Free/Pro/Business plan presentation and payment-history empty state; added optional full-name persistence and password visibility to signup.
+- **Verified checks:** `py -3 -m pytest -q` — 112 passed, 1 warning; `py -3 -m ruff check .` — passed; frontend Vitest — 2 passed; Vite build — passed; browser workflow — passed; custom interior QA — passed for workspace sample preview/continue, dashboard metrics, billing, signup controls, theme, direct routes and reloads.
+- **Remaining:** Payment provider, OAuth, real payment history, and checkout remain unavailable by design. No deployment or Meta request was made.
 
 Historical sections below preserve earlier checkpoints; the current checkpoint above is authoritative for the present tree.
 

@@ -53,6 +53,21 @@ def test_signup_validates_and_sets_session():
     client.post("/auth/logout", data={"csrf_token": _csrf()})
 
 
+def test_signup_persists_optional_display_name():
+    response = client.post(
+        "/auth/signup",
+        data={
+            "email": "named-ui@example.test",
+            "password": "a-strong-password",
+            "full_name": "Import Guard Tester",
+        },
+        follow_redirects=False,
+    )
+    assert response.status_code == 303
+    assert store.get_user_by_email("named-ui@example.test")["name"] == "Import Guard Tester"
+    client.post("/auth/logout", data={"csrf_token": _csrf()})
+
+
 def test_login_success_failure_and_next_sanitization():
     _signup("luis@example.test")
     client.post("/auth/logout", data={"csrf_token": _csrf()})

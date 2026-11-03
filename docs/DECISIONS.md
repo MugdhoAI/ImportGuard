@@ -33,6 +33,13 @@ Add decisions below using:
 - Reason/evidence: Ensures a hard reload revalidates the current landing entrypoint and remains deterministic if the bundle is temporarily absent during a build.
 - Consequences and revisit condition: Frontend source changes require restarting the launcher; static assets remain fingerprinted and served under `/web`.
 
+### Reference-based interior UI — 2026-11-03
+- Decision: Use `importguard-workspace-full.png` as the visual reference for server-rendered interior screens only; preserve the existing landing hero and React bundle.
+- Reason/evidence: The reference's strongest product pattern is a workspace-first upper stage with upload, preview, quality status and continuation; existing FastAPI templates and CSV endpoints already own this behavior.
+- Decision: Keep billing actions disabled and label unavailable pricing/provider states rather than inventing checkout, OAuth, or payment history.
+- Reason/evidence: The current billing seam is a `NullProvider`; honest unavailable states satisfy the reference structure without claiming transactions or credentials.
+- Consequences and revisit condition: A real provider, prices, OAuth credentials, or payment records require owner-approved backend integrations before those controls can become active.
+
 ### Implementation decisions — 2026-10-27
 - Decision: Keep uploads stateless and in memory; the browser re-uploads the selected file to each endpoint.
 - Reason/evidence: CSVs are capped at 5 MB and 5,000 rows, so a database/session store is unnecessary for this MVP.
