@@ -5,7 +5,7 @@
 - Updated at: 2026-11-03
 - Session/model: reference-based internal UI implementation session
 - Current branch: main
-- Last verified code commit: `3db5346` (`feat(interior): align workspace shell with reference`)
+- Last verified code commit: `1821c4f` (`fix(interior): make preview control actionable`)
 - Working tree state: clean tracked state; pre-existing untracked `browser-run.log`, `omni.txt`, `Last_execution_prompt.md`, `importguard-workspace-full.png`, and `tatus --short` are preserved and remain unstaged; no private data staged.
 - Checkpoint type: Reference-based interior UI and final workflow verification
 

@@ -5,7 +5,7 @@
 - Current phase: Reference-based interior workspace/dashboard/billing/auth pass complete; landing hero preserved
 - Last updated: 2026-11-03
 - Current branch: main
-- Last verified implementation: `3db5346` (`feat(interior): align workspace shell with reference`)
+- Last verified implementation: `1821c4f` (`fix(interior): make preview control actionable`)
 - Working tree: clean tracked state; pre-existing untracked `browser-run.log`, `omni.txt`, `Last_execution_prompt.md`, `importguard-workspace-full.png`, and `tatus --short` remain unstaged
 - Local app startup command: `.\start-local.bat`, which builds the frontend and starts Uvicorn at `http://127.0.0.1:8000`
 - Core workflow status: Pipeline, API, UI, exports, replay, accounts, history, dashboard, provider-neutral billing, teams, admin, export gate, pending restoration implemented
