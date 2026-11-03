@@ -6,7 +6,7 @@
 - Last updated: 2026-11-04
 - Current branch: main
 - Last verified implementation: `eb2ec6c` (`feat(auth): add gated OAuth, pricing, and security hardening`)
-- Working tree: implementation checkpoint committed; pre-existing generated visual QA captures remain modified and intentionally unstaged; untracked `browser-run.log`, `omni.txt`, `Last_execution_prompt.md`, `importguard-workspace-full.png`, and `tatus --short` remain preserved and unstaged
+- Working tree: implementation and remote-merge checkpoints committed and pushed; pre-existing generated visual QA captures remain modified and intentionally unstaged; untracked `browser-run.log`, `omni.txt`, `Last_execution_prompt.md`, `importguard-workspace-full.png`, and `tatus --short` remain preserved and unstaged
 - Local app startup command: `.\start-local.bat`, which builds the frontend and starts Uvicorn at `http://127.0.0.1:8000`
 - Core workflow status: Pipeline, API, UI, exports, replay, accounts, history, dashboard, provider-neutral billing, teams, admin, export gate, pending restoration implemented
 - Meta API status: Adapter implemented; live smoke request verified 2026-10-30 (1 synthetic call, 3 mappings, 18.6s); mapping quality on real CSVs still needs per-suggestion review
@@ -56,4 +56,4 @@
 
 ## Next action
 
-Next: push `main` to `origin/main` as explicitly requested, verify the remote commit, and stop. No deployment or live OAuth/payment request was made. Do not make additional Meta API calls without explicit authorization.
+Next: stop. `origin/main` was pushed and verified against the local branch. No deployment or live OAuth/payment request was made. Do not make additional Meta API calls without explicit authorization.

@@ -6,7 +6,7 @@
 - Session/model: pricing, OAuth, and security hardening session
 - Current branch: main
 - Last verified code commit: `eb2ec6c` (`feat(auth): add gated OAuth, pricing, and security hardening`)
-- Working tree state: implementation checkpoint committed; generated visual QA captures are intentionally unstaged; pre-existing untracked `browser-run.log`, `omni.txt`, `Last_execution_prompt.md`, `importguard-workspace-full.png`, and `tatus --short` remain preserved and unstaged; no private data staged.
+- Working tree state: implementation and remote-merge checkpoints committed and pushed; generated visual QA captures are intentionally unstaged; pre-existing untracked `browser-run.log`, `omni.txt`, `Last_execution_prompt.md`, `importguard-workspace-full.png`, and `tatus --short` remain preserved and unstaged; no private data staged.
 - Checkpoint type: Pricing, configuration-gated OAuth, security hardening, and final verification
 
 ## Current checkpoint — 2026-11-04
@@ -15,6 +15,7 @@
 - **Implementation:** Added planned Free/Pro/Business pricing (`$0`, `$6.99`, `$19.99` per month) with provider-disabled copy; added server-side Google/GitHub authorization-code OAuth with PKCE, one-time expiring state, verified identities, exact-email account linking, atomic OAuth user creation, and Settings linking; added configurable per-IP/per-account auth failure limits, endpoint sliding-window limits, bounded processing, upload/recipe size checks, SQLite busy timeout, favicon alias, loading feedback, and focused regression tests.
 - **Verified checks:** `py -3 -m pytest -q` — 123 passed, 1 warning; `py -3 -m ruff check .` — passed with protected-temp access warnings; `npm --prefix frontend test` — 2 passed; `npm --prefix frontend run build` — passed with the existing large-chunk warning; `npm --prefix frontend run test:browser` — passed; final Puppeteer QA — passed for routes/reloads, pricing, honest OAuth states, signup/login, authenticated Settings, cleanup, and workspace controls.
 - **Remaining:** Payment provider and real checkout/payment history remain unavailable. OAuth provider credentials are not configured locally, so no live Google/GitHub redirect or callback was exercised. No deployment or new Meta request was made.
+- **Remote verification:** `main` was pushed to `origin/main` without force and the remote tip matched local `HEAD`; the remote documentation divergence was merged through `8e73bc3` before the final push.
 
 Historical sections below preserve earlier checkpoints; the current checkpoint above is authoritative for the present tree.
 
