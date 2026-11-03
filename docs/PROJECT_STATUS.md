@@ -2,16 +2,16 @@
 
 > Update after every major milestone. Only record verified state.
 
-- Current phase: Local URL diagnosis and browser verification repair complete; full console and CSV workflow remain implemented
+- Current phase: Local startup/reload repair complete; full console and CSV workflow browser-verified
 - Last updated: 2026-11-03
 - Current branch: main
-- Last verified implementation: `5d370b9` (`fix(qa): align browser check with local server`)
-- Working tree: clean tracked state; pre-existing untracked `browser-run.log` and `tatus --short` are preserved and remain unstaged
-- Local app startup command: `npm.cmd --prefix frontend run build` then `C:\Users\rojina\AppData\Local\Python\pythoncore-3.14-64\python.exe -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000`
+- Last verified implementation: `fcdfa8b` plus the pending local startup/reload repair checkpoint
+- Working tree: intended startup repair changes are pending commit; pre-existing untracked `browser-run.log`, `omni.txt`, `Last_execution_prompt.md`, and `tatus --short` remain unstaged
+- Local app startup command: `.\start-local.bat`, which builds the frontend and starts Uvicorn at `http://127.0.0.1:8000`
 - Core workflow status: Pipeline, API, UI, exports, replay, accounts, history, dashboard, provider-neutral billing, teams, admin, export gate, pending restoration implemented
 - Meta API status: Adapter implemented; live smoke request verified 2026-10-30 (1 synthetic call, 3 mappings, 18.6s); mapping quality on real CSVs still needs per-suggestion review
-- Latest verified tests: 111 passed + ruff clean locally; frontend Vitest 2 passed, Vite build passed, and browser workflow passed against `127.0.0.1:8000`; only the known deprecation/build-size warnings remain
-- URL diagnosis: no public deployment URL or deployment manifest is configured. The application is locally reachable at `http://127.0.0.1:8000` after the frontend build and Uvicorn startup.
+- Latest verified tests: 111 passed + Ruff clean; frontend Vitest 2 passed, Vite build passed, source verification passed for 24 files plus Fragment Mono, and browser workflow passed against `127.0.0.1:8000`; only the known deprecation/build-size warnings remain
+- URL diagnosis: no public deployment URL or deployment manifest is configured. The application is locally reachable at `http://127.0.0.1:8000` after running the launcher.
 
 ## Milestone status
 

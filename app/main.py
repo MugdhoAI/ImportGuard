@@ -15,6 +15,10 @@ from app.services import billing as billing_state
 
 ROOT = Path(__file__).resolve().parent
 FRONTEND_DIST = ROOT.parent / "frontend" / "dist"
+LANDING_CACHE_HEADERS = {
+    "Cache-Control": "no-cache, max-age=0, must-revalidate",
+    "Pragma": "no-cache",
+}
 app = FastAPI(title="ImportGuard", docs_url=None, redoc_url=None)
 app.mount("/static", StaticFiles(directory=ROOT / "static"), name="static")
 templates = Jinja2Templates(directory=ROOT / "templates")
@@ -28,8 +32,13 @@ if FRONTEND_DIST.is_dir():
 def landing(request: Request):
     built_landing = FRONTEND_DIST / "index.html"
     if built_landing.is_file():
-        return FileResponse(built_landing)
-    return templates.TemplateResponse(request, "landing.html", {})
+        return FileResponse(
+            built_landing,
+            headers=LANDING_CACHE_HEADERS,
+        )
+    response = templates.TemplateResponse(request, "landing.html", {})
+    response.headers.update(LANDING_CACHE_HEADERS)
+    return response
 
 
 @app.get("/app")

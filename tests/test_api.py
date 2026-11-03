@@ -11,7 +11,10 @@ client = TestClient(app)
 
 def test_pages_health_and_examples():
     assert client.get("/health").json() == {"status": "ok"}
-    assert "predictable" in client.get("/").text
+    landing = client.get("/")
+    assert "predictable" in landing.text
+    assert landing.headers["cache-control"] == "no-cache, max-age=0, must-revalidate"
+    assert landing.headers["pragma"] == "no-cache"
     assert "Choose your source" in client.get("/app").text
     assert "Privacy" in client.get("/privacy").text
     assert client.get("/examples/registrations.csv").status_code == 200

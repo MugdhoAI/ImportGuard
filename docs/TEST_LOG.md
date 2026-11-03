@@ -2,6 +2,20 @@
 
 Record commands actually run, exact outcomes, and failures. Do not record expected results as completed results.
 
+## Local startup/reload repair — 2026-11-03
+
+| Working tree | Command / check | Result | Notes |
+|---|---|---|---|
+| startup repair | `py -3 -m pytest -q` | 111 passed, 1 warning | Final sequential run passed. Warning is the known Starlette/httpx deprecation; pytest also emitted the existing Windows temp cleanup PermissionError after completion. |
+| startup repair | `py -3 -m ruff check .` | Passed | Ruff passed; protected temporary directories emitted access-denied scan warnings. |
+| startup repair | `npm --prefix frontend test` | 2 passed | Vitest passed. |
+| startup repair | `npm --prefix frontend run build` | Passed | Vite build passed with the existing large-chunk warning. |
+| startup repair | `npm --prefix frontend run verify:sources` | Passed | 24 ThreeUI source files and the 15,176-byte Fragment Mono asset matched their pinned SHA-256 values. |
+| startup repair | `start-local.bat` from a stopped port plus HTTP smoke | Passed | Rebuilt the frontend, started Uvicorn on `127.0.0.1:8000`, and returned HTTP 200 for `/health` and `/`; landing revalidation headers were present. |
+| startup repair | `npm --prefix frontend run test:browser` | Passed | Sample profile/local mapping/approval/export/replay, CTA, dock, themes, reduced motion, fallback, axe scans, console errors, and 8 widths all passed. |
+| startup repair | Puppeteer direct-route/reload smoke | Passed | `/`, `/app`, `/workspace`, `/privacy`, `/home`, `/dashboard`, `/billing`, and `/payments` each loaded directly and after reload with no page or console errors. |
+| startup repair | Parallel pytest + Vite build attempt | Failed then fixed | The concurrent Vite clean of `frontend/dist` made pytest hit the fallback template before fallback cache headers were added; the final sequential pytest run passed. |
+
 ## Local URL diagnosis and verification — 2026-11-03
 
 | Working tree | Command / check | Result | Notes |

@@ -22,21 +22,19 @@ py -3 -m venv .venv
 python -m pip install --upgrade pip
 pip install -r requirements.txt
 Copy-Item .env.example .env
-python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
+.\start-local.bat
 ```
 
-Open `http://127.0.0.1:8000`. If `py -3` is unavailable, use `python -m venv .venv`.
+`start-local.bat` rebuilds the frontend and starts Uvicorn on loopback port
+8000. Keep that terminal open, then open `http://127.0.0.1:8000`. If `py -3`
+is unavailable, use `python -m venv .venv` and the manual fallback below.
 
-The landing page at `/` is served from a prebuilt bundle. Before starting the
-app (or after changing anything under `frontend/src`), build it once with
-Node 18+:
+The launcher rebuilds the frontend before each start, so changes under
+`frontend/src` are reflected after restarting it. To build without starting
+the server, run `npm --prefix frontend run build`.
 
-```powershell
-npm --prefix frontend run build
-```
-
-Without this build, `/` falls back to a basic server-rendered page; `/app`,
-`/privacy`, and all API routes work either way.
+Without a frontend build, `/` falls back to a basic server-rendered page;
+`/app`, `/privacy`, and all API routes work either way.
 
 ### If the local URL does not open
 
@@ -44,7 +42,8 @@ ImportGuard does not currently have a public deployment URL. Start Uvicorn from
 the repository root and open the exact local address shown below:
 
 ```powershell
-python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
+npm --prefix frontend run build
+python -m uvicorn app.main:app --host 127.0.0.1 --port 8000
 ```
 
 Open `http://127.0.0.1:8000` rather than port `8001`. The browser workflow

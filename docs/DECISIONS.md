@@ -26,6 +26,13 @@ Add decisions below using:
 - Alternatives considered:
 - Consequences and revisit condition:
 
+### Local startup reliability — 2026-11-03
+- Decision: Make `start-local.bat` the documented Windows startup path; it builds the Vite frontend first and starts Uvicorn on `127.0.0.1:8000`.
+- Reason/evidence: The reported URL failure was reproducible when the server was not running or the built landing bundle was stale. One command removes the build-order ambiguity without adding a dev service.
+- Decision: Send `Cache-Control: no-cache, max-age=0, must-revalidate` and `Pragma: no-cache` for the landing response, including the server-rendered fallback.
+- Reason/evidence: Ensures a hard reload revalidates the current landing entrypoint and remains deterministic if the bundle is temporarily absent during a build.
+- Consequences and revisit condition: Frontend source changes require restarting the launcher; static assets remain fingerprinted and served under `/web`.
+
 ### Implementation decisions — 2026-10-27
 - Decision: Keep uploads stateless and in memory; the browser re-uploads the selected file to each endpoint.
 - Reason/evidence: CSVs are capped at 5 MB and 5,000 rows, so a database/session store is unnecessary for this MVP.
