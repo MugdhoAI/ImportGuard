@@ -99,7 +99,7 @@ Do not continue adding features until the end of a session and leave no summary.
 
 The next model must read this protocol and the latest `docs/SESSION_HANDOFF.md`, inspect Git status and recent commits, run or review the listed tests, and continue from the actual state. It must not recreate files, repeat completed work, or overwrite existing implementation just because the prior model stopped.
 
-Use `prompts/04_RESUME_FROM_HANDOFF.md` as the continuation prompt.
+Resume from `docs/SESSION_HANDOFF.md` and follow the current execution phase in `CODEX_EXECUTION_PLAN.md`.
 
 ## 7. Git safety rules
 
