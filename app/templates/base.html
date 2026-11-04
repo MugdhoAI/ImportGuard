@@ -5,6 +5,15 @@
   <meta name="theme-color" content="#111310">
   <script>try{const t=localStorage.getItem('importguard-theme');document.documentElement.dataset.theme=t==='light'?'light':'dark'}catch{document.documentElement.dataset.theme='dark'}</script>
   <title>{% block title %}ImportGuard{% endblock %}</title>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-T5N0ZHCLVE"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-T5N0ZHCLVE');
+  </script>
   <link rel="icon" href="/web/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/static/css/styles.css">
   <link rel="stylesheet" href="/static/css/theme.css">
